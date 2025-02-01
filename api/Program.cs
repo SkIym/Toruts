@@ -1,3 +1,6 @@
+using api.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,9 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
+// Database Configuration
+builder.Services.AddDbContext<ApplicationDBContext>(options => 
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// HTTP requests pipeline
 if (app.Environment.IsDevelopment())
 {   
     app.UseSwagger();

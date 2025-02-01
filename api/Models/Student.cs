@@ -10,8 +10,6 @@ namespace api.Models
         public int Id { get; set; }
         public List<string>? AreasOfImprovemnt { get; set; }
         public string? DegreeProgram { get; set; }
-        public List<Tutor>? PastTutors { get; set; }
-        public Tutor? CurrentTutor { get; set; }
         public int UserId { get; set; }
 
         // Navigation property
