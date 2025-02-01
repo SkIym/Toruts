@@ -12,9 +12,8 @@ This project will demonstrate the usage of:
 
 - Web (Frontend)
     - React (Typescript)
-    - Vite 
-    - Redux
-    - [ui lib here]
+    - Redux Toolkit, React Router
+    - TailwindCSS
 
 - API (Backend)
     - ASP.NET Core 9.0 (C#)
