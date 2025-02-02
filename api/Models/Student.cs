@@ -10,7 +10,8 @@ namespace api.Models
         public int Id { get; set; }
         public List<string>? AreasOfImprovemnt { get; set; }
         public string? DegreeProgram { get; set; }
-        public int UserId { get; set; }
+        // Foreign key to  User (Identity User uses ids of type string)
+        public required string UserId { get; set; }
 
         // Navigation property
         public required User User { get; set; }    

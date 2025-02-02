@@ -18,7 +18,9 @@ namespace api.Models
         public List<Student>? Students { get; set; } 
         public string? PortraitUrl { get; set; } 
         public Status Status { get; set; } 
-        public int UserId { get; set; }
+        // Foreign key to  User (Identity User uses ids of type string)
+        public required string UserId { get; set; }
+
         // Navigation property
         public required User User { get; set; } 
     }
