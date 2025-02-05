@@ -7,27 +7,29 @@ const userSlice = createSlice({
     name: "user",
     initialState: null,
     reducers: {
-      setUser(state, action) {
-        return action.payload;
-      },
-      clearUser(state, action) {
-        return null;
-      },
+        setUser(state, action) {
+            return action.payload;
+        },
+        clearUser(state, action) {
+            return null;
+        },
     },
-  });
+});
 
-// export const loginUser = (creds: SignupInfo) => {
-//     return async (dispatch: Dispatch) => {
-//         try {
-//             const user = await accountService.signup(creds);
-//             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-//             accountService.setToken(user.token);
-//             dispatch(setUser(user));
-//         } catch (err) {
-//             dispatch(showNotification("error", err, 4));
-//             return Promise.reject();
-//         }
-//     };
-// };
+export const { setUser, clearUser } = userSlice.actions
 
-export default userSlice.reducer;
+export const signupUser = (creds: SignupInfo) => {
+    console.log("signup reached")
+    return async (dispatch: Dispatch) => {
+        try {
+            const user = await accountService.signup(creds);
+            accountService.setToken(user.token);
+            dispatch(setUser(user));
+        } catch (err) {
+            dispatch(showNotification("error", err, 4));
+            return Promise.reject();
+        }
+    };
+};
+
+export default { userReducer: userSlice.reducer };
