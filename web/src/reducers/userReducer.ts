@@ -16,18 +16,18 @@ const userSlice = createSlice({
     },
   });
 
-export const loginUser = (creds: SignupInfo) => {
-    return async (dispatch: Dispatch) => {
-        try {
-            const user = await accountService.signup(creds);
-            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-            accountService.setToken(user.token);
-            dispatch(setUser(user));
-        } catch (err) {
-            dispatch(showNotification("error", err, 4));
-            return Promise.reject();
-        }
-    };
-};
+// export const loginUser = (creds: SignupInfo) => {
+//     return async (dispatch: Dispatch) => {
+//         try {
+//             const user = await accountService.signup(creds);
+//             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+//             accountService.setToken(user.token);
+//             dispatch(setUser(user));
+//         } catch (err) {
+//             dispatch(showNotification("error", err, 4));
+//             return Promise.reject();
+//         }
+//     };
+// };
 
 export default userSlice.reducer;
