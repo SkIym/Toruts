@@ -20,6 +20,7 @@ export const SignUpForm = () => {
                 username: username.value, 
                 email: email.value, 
                 password: password.value}))
+            navigate("/")
         } catch {
             //
         }
@@ -28,14 +29,21 @@ export const SignUpForm = () => {
     return <div>
         <h1>Sign up</h1>
         <form onSubmit={handleSignups} action="/">
-            <label htmlFor="">Username</label>
-            <input {...username} />
-            <label htmlFor="">Email</label>
-            <input {...email} />
-            <label htmlFor="">Password</label>
-            <input {...password} />
+            <div>
+                <span>Username:</span>
+                <input {...username} data-testid="username" />
+            </div>
+            <div>
+                <span>Email:</span>
+                <input {...email} data-testid="username" />
+            </div>
+            <div>
+                <span>Password:</span>
+                <input {...password} data-testid="password" />
+            </div>
             <input type="submit" />
         </form>
+        <button onClick={() => navigate("/login")}>Login instead</button>
     </div>
 }
 

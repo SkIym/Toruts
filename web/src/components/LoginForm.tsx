@@ -12,8 +12,13 @@ const LoginForm = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await dispatch(loginUser(username.value, password.value));
+      await dispatch(loginUser({
+        username: username.value, 
+        password: password.value
+        }));
       navigate("/");
+      usernameReset()
+      passwordReset()
     } catch (err) {
       return;
     }

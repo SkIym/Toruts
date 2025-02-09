@@ -27,6 +27,7 @@ export const signupUser = (creds: SignupInfo) => {
             accountService.setToken(user.token);
             dispatch(setUser(user));
         } catch (err) {
+            console.log(err)
             // dispatch(showNotification("error", err, 4));
             return Promise.reject();
         }
@@ -44,7 +45,19 @@ export const getLoggedInUser = () => {
 };
 
 export const loginUser = (creds: LoginInfo) => {
-
+    console.log("login reducer reached")
+    return async (dispatch: Dispatch) => {
+        try {
+            const user = await accountService.login(creds);
+            accountService.setToken(user.token);
+            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+            dispatch(setUser(user));
+        } catch (err) {
+            console.log(err)
+            // dispatch(showNotification("error", err, 4));
+            return Promise.reject();
+        }
+    };
 }
 
 export default userSlice.reducer

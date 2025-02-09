@@ -29,11 +29,12 @@ namespace api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
+            Console.WriteLine("Logging in...");
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
             if (user == null) return Unauthorized("Invalid username");
@@ -59,7 +60,8 @@ namespace api.Controllers
             {
                 if (!ModelState.IsValid)
                 return BadRequest(ModelState);  
-
+                
+                Console.WriteLine("Signing up...");
                 var appUser = new User
                 {
                     UserName =  signupDto.UserName,
