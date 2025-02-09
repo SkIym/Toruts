@@ -50,6 +50,7 @@ export const loginUser = (creds: LoginInfo) => {
         try {
             const user = await accountService.login(creds);
             accountService.setToken(user.token);
+            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
         } catch (err) {
             console.log(err)
