@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, Dispatch, Action } from "@reduxjs/toolkit";
-import { SignupInfo } from "../types";
+import { SignupInfo, LoginInfo } from "../types";
 import accountService from "../services/account";
 import { ThunkAction } from "@reduxjs/toolkit";
 
@@ -19,7 +19,7 @@ const userSlice = createSlice({
 
 export const { setUser, clearUser } = userSlice.actions
 
-export const signupUser = (creds: SignupInfo): ThunkAction<Promise<void>, RootState, unknown, Action> => {
+export const signupUser = (creds: SignupInfo) => {
     console.log("signup reached")
     return async (dispatch: Dispatch) => {
         try {
@@ -32,5 +32,19 @@ export const signupUser = (creds: SignupInfo): ThunkAction<Promise<void>, RootSt
         }
     };
 };
+
+export const getLoggedInUser = () => {
+    return async (dispatch: Dispatch) => {
+      const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+      if (loggedInUserJSON) {
+        const user = JSON.parse(loggedInUserJSON);
+        dispatch(setUser(user));
+      }
+    };
+};
+
+export const loginUser = (creds: LoginInfo) => {
+
+}
 
 export default userSlice.reducer

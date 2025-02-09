@@ -26,7 +26,7 @@ export const SignUpForm = () => {
     }
 
     return <div>
-        Sign up:
+        <h1>Sign up</h1>
         <form onSubmit={handleSignups} action="/">
             <label htmlFor="">Username</label>
             <input {...username} />
