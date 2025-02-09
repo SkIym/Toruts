@@ -1,19 +1,19 @@
 import axios from "axios";
 import { accountApiBaseUrl } from "../constants";
-import { SignupInfo } from "../types";
-import { signupUser } from "../reducers/userReducer";
+import { SignupInfo, UserToken } from "../types";
 
 import { serverURL } from "../constants";
 
-let token = null;
+let token: string = '';
 
 const setToken = async (newToken: string) => {
     token = `Bearer ${newToken}`;
 };
 
 const signup = async (creds: SignupInfo) => {
-    console.log("Hello World!")
-    const { data } = await axios.post<SignupInfo>(`${serverURL}${accountApiBaseUrl}`, creds)
+    console.log("Requesting...")
+    const { data } = await axios.post<UserToken>(`${serverURL}account/signup`, creds)
+    console.log("Sign up succesful")
     return data;
 }
 

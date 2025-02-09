@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo } from "../types";
+import { createSlice, Dispatch, Action } from "@reduxjs/toolkit";
+import { SignupInfo, LoginInfo } from "../types";
 import accountService from "../services/account";
+import { ThunkAction } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
     name: "user",
@@ -26,10 +27,24 @@ export const signupUser = (creds: SignupInfo) => {
             accountService.setToken(user.token);
             dispatch(setUser(user));
         } catch (err) {
-            dispatch(showNotification("error", err, 4));
+            // dispatch(showNotification("error", err, 4));
             return Promise.reject();
         }
     };
 };
 
-export default { userReducer: userSlice.reducer };
+export const getLoggedInUser = () => {
+    return async (dispatch: Dispatch) => {
+      const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+      if (loggedInUserJSON) {
+        const user = JSON.parse(loggedInUserJSON);
+        dispatch(setUser(user));
+      }
+    };
+};
+
+export const loginUser = (creds: LoginInfo) => {
+
+}
+
+export default userSlice.reducer
