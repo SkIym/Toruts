@@ -1,2 +1,1 @@
-export const accountApiBaseUrl = "/api/account"
-export const serverURL = "localhost:5177/"
+export const serverURL = "http://localhost:5177/api/"
