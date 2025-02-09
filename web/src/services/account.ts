@@ -1,6 +1,6 @@
 import axios from "axios";
 import { accountApiBaseUrl } from "../constants";
-import { SignupInfo, UserToken } from "../types";
+import { LoginInfo, SignupInfo, UserToken } from "../types";
 
 import { serverURL } from "../constants";
 
@@ -11,12 +11,19 @@ const setToken = async (newToken: string) => {
 };
 
 const signup = async (creds: SignupInfo) => {
-    console.log("Requesting...")
+    console.log("Requesting singup...")
     const { data } = await axios.post<UserToken>(`${serverURL}account/signup`, creds)
-    console.log("Sign up succesful")
+    console.log("Sign up request received", data)
     return data;
 }
 
+const login = async (creds: LoginInfo) => {
+    console.log("Requesting login...")
+    const { data } = await axios.post<UserToken>(`${serverURL}account/login`, creds)
+    console.log("Login request received", data)
+    return data
+}
+
 export default {
-    signup, setToken
+    signup, setToken, login
 }
