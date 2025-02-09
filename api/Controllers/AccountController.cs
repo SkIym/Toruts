@@ -30,7 +30,6 @@ namespace api.Controllers
                 if (!ModelState.IsValid)
                 return BadRequest(ModelState);  
 
-                Console.WriteLine("Signing up...");
                 var appUser = new User
                 {
                     UserName =  signupDto.UserName,
