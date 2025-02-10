@@ -2,11 +2,12 @@ import { useField } from "../hooks";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../store";
 
 const LoginForm = () => {
   const { reset: usernameReset, ...username } = useField("text");
   const { reset: passwordReset, ...password } = useField("password");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
