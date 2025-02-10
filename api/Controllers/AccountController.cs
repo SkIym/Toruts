@@ -99,7 +99,7 @@ namespace api.Controllers
         }
         
         [HttpDelete]
-        [Route("{username}")]
+        [Route("delete/{username}")]
         public async Task<IActionResult> Delete([FromRoute] string username)
         {
             if (!ModelState.IsValid)
@@ -118,6 +118,29 @@ namespace api.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Deleted user");
+        }
+
+        [HttpPut]
+        [Route("update/{username}")]
+        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateUserDto updateDto) 
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound(username);
+            }
+
+            user.FirstName = updateDto.FirstName;
+            user.LastName = updateDto.LastName;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Updated user");
+
         }
     }
 }
