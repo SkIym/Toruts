@@ -2,7 +2,7 @@ import { useField } from "../hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signupUser } from "../reducers/userReducer";
-import { AppDispatch } from "../types";
+import { AppDispatch } from "../../store";
 
 
 export const SignUpForm = () => {
