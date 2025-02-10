@@ -7,6 +7,7 @@ using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using api.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
@@ -16,10 +17,12 @@ namespace api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDBContext _context;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<User> _signInManger;
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, ApplicationDBContext context, ITokenService tokenService, SignInManager<User> signInManager)
         {
+            _context = context;
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManger = signInManager;
@@ -93,6 +96,28 @@ namespace api.Controllers
             {
                 return StatusCode(500, e);
             }
+        }
+        
+        [HttpDelete]
+        [Route("{username}")]
+        public async Task<IActionResult> Delete([FromRoute] string username)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            // var email = $"{username}@{extension}";
+            
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound(username);
+            }
+
+            _context.User.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok("Deleted user");
         }
     }
 }
