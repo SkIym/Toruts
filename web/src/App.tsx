@@ -1,28 +1,33 @@
-import { useEffect } from 'react'
+
 import './App.css'
 import './components/SignupForm'
-import { useDispatch } from 'react-redux'
-import { getLoggedInUser } from './reducers/userReducer'
 import { Outlet } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store'
+import { useEffect, useState } from 'react'
+import { getLoggedInUser } from './reducers/userReducer'
 
 const App = () => {
+
     const dispatch = useDispatch<AppDispatch>();
+    const [isReady, setIsReady] = useState(false);
+
     useEffect(() => 
-    {
-        const getUser = async () => {
-            await dispatch(getLoggedInUser());
-            console.log("getting loggedinuser...")
-        }
-        
-        getUser();
+        {
+            const getUser = async () => {
+                await dispatch(getLoggedInUser());
+                console.log("getting loggedinuser...")
+            }
+            
+            getUser();
+            setIsReady(true);
     }, [dispatch])
-    
-    return (
-        <>
-            <Outlet></Outlet>
-        </>
-    )
+
+    if (!isReady) {
+        return <div>Loading...</div>
+    }
+
+    return isReady ? <Outlet/> : null
 }
 
 export default App

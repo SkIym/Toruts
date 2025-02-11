@@ -3,6 +3,7 @@ import { SignUpForm } from "../components/SignupForm";
 import LoginForm from "../components/LoginForm";
 import App from "../App";
 import ProfilePage from "../components/ProfilePage";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -10,7 +11,12 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
     //   { path: "", element: <HomePage /> }, no homepage for now
-      { path: "", element: <ProfilePage/>},
+      { path: "", 
+        element: (
+            <ProtectedRoute>
+                <ProfilePage/>
+            </ProtectedRoute>)
+        },
       { path: "login", element: <LoginForm /> },
       { path: "signup", element: <SignUpForm /> },
     ],
