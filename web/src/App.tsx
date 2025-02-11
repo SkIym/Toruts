@@ -4,9 +4,10 @@ import './components/SignupForm'
 import { useDispatch } from 'react-redux'
 import { getLoggedInUser } from './reducers/userReducer'
 import { Outlet } from 'react-router-dom'
+import { AppDispatch } from '../store'
 
 const App = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     useEffect(() => 
     {
         const getUser = async () => {
