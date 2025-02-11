@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store'
 import { useEffect, useState } from 'react'
 import { getLoggedInUser } from './reducers/userReducer'
+import { ToastContainer } from 'react-toastify'
 
 const App = () => {
 
@@ -27,7 +28,12 @@ const App = () => {
         return <div>Loading...</div>
     }
 
-    return isReady ? <Outlet/> : null
+    return isReady ? (
+        <>
+            <Outlet/> 
+            <ToastContainer/>
+        </>
+    ) : null
 }
 
 export default App

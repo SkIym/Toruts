@@ -2,7 +2,9 @@
 import { createSlice, Dispatch, Action } from "@reduxjs/toolkit";
 import { SignupInfo, LoginInfo } from "../types";
 import accountService from "../services/account";
-import { ThunkAction } from "@reduxjs/toolkit";
+import axios from "axios";
+import { useNotification } from "../hooks";
+import { toast } from "react-toastify";
 
 const userSlice = createSlice({
     name: "user",
@@ -26,9 +28,8 @@ export const signupUser = (creds: SignupInfo) => {
             const user = await accountService.signup(creds);
             accountService.setToken(user.token);
             dispatch(setUser(user));
-        } catch (err) {
-            console.log(err)
-            // dispatch(showNotification("error", err, 4));
+        } catch (e) {
+            useNotification(e)
             return Promise.reject();
         }
     };
@@ -52,9 +53,8 @@ export const loginUser = (creds: LoginInfo) => {
             accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
-        } catch (err) {
-            console.log(err)
-            // dispatch(showNotification("error", err, 4));
+        } catch (e) {
+            useNotification(e)
             return Promise.reject();
         }
     };
