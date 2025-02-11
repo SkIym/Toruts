@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createSlice, Dispatch, Action } from "@reduxjs/toolkit";
+import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import { SignupInfo, LoginInfo } from "../types";
 import accountService from "../services/account";
-import axios from "axios";
-import { useNotification } from "../hooks";
-import { toast } from "react-toastify";
+import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 const userSlice = createSlice({
     name: "user",
@@ -27,9 +25,11 @@ export const signupUser = (creds: SignupInfo) => {
         try {
             const user = await accountService.signup(creds);
             accountService.setToken(user.token);
+            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
+            useSuccessNotification("Signup succesful!")
         } catch (e) {
-            useNotification(e)
+            useErrorNotification(e)
             return Promise.reject();
         }
     };
@@ -53,8 +53,9 @@ export const loginUser = (creds: LoginInfo) => {
             accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
+            useSuccessNotification("Login succesful!")
         } catch (e) {
-            useNotification(e)
+            useErrorNotification(e)
             return Promise.reject();
         }
     };

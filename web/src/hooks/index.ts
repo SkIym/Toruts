@@ -18,7 +18,7 @@ export const useField = (type: string) => {
   };
 };
 
-export const useNotification = (e: unknown) => {
+export const useErrorNotification = (e: unknown) => {
     if (axios.isAxiosError(e)) {
         console.log(e)
         switch (e.status) {
@@ -41,4 +41,8 @@ export const useNotification = (e: unknown) => {
     } else {
         console.error(e);
     }
+}
+
+export const useSuccessNotification = (message: string) => {
+    toast.success(message)
 }
