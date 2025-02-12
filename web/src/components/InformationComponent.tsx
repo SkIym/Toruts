@@ -34,6 +34,7 @@ export const InformationComponent = () => {
         }
     }
     return <div id="information">
+        <h2>Update your profile</h2>
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>
