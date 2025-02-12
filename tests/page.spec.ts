@@ -60,8 +60,8 @@ test.describe('Test Pages', () => {
         await page.getByTestId('password').fill('Abc123!?')
         await page.getByRole('button', { name: 'Login' }).click()
 
-        const heading = await 
-        await expect(page.getByText('OMG HELLO')).toBeVisible();
+        const heading = await page.getByRole('heading', { name: /HELLO/ })
+        await expect(heading).toBeVisible();
     })
 
     test('Info Page', async ({ page }) => {
