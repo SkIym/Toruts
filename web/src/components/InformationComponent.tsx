@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux"
 import { useField } from "../hooks"
 import { AppDispatch } from "../../store"
 import { useNavigate } from "react-router-dom"
+import { addUserInfo } from "../reducers/userReducer"
 
 const export informationComponent = () => {
     const { reset: fnameReset, ...firstName } = useField("text")
@@ -13,6 +14,16 @@ const export informationComponent = () => {
     const handleInformation = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
+            const loggedInUserJSON = window.localStorage.getItem("loggedInUser")
+            if (loggedInUserJSON == null) {
+                return
+
+            }
+            await dispatch(addUserInfo({
+                firstName: firstName.value,
+                lastName: lastName.value,
+                token: JSON.parse(loggedInUserJSON)
+            }))
         } catch (err) {
             return
         }
