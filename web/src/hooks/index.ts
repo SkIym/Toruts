@@ -23,6 +23,7 @@ export const useErrorNotification = (e: unknown) => {
         console.log(e)
         switch (e.status) {
             case 400:
+                if (e.response?.data) toast.error(e.response?.data)
                 if (e.response?.data.errors.Email) toast.error(e.response?.data.errors.Email[0])
                 if (e.response?.data.errors.Password) toast.error(e.response?.data.errors.Password[0])
                 break;
