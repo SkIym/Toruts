@@ -24,7 +24,7 @@ const login = async (creds: LoginInfo) => {
     return data
 }
 
-const userinfo = async (info: UserInfo) => {
+const setUserInfo = async (info: UserInfo) => {
     console.log("info reached")
 
     const { data } = await axios.post<UserToken>(`${serverURL}account/account/${info.token?.userName}`, info)
@@ -36,5 +36,5 @@ const userinfo = async (info: UserInfo) => {
 }
 
 export default {
-    signup, setToken, login
+    signup, setToken, login, setUserInfo
 }
