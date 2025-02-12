@@ -29,8 +29,7 @@ namespace api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             Console.WriteLine("Logging in...");
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
@@ -40,7 +39,7 @@ namespace api.Controllers
             var result = await _signInManger.CheckPasswordSignInAsync(user, loginDto.Password, false);
             Console.WriteLine(loginDto.Password);
 
-            if (!result.Succeeded) return Unauthorized("Username not found and/or incorrect passowrd");
+            if (!result.Succeeded) return Unauthorized("Username not found and/or incorrect password");
 
             return Ok(
                 new NewUserDto
@@ -55,21 +54,26 @@ namespace api.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupDto signupDto)
         {
-            try 
+            try
             {
-                if (!ModelState.IsValid)
-                return BadRequest(ModelState);  
-                
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+
+                var userExists = await _userManager.FindByNameAsync(signupDto.UserName);
+                if (userExists != null) return BadRequest("Username already exists");
+
+                var emailExists = await _userManager.FindByEmailAsync(signupDto.Email);
+                if (emailExists != null) return BadRequest("Email already exists");
+
                 Console.WriteLine("Signing up...");
                 var appUser = new User
                 {
-                    UserName =  signupDto.UserName,
+                    UserName = signupDto.UserName,
                     Email = signupDto.Email
                 };
 
                 var createdUser = await _userManager.CreateAsync(appUser, signupDto.Password);
 
-                if(createdUser.Succeeded)
+                if (createdUser.Succeeded)
                 {
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
                     if (roleResult.Succeeded)
@@ -82,16 +86,19 @@ namespace api.Controllers
                                 Token = _tokenService.CreateToken(appUser)
                             }
                         );
-                    } else
+                    }
+                    else
                     {
                         return StatusCode(500, roleResult.Errors);
                     }
-                } else 
+                }
+                else
                 {
                     return StatusCode(500, createdUser.Errors);
                 }
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return StatusCode(500, e);
             }
