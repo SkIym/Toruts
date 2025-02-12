@@ -4,7 +4,7 @@ import { AppDispatch } from "../../store"
 import { useNavigate } from "react-router-dom"
 import { addUserInfo } from "../reducers/userReducer"
 
-const export informationComponent = () => {
+export const InformationComponent = () => {
     const { reset: fnameReset, ...firstName } = useField("text")
     const { reset: lnameReset, ...lastName } = useField("text")
 
@@ -16,7 +16,7 @@ const export informationComponent = () => {
         try {
             const loggedInUserJSON = window.localStorage.getItem("loggedInUser")
             if (loggedInUserJSON == null) {
-                return
+                throw "not logged in";
             }
 
             await dispatch(addUserInfo({
@@ -27,25 +27,23 @@ const export informationComponent = () => {
 
             fnameReset()
             lnameReset()
-        } catch (err) {
-            return
+        } catch (e) {
+            console.error(e)
+            return;
         }
-
-        return (
-            <div id="information">
-                <form onSubmit={handleInformation} id="user-information-form">
-                    <div>
-                        <span>First Name</span>
-                        <input {...firstName} />
-                    </div>
-                    <div>
-                        <span>Last Name</span>
-                        <input {...lastName} />
-                    </div>
-                    <button type="submit" > Upload</button>
-                </form>
-            </div>
-        )
     }
+    return <div id="information">
+        <form onSubmit={handleInformation} id="user-information-form">
+            <div>
+                <span>First Name</span>
+                <input {...firstName} />
+            </div>
+            <div>
+                <span>Last Name</span>
+                <input {...lastName} />
+            </div>
+            <button type="submit" > Upload</button>
+        </form>
+    </div>
 
 }
