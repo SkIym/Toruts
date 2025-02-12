@@ -1,6 +1,6 @@
 import axios from "axios";
 import { accountApiBaseUrl } from "../constants";
-import { LoginInfo, SignupInfo, UserToken } from "../types";
+import { LoginInfo, SignupInfo, UserInfo, UserToken } from "../types";
 
 import { serverURL } from "../constants";
 
@@ -22,6 +22,17 @@ const login = async (creds: LoginInfo) => {
     const { data } = await axios.post<UserToken>(`${serverURL}account/login`, creds)
     console.log("Login request received", data)
     return data
+}
+
+const userinfo = async (info: UserInfo) => {
+    console.log("info reached")
+
+    const { data } = await axios.post<UserToken>(`${serverURL}account/account/${info.token?.userName}`, info)
+
+    return data
+
+
+
 }
 
 export default {
