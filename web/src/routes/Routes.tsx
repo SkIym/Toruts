@@ -4,7 +4,7 @@ import LoginForm from "../components/LoginForm";
 import App from "../App";
 import ProfilePage from "../components/ProfilePage";
 import ProtectedRoute from "./ProtectedRoute";
-import { InformationComponent } from "../components/InformationComponent";
+import { InfoForm } from "../components/InfoForm";
 
 export const router = createBrowserRouter([
     {
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
             },
             { path: "login", element: <LoginForm /> },
             { path: "signup", element: <SignUpForm /> },
-            { path: "profile", element: <InformationComponent /> },
+            { path: "profile", element: <InfoForm /> },
         ],
     },
 ]);

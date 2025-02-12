@@ -4,7 +4,7 @@ import { AppDispatch } from "../../store"
 import { useNavigate } from "react-router-dom"
 import { addUserInfo } from "../reducers/userReducer"
 
-export const InformationComponent = () => {
+export const InfoForm = () => {
     const { reset: fnameReset, ...firstName } = useField("text")
     const { reset: lnameReset, ...lastName } = useField("text")
 
