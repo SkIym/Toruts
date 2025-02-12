@@ -35,7 +35,7 @@ export const SignUpForm = () => {
             </div>
             <div>
                 <span>Email:</span>
-                <input {...email} data-testid="username" />
+                <input {...email} data-testid="email" />
             </div>
             <div>
                 <span>Password:</span>

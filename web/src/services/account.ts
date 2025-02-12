@@ -26,15 +26,16 @@ const login = async (creds: LoginInfo) => {
 
 const setUserInfo = async (info: UserInfo) => {
     console.log("info reached")
-
     const { data } = await axios.put<UserToken>(`${serverURL}record/update/${info.token?.userName}`, info)
-
     return data
+}
 
-
-
+const deleteUser = async (username: string) => {
+    console.log("delete user reached")
+    const { data } = await axios.delete(`${serverURL}record/delete/${username}`)
+    return data
 }
 
 export default {
-    signup, setToken, login, setUserInfo
+    signup, setToken, login, setUserInfo, deleteUser
 }

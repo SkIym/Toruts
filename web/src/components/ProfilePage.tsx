@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
-import { logoutUser } from "../reducers/userReducer";
+import { logoutUser, deleteUser } from "../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
@@ -18,12 +18,27 @@ const ProfilePage = () => {
         }
     }
 
+    const handleDelete = async () => {
+        console.log("Handling deletion...")
+        try {
+            const loggedInUserJSON = window.localStorage.getItem("loggedInUser")
+            if (loggedInUserJSON == null) {
+                throw "not logged in";
+            }
+
+            await dispatch(deleteUser(JSON.parse(loggedInUserJSON)))
+        } catch {
+            //
+        }
+    }
+
 
     console.log("(app) hello", user)
     return (
         <div>
             <h1>OMG HELLO</h1>
             <button onClick={() => navigate('/profile')}>Edit Profile</button>
+            <button onClick={handleDelete}>Delete Profile</button>
             <button onClick={handleLogout}>Logout</button>
         </div>
 
