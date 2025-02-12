@@ -17,6 +17,16 @@ describe('Authentication measures', () => {
         const locator = await page.getByText('Welcome to Toruts, ka-peyups!')
         await expect(locator).toBeVisible()
     })
+
+    test('user can not sign up with incomplete info', async ({ page }) => {
+        await page.getByRole('button', { name: 'Sign up'}).click()
+        await expect(page.getByText('Sign up')).toBeVisible()
+        await page.getByTestId('username').fill('abram')
+        await page.getByTestId('email').fill('acmarcelo2@up.edu.ph')
+        await page.getByTestId('password').fill('')
+        await page.getByRole('button', { name : 'Submit'}).click()
+        await expect(page.getByText('Sign up')).toBeVisible()
+    })
     
     test('user can sign up and add profile', async ({ page }) => {
         await page.getByRole('button', { name: 'Sign up'}).click()
