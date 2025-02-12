@@ -38,11 +38,11 @@ export const InformationComponent = () => {
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>
-                <input {...firstName} />
+                <input {...firstName} data-testid="first-name"/>
             </div>
             <div>
                 <span>Last Name</span>
-                <input {...lastName} />
+                <input {...lastName} data-testid="last-name"/>
             </div>
             <button type="submit" > Upload</button>
         </form>
