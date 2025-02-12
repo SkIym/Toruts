@@ -41,7 +41,7 @@ export const SignUpForm = () => {
                 <span>Password:</span>
                 <input {...password} data-testid="password" />
             </div>
-            <button type="submit" />
+            <button type="submit">Sign up</button>
         </form>
         <button onClick={() => navigate("/login")}>Login instead</button>
     </div>
