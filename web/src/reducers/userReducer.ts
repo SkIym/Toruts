@@ -61,4 +61,12 @@ export const loginUser = (creds: LoginInfo) => {
     };
 }
 
+export const logoutUser = () => {
+    return async (dispatch: Dispatch) => {
+        window.localStorage.removeItem("loggedInUser");
+        dispatch(clearUser(''));
+        useSuccessNotification("Logged out.")
+    };
+};
+
 export default userSlice.reducer
