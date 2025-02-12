@@ -17,13 +17,16 @@ const export informationComponent = () => {
             const loggedInUserJSON = window.localStorage.getItem("loggedInUser")
             if (loggedInUserJSON == null) {
                 return
-
             }
+
             await dispatch(addUserInfo({
                 firstName: firstName.value,
                 lastName: lastName.value,
                 token: JSON.parse(loggedInUserJSON)
             }))
+
+            fnameReset()
+            lnameReset()
         } catch (err) {
             return
         }
