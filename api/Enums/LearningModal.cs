@@ -1,4 +1,6 @@
-namespace api.Models
+
+
+namespace api.Enums
 {
     public enum LearningModal
     {
