@@ -27,6 +27,7 @@ export const InformationComponent = () => {
 
             fnameReset()
             lnameReset()
+            navigate('/')
         } catch (e) {
             console.error(e)
             return;

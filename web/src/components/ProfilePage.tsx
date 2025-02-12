@@ -23,6 +23,7 @@ const ProfilePage = () => {
     return (
         <div>
             <h1>OMG HELLO</h1>
+            <button onClick={() => navigate('/profile')}>Edit Profile</button>
             <button onClick={handleLogout}>Logout</button>
         </div>
 
