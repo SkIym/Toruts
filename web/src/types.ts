@@ -13,3 +13,9 @@ export type UserToken = {
     email: string;
     token: string;
 }
+
+export type UserInfo = {
+    firstName: string;
+    lastName: string;
+    token: UserToken | null;
+}
