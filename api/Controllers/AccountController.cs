@@ -128,7 +128,7 @@ namespace api.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e); // Log the exception for debugging
-                return StatusCode(500, new { Message = "An error occurred while processing your request.", Details = e.Message });
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Errors = e });
             }
         }
     }
