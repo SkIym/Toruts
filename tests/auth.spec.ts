@@ -73,7 +73,7 @@ describe('Authentication measures', () => {
         // await loginWith(page, 'abram', 'Abc123!?')
         
         await page.getByTestId('username').fill('deleted-user');
-        await page.getByTestId('password').fill('Delete123!?');
+        await page.getByTestId('password').fill('Deleted123!?');
         await page.getByRole('button', { name: 'Login' }).click();
 
         await expect(page.getByRole('heading', { name: /HELLO/})).toBeVisible()
