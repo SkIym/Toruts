@@ -16,9 +16,16 @@ namespace api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        // UserManager for managing user-related operations
         private readonly UserManager<User> _userManager;
+
+        // TokenService for generating JWT tokens
         private readonly ITokenService _tokenService;
+
+        // SignInManager for handling user sign-in operations
         private readonly SignInManager<User> _signInManger;
+
+        // Constructor to inject dependencies
         public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
         {
             _userManager = userManager;
@@ -26,21 +33,30 @@ namespace api.Controllers
             _signInManger = signInManager;
         }
 
+        // POST endpoint for user login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            // Validate the model state
+            if (!ModelState.IsValid) return BadRequest(new { Message = "Invalid model state", Errors = ModelState.Values.SelectMany(v => v.Errors) });
 
             Console.WriteLine("Logging in...");
+
+            // Find the user by username
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
+            // If user not found, return unauthorized
             if (user == null) return Unauthorized("Invalid username");
 
+            // Check if the password is correct
             var result = await _signInManger.CheckPasswordSignInAsync(user, loginDto.Password, false);
             Console.WriteLine(loginDto.Password);
 
-            if (!result.Succeeded) return Unauthorized("Username not found and/or incorrect password");
+            // If password check fails, return unauthorized
+            if (user == null) return Unauthorized("Invalid username");
+            if (!result.Succeeded) return Unauthorized("Incorrect password");
 
+            // Return user details and JWT token
             return Ok(
                 new NewUserDto
                 {
@@ -51,33 +67,43 @@ namespace api.Controllers
             );
         }
 
+        // POST endpoint for user signup
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupDto signupDto)
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
+                // Validate the model state
+                if (!ModelState.IsValid) return BadRequest(new { Message = "Invalid model state", Errors = ModelState.Values.SelectMany(v => v.Errors) });
 
+                // Check if the username already exists
                 var userExists = await _userManager.FindByNameAsync(signupDto.UserName);
-                if (userExists != null) return BadRequest("Username already exists");
+                if (userExists != null) return BadRequest(new { Message = "Username already exists" });
 
+                // Check if the email already exists
                 var emailExists = await _userManager.FindByEmailAsync(signupDto.Email);
-                if (emailExists != null) return BadRequest("Email already exists");
+                if (emailExists != null) return BadRequest(new { Message = "Email already exists" });
 
                 Console.WriteLine("Signing up...");
+
+                // Create a new user object
                 var appUser = new User
                 {
                     UserName = signupDto.UserName,
                     Email = signupDto.Email
                 };
 
+                // Attempt to create the user
                 var createdUser = await _userManager.CreateAsync(appUser, signupDto.Password);
 
+                // If user creation is successful
                 if (createdUser.Succeeded)
                 {
+                    // Assign the "User" role to the new user
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
                     if (roleResult.Succeeded)
                     {
+                        // Return user details and JWT token
                         return Ok(
                             new NewUserDto
                             {
@@ -89,18 +115,20 @@ namespace api.Controllers
                     }
                     else
                     {
+                        // Return role assignment errors
                         return StatusCode(500, roleResult.Errors);
                     }
                 }
                 else
                 {
-                    return StatusCode(500, createdUser.Errors);
+                    // Return user creation errors
+                    return StatusCode(500, new { Message = "User creation failed", Errors = createdUser.Errors });
                 }
-
             }
             catch (Exception e)
             {
-                return StatusCode(500, e);
+                Console.WriteLine(e); // Log the exception for debugging
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Details = e.Message });
             }
         }
     }
