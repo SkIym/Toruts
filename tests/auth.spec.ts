@@ -42,7 +42,7 @@ describe('Authentication measures', () => {
 
         await expect(page.getByRole('heading', { name: /HELLO/ })).toBeVisible()
 
-        await page.getByRole('button', { name: /Delete/ }).click()
+        await page.getByRole('button', { name: 'Logout' }).click()
         await expect(page.getByRole('heading', { name: /Toruts/ })).toBeVisible()
 
     })  
@@ -60,7 +60,7 @@ describe('Authentication measures', () => {
     test('user can log in', async ({ page }) => {
         // await loginWith(page, 'abram', 'Abc123!?')
         
-        await page.getByTestId('username').fill('admin');
+        await page.getByTestId('username').fill('abram');
         await page.getByTestId('password').fill('Abc123!?');
         await page.getByRole('button', { name: 'Login' }).click();
 
@@ -91,6 +91,10 @@ describe('Authentication measures', () => {
     test('user cannot login anymore after deleting account', async ({ page }) => {
         // await loginWith(page, 'abram', 'Abc123!?')
         
+        await page.getByTestId('username').fill('abram');
+        await page.getByTestId('password').fill('Abc123!?');
+        await page.getByRole('button', { name: 'Login' }).click();
+        await page.getByRole('button', { name: /Delete/ }).click();
         await page.getByTestId('username').fill('abram');
         await page.getByTestId('password').fill('Abc123!?');
         await page.getByRole('button', { name: 'Login' }).click();
