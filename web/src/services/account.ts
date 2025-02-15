@@ -3,12 +3,12 @@ import { LoginInfo, SignupInfo, UserInfo, UserToken } from "../types";
 
 import { serverURL } from "../constants";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-let token: string = '';
 
-const setToken = async (newToken: string) => {
-    token = `Bearer ${newToken}`;
-};
+// let token: string = '';
+
+// const setToken = async (newToken: string) => {
+//     token = `Bearer ${newToken}`;
+// };
 
 const signup = async (creds: SignupInfo) => {
     console.log("Requesting singup...")
@@ -37,5 +37,5 @@ const deleteUser = async (username: string) => {
 }
 
 export default {
-    signup, setToken, login, setUserInfo, deleteUser
+    signup, login, setUserInfo, deleteUser
 }

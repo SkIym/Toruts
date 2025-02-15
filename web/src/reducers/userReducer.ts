@@ -25,7 +25,7 @@ export const signupUser = (creds: SignupInfo) => {
     return async (dispatch: Dispatch) => {
         try {
             const user = await accountService.signup(creds);
-            accountService.setToken(user.token);
+            // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
             useSuccessNotification("Signup succesful!")
@@ -51,7 +51,7 @@ export const loginUser = (creds: LoginInfo) => {
     return async (dispatch: Dispatch) => {
         try {
             const user = await accountService.login(creds);
-            accountService.setToken(user.token);
+            // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
             useSuccessNotification("Login succesful!")
