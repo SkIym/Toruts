@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import { SignupInfo, LoginInfo, UserInfo, UserToken } from "../types";
 import accountService from "../services/account";
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
+
+
 const userSlice = createSlice({
     name: "user",
     initialState: null,
     reducers: {
-        setUser(state, action) {
+        setUser(_state, action) {
             return action.payload;
         },
-        clearUser(state, action) {
+        clearUser() {
             return null;
         },
     },
@@ -63,7 +64,7 @@ export const loginUser = (creds: LoginInfo) => {
 
 export const addUserInfo = (info: UserInfo) => {
     console.log("user info reducer reached")
-    return async (dispatch: Dispatch) => {
+    return async () => {
         try {
             if (info.token == null) {
                 return Promise.reject()
@@ -80,7 +81,7 @@ export const addUserInfo = (info: UserInfo) => {
 export const logoutUser = () => {
     return async (dispatch: Dispatch) => {
         window.localStorage.removeItem("loggedInUser");
-        dispatch(clearUser(''));
+        dispatch(clearUser());
         useSuccessNotification("Logged out.")
     };
 };
@@ -90,7 +91,7 @@ export const deleteUser = (token: UserToken) => {
         try {
             window.localStorage.removeItem("loggedInUser");
             accountService.deleteUser(token.userName)
-            dispatch(clearUser(''));
+            dispatch(clearUser());
             useSuccessNotification("Deleted user.")
         } catch (e) {
             useErrorNotification(e)

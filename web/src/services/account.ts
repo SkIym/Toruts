@@ -1,9 +1,9 @@
 import axios from "axios";
-import { accountApiBaseUrl } from "../constants";
 import { LoginInfo, SignupInfo, UserInfo, UserToken } from "../types";
 
 import { serverURL } from "../constants";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let token: string = '';
 
 const setToken = async (newToken: string) => {
@@ -25,7 +25,7 @@ const login = async (creds: LoginInfo) => {
 }
 
 const setUserInfo = async (info: UserInfo) => {
-    console.log("info reached")
+    console.log("info reached") 
     const { data } = await axios.put<UserToken>(`${serverURL}record/update/${info.token?.userName}`, info)
     return data
 }
