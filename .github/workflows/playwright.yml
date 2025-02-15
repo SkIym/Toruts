@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  workflow_run:
+    workflows: [Deployment pipeline]
+    types:
+      - completed
 jobs:
     test:
         timeout-minutes: 60
