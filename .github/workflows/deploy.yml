@@ -38,7 +38,7 @@ jobs:
             - name: Start React Frontend
               working-directory: ./web
               run: |
-                PORT=5173 npm start &
+                npm start &
                 sleep 10
             - name: Install Playwright Test Runner
               run: npm install --save
