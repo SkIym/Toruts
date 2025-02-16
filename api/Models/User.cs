@@ -13,6 +13,9 @@ namespace api.Models
         public string LastName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        // One-to-one relationship
+        public Tutor? Tutor { get; set; }
+        public Student? Student { get; set;}
 
     }
 }

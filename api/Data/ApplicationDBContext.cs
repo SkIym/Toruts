@@ -47,17 +47,17 @@ namespace api.Data
 
             builder.Entity<Student>()
                 .HasOne(s => s.User)
-                .WithMany()
-                .HasForeignKey(s => s.UserId)
+                .WithOne(u => u.Student)
+                .HasForeignKey<Student>(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             builder.Entity<Tutor>()
                 .HasOne(t => t.User)
-                .WithMany()
-                .HasForeignKey(t => t.UserId)
+                .WithOne(u => u.Tutor)
+                .HasForeignKey<Tutor>(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-        }
+        }   
 
     }
 }
