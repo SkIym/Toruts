@@ -45,8 +45,9 @@ namespace api.Controllers
         // GET endpoint to filter tutors
 
         // GET endpoint to get tutor by username
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetById([FromRoute] string username)
+        [HttpGet]
+        [Route("get/{username}")]
+        public async Task<IActionResult> GetByUsername([FromRoute] string username)
         {
             var user = await _userManager.FindByNameAsync(username);
 
@@ -68,20 +69,20 @@ namespace api.Controllers
         }
 
 
-        // // GET endpoint to get tutor by id
-        // [HttpGet("{id}")]
-        // public async Task<IActionResult> GetById([FromRoute] int id)
-        // {
-        //     var tutor = await _context.Tutor.FindAsync(id);
+        // GET endpoint to get tutor by id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            var tutor = await _context.Tutor.FindAsync(id);
 
-        //     // If user not found, return 404 Not Found
-        //     if (tutor == null)
-        //     {
-        //         return NotFound();
-        //     }
+            // If user not found, return 404 Not Found
+            if (tutor == null)
+            {
+                return NotFound();
+            }
 
-        //     return Ok(tutor.ToTutorDto());
-        // }
+            return Ok(tutor.ToTutorDto());
+        }
 
         // POST endpoint to create tutors
         [HttpPost]
