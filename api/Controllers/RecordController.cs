@@ -9,6 +9,8 @@ using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
+using api.Mappers;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -84,40 +86,5 @@ namespace api.Controllers
             return Ok("Updated user");
         }
 
-        // [HttpPost]
-        // [Route("create/tutor/{username}")]
-        // public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] TutorDto tutorDto)
-        // {
-        //     if (!ModelState.IsValid)
-        //         return BadRequest(ModelState);
-
-        //     var user = await _userManager.FindByNameAsync(username);
-
-        //     if (user == null)
-        //     {
-        //         return NotFound(username);
-        //     }
-
-        //     var tutor = new Tutor 
-        //     {
-        //         UserId = user.Id,
-        //         User = user,
-        //         EducAttainment = tutorDto.EducAttainment,
-        //         LearningMode = tutorDto.LearningMode,
-        //         Venue = tutorDto.Venue,
-        //         Price = tutorDto.Price,
-        //         AreasOfExpertise = tutorDto.AreasOfExpertise,
-        //         TutoringExperiences = tutorDto.TutoringExperiences,
-        //         Availability = tutorDto.Availability,
-        //         PortraitUrl = tutorDto.PortraitUrl,
-        //         Status = tutorDto.Status
-        //     };
-
-        //     await _context.Tutor.AddAsync(tutor);
-        //     await _context.SaveChangesAsync();
-
-        //     return Ok("Updated user");
-
-        // }
     }
 }

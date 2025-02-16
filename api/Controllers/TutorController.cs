@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using api.Interfaces;
+using api.Dtos.Record;
+using api.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using api.Data;
+using api.Mappers;
+using Microsoft.EntityFrameworkCore;
+
+namespace api.Controllers
+{
+    [ApiController]
+    [Route("api/tutors")]
+    public class TutorController : ControllerBase
+    {
+        // UserManager for managing user-related operations
+        private readonly UserManager<User> _userManager;
+
+        // ApplicationDBContext for interacting with the database
+        private readonly ApplicationDBContext _context;
+
+        // Constructor to inject dependencies
+        public TutorController(UserManager<User> userManager, ApplicationDBContext context)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        // GET endpoind to get all tutors
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var tutorList = await _context.Tutor.ToListAsync();
+            var tutors = tutorList.Select(t => t.ToTutorDto());
+
+            return Ok(tutors);
+        }
+
+        // GET endpoint to search tutors
+
+        // GET endpoint to filter tutors
+
+        // GET endpoint to get tutor by username
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetById([FromRoute] string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            // If user not found, return 404 Not Found
+            if (user == null)
+            {
+                return NotFound(username);
+            }
+
+            var tutor = await _context.Tutor.FirstAsync(t => t.UserId == user.Id);
+
+            // If user not found, return 404 Not Found
+            if (tutor == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(tutor.ToTutorDto());
+        }
+
+
+        // // GET endpoint to get tutor by id
+        // [HttpGet("{id}")]
+        // public async Task<IActionResult> GetById([FromRoute] int id)
+        // {
+        //     var tutor = await _context.Tutor.FindAsync(id);
+
+        //     // If user not found, return 404 Not Found
+        //     if (tutor == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     return Ok(tutor.ToTutorDto());
+        // }
+
+        // POST endpoint to create tutors
+        [HttpPost]
+        [Route("create/{username}")]
+        public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto)
+        {
+
+            // Validate the model state
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Find username
+            var user = await _userManager.FindByNameAsync(username);
+
+            // If user not found, return 404 Not Found
+            if (user == null)
+            {
+                return NotFound(username);
+            }
+
+            var tutor = new Tutor 
+            {
+                UserId = user.Id,
+                User = user,
+                EducAttainment = tutorDto.EducAttainment,
+                LearningMode = tutorDto.LearningMode,
+                Venue = tutorDto.Venue,
+                Price = tutorDto.Price,
+                AreasOfExpertise = tutorDto.AreasOfExpertise,
+                TutoringExperiences = tutorDto.TutoringExperiences,
+                Availability = tutorDto.Availability,
+                PortraitUrl = tutorDto.PortraitUrl,
+                Status = tutorDto.Status
+            };
+
+            await _context.Tutor.AddAsync(tutor);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetById), new { id = tutor.Id }, tutor.ToTutorDto());
+
+        }
+    }
+}

@@ -2,8 +2,8 @@ namespace api.Enums
 {
     public enum Status
     {
-        Active,
-        Inactive,
-        PendingVerification
+        Inactive = 0,
+        Active = 1,
+        PendingVerification = 2
     }
 }
