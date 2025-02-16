@@ -57,7 +57,7 @@ namespace api.Controllers
                 return NotFound(username);
             }
 
-            var tutor = await _context.Tutor.FirstAsync(t => t.UserId == user.Id);
+            var tutor = await _context.Tutor.FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             // If user not found, return 404 Not Found
             if (tutor == null)
@@ -100,7 +100,14 @@ namespace api.Controllers
             // If user not found, return 404 Not Found
             if (user == null)
             {
-                return NotFound(username);
+                return NotFound($"User '{username}' does not exist.");
+            }
+
+            // Check if the user already has a tutor account
+            var existingTutor = await _context.Tutor.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            if (existingTutor != null)
+            {
+                return BadRequest("User already has a tutor account.");
             }
 
             var tutor = new Tutor 
