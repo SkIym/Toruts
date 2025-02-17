@@ -4,16 +4,15 @@ import accountService from "../services/account";
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 
-
 const userSlice = createSlice({
     name: "user",
-    initialState: null,
+    initialState: {userName: "", email: "", token: ""} satisfies UserToken as UserToken,
     reducers: {
         setUser(_state, action) {
             return action.payload;
         },
         clearUser() {
-            return null;
+            return {userName: "", email: "", token: ""};
         },
     },
 });
