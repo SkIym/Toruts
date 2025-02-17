@@ -46,15 +46,15 @@ namespace api.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
             // If user not found, return unauthorized
-            if (user == null) return Unauthorized("Invalid username");
+            if (user == null) return Unauthorized("Username does not exist");
 
             // Check if the password is correct
             var result = await _signInManger.CheckPasswordSignInAsync(user, loginDto.Password, false);
             Console.WriteLine(loginDto.Password);
 
             // If password check fails, return unauthorized
-            if (user == null) return Unauthorized("Invalid username");
-            if (!result.Succeeded) return Unauthorized("Incorrect password");
+            // NOTE: for security, username or password dapat sabihin nating mali not password lang kasi malalaman na tama ung username
+            if (!result.Succeeded) return Unauthorized("Incorrect username or password");
 
             // Return user details and JWT token
             return Ok(
