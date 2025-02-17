@@ -69,7 +69,7 @@ export const addUserInfo = (info: UserInfo) => {
             if (info.token == null) {
                 return Promise.reject()
             }
-            accountService.setUserInfo(info)
+            await accountService.setUserInfo(info)
             useSuccessNotification(`Hello ${info.firstName}!`)
         } catch (err) {
             useErrorNotification(err)

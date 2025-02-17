@@ -9,7 +9,6 @@ const ProtectedRoute = ({ children }: Props) => {
     const location = useLocation();
     const user = useSelector((state: RootState) => state.user);
     
-    console.log("(protroute) hello", user)
     return user ? (
         <>{children}</>
     ) : (

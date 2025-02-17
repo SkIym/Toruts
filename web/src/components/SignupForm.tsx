@@ -20,7 +20,7 @@ export const SignUpForm = () => {
                 username: username.value, 
                 email: email.value, 
                 password: password.value}))
-            navigate("/profile")
+            navigate("/info")
         } catch {
             //
         }

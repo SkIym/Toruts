@@ -29,6 +29,9 @@ export const useErrorNotification = (e: unknown) => {
                 // invalid username
                 if (data) toast.error(data.message)
 
+                // invalid fields
+                if (data.errors) for(const err in data.errors) for(const e of data.errors[err]) toast.error(e)
+
                 // invalid email
                 if (data.errors.Email)  for(const err of data.errors.Email) toast.error(err)
                 
