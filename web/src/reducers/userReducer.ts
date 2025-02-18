@@ -6,13 +6,13 @@ import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 const userSlice = createSlice({
     name: "user",
-    initialState: {userName: "", email: "", token: ""} satisfies UserToken as UserToken,
+    initialState: null as UserToken | null,
     reducers: {
         setUser(_state, action) {
             return action.payload;
         },
         clearUser() {
-            return {userName: "", email: "", token: ""};
+            return null;
         },
     },
 });
