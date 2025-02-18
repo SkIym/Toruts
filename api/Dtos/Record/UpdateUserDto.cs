@@ -14,6 +14,8 @@ namespace api.Dtos.Record
         [Required(ErrorMessage = "Last name is required.")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Phone number is required.")]
+        public string PhoneNumber { get; set; }
 
     }
 }
