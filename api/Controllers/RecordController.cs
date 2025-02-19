@@ -78,6 +78,7 @@ namespace api.Controllers
             // Update the user's first and last name
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
+            user.PhoneNumber = updateDto.PhoneNumber;
 
             // Save changes to the database
             await _context.SaveChangesAsync();
