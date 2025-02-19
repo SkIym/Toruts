@@ -70,9 +70,8 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("create/{username}")]
-        public async Task<IActionResult> StudentCreate([FromRoute] string username)
+        public async Task<IActionResult> StudentCreate([FromRoute] string username, CreateStudentRequestDto request)
         {
-
             if (!ModelState.IsValid)
                 return BadRequest((ModelState));
 
@@ -94,6 +93,8 @@ namespace api.Controllers
             {
                 UserId = user.Id,
                 User = user,
+                DegreeProgram = request.DegreeProgram,
+                AreasOfImprovemnt = request.AreasOfImprovement,
             };
 
             await _context.Student.AddAsync(student);
