@@ -4,16 +4,17 @@ import LoginForm from "../components/LoginForm";
 import App from "../App";
 import ProfilePage from "../components/ProfilePage";
 import ProtectedRoute from "./ProtectedRoute";
-import { InformationComponent } from "../components/InformationComponent";
+import HomePage from "../components/HomePage";
+import { InfoForm } from "../components/InfoForm";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
         children: [
-            //   { path: "", element: <HomePage /> }, no homepage for now
+            { path: "", element: <HomePage /> },
             {
-                path: "",
+                path: "profile",
                 element: (
                     <ProtectedRoute>
                         <ProfilePage />
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
             },
             { path: "login", element: <LoginForm /> },
             { path: "signup", element: <SignUpForm /> },
-            { path: "profile", element: <InformationComponent /> },
+            { path: "info", element: <InfoForm /> },
         ],
     },
 ]);

@@ -3,13 +3,21 @@ import { useField } from "../hooks"
 import { AppDispatch } from "../../store"
 import { useNavigate } from "react-router-dom"
 import { addUserInfo } from "../reducers/userReducer"
+import React, { useState } from "react"
+import TutorForm from "./TutorForm"
+import StudentForm from "./StudentForm"
 
-export const InformationComponent = () => {
+export const InfoForm = () => {
     const { reset: fnameReset, ...firstName } = useField("text")
     const { reset: lnameReset, ...lastName } = useField("text")
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate()
+    const [type, setType] = useState(true);
+
+    const toggleForm = () => {
+        setType(!type)
+    }
 
     const handleInformation = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -25,16 +33,18 @@ export const InformationComponent = () => {
                 token: JSON.parse(loggedInUserJSON)
             }))
 
+            // another dispatch here for creation of the tutor or student
+
+            navigate("/")
             fnameReset()
             lnameReset()
-            navigate('/')
         } catch (e) {
             console.error(e)
             return;
         }
     }
     return <div id="information">
-        <h2>Update your profile</h2>
+        <h2>Update your information</h2>
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>
@@ -44,7 +54,23 @@ export const InformationComponent = () => {
                 <span>Last Name</span>
                 <input {...lastName} data-testid="last-name"/>
             </div>
-            <button type="submit" > Upload</button>
+            <div>
+                {type
+                ? 
+                    <div>
+                        <h2>Signing up as a tutor...</h2>
+                        <button type="button" onClick={toggleForm}>I'm a student</button>
+                        <TutorForm></TutorForm>
+                    </div>
+                     
+                : 
+                    <div>
+                        <h2>Singing up as a student</h2>
+                        <button type="button" onClick={toggleForm}>I'm a tutor</button>
+                        <StudentForm></StudentForm>
+                    </div>
+                }                        
+            </div>
         </form>
     </div>
 

@@ -19,3 +19,8 @@ export type UserInfo = {
     lastName: string;
     token: UserToken | null;
 }
+
+export interface ToggleObject {
+    toggleVisibility: () => void 
+    setInvisible: () => void
+}

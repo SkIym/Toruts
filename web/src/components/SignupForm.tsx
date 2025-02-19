@@ -20,7 +20,7 @@ export const SignUpForm = () => {
                 username: username.value, 
                 email: email.value, 
                 password: password.value}))
-            navigate("/profile")
+            navigate("/info")
         } catch {
             //
         }
@@ -41,7 +41,7 @@ export const SignUpForm = () => {
                 <span>Password:</span>
                 <input {...password} data-testid="password" />
             </div>
-            <input type="submit" />
+            <button type="submit">Sign up</button>
         </form>
         <button onClick={() => navigate("/login")}>Login instead</button>
     </div>

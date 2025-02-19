@@ -4,8 +4,8 @@ namespace api.Enums
 {
     public enum LearningModal
     {
-        Online,
-        F2F,
-        Hybrid
+        Online = 0,
+        F2F = 1,
+        Hybrid = 2
     }
 }

@@ -1,17 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import { SignupInfo, LoginInfo, UserInfo, UserToken } from "../types";
 import accountService from "../services/account";
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
+
 const userSlice = createSlice({
     name: "user",
-    initialState: null,
+    initialState: null as UserToken | null,
     reducers: {
-        setUser(state, action) {
+        setUser(_state, action) {
             return action.payload;
         },
-        clearUser(state, action) {
+        clearUser() {
             return null;
         },
     },
@@ -24,7 +24,7 @@ export const signupUser = (creds: SignupInfo) => {
     return async (dispatch: Dispatch) => {
         try {
             const user = await accountService.signup(creds);
-            accountService.setToken(user.token);
+            // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
             useSuccessNotification("Signup succesful!")
@@ -50,7 +50,7 @@ export const loginUser = (creds: LoginInfo) => {
     return async (dispatch: Dispatch) => {
         try {
             const user = await accountService.login(creds);
-            accountService.setToken(user.token);
+            // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
             useSuccessNotification("Login succesful!")
@@ -63,12 +63,12 @@ export const loginUser = (creds: LoginInfo) => {
 
 export const addUserInfo = (info: UserInfo) => {
     console.log("user info reducer reached")
-    return async (dispatch: Dispatch) => {
+    return async () => {
         try {
             if (info.token == null) {
                 return Promise.reject()
             }
-            accountService.setUserInfo(info)
+            await accountService.setUserInfo(info)
             useSuccessNotification(`Hello ${info.firstName}!`)
         } catch (err) {
             useErrorNotification(err)
@@ -80,7 +80,7 @@ export const addUserInfo = (info: UserInfo) => {
 export const logoutUser = () => {
     return async (dispatch: Dispatch) => {
         window.localStorage.removeItem("loggedInUser");
-        dispatch(clearUser(''));
+        dispatch(clearUser());
         useSuccessNotification("Logged out.")
     };
 };
@@ -90,7 +90,7 @@ export const deleteUser = (token: UserToken) => {
         try {
             window.localStorage.removeItem("loggedInUser");
             accountService.deleteUser(token.userName)
-            dispatch(clearUser(''));
+            dispatch(clearUser());
             useSuccessNotification("Deleted user.")
         } catch (e) {
             useErrorNotification(e)

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { logoutUser, deleteUser } from "../reducers/userReducer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.user);
@@ -33,11 +33,13 @@ const ProfilePage = () => {
     }
 
 
-    console.log("(app) hello", user)
     return (
         <div>
-            <h1>OMG HELLO</h1>
-            <button onClick={() => navigate('/profile')}>Edit Profile</button>
+            <h1>OMG HELLO {user.userName}</h1>
+            <Link to={"/"}>
+                <h3>Home</h3>
+            </Link>
+            <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
             <button onClick={handleLogout}>Logout</button>
         </div>

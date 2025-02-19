@@ -1,14 +1,14 @@
 import axios from "axios";
-import { accountApiBaseUrl } from "../constants";
 import { LoginInfo, SignupInfo, UserInfo, UserToken } from "../types";
 
 import { serverURL } from "../constants";
 
-let token: string = '';
 
-const setToken = async (newToken: string) => {
-    token = `Bearer ${newToken}`;
-};
+// let token: string = '';
+
+// const setToken = async (newToken: string) => {
+//     token = `Bearer ${newToken}`;
+// };
 
 const signup = async (creds: SignupInfo) => {
     console.log("Requesting singup...")
@@ -25,7 +25,7 @@ const login = async (creds: LoginInfo) => {
 }
 
 const setUserInfo = async (info: UserInfo) => {
-    console.log("info reached")
+    console.log("info reached") 
     const { data } = await axios.put<UserToken>(`${serverURL}record/update/${info.token?.userName}`, info)
     return data
 }
@@ -37,5 +37,5 @@ const deleteUser = async (username: string) => {
 }
 
 export default {
-    signup, setToken, login, setUserInfo, deleteUser
+    signup, login, setUserInfo, deleteUser
 }
