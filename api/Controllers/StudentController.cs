@@ -45,7 +45,7 @@ namespace api.Controllers
 
             var student = await _context.Student.FirstOrDefaultAsync(t => t.UserId == user.Id);
 
-            if (tutor == null)
+            if (student == null)
             {
                 return NotFound();
             }
