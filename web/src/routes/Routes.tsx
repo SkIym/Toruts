@@ -22,7 +22,13 @@ export const router = createBrowserRouter([
             },
             { path: "login", element: <LoginForm /> },
             { path: "signup", element: <SignUpForm /> },
-            { path: "info", element: <InfoForm /> },
+            {
+                path: "info",
+                element: (
+                    <ProtectedRoute>
+                        <InfoForm />
+                    </ProtectedRoute>)
+            },
         ],
     },
 ]);
