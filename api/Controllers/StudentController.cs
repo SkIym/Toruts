@@ -53,6 +53,19 @@ namespace api.Controllers
             return Ok(student.ToStudentDto());
 
         }
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            var student = await _context.Student.FindAsync(id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(student.ToStudentDto());
+        }
     }
 
 }
