@@ -6,6 +6,7 @@ using api.Interfaces;
 using api.Models;
 using api.Data;
 using api.Mappers;
+using api.Dtos.Record;
 
 
 namespace api.Controllers
