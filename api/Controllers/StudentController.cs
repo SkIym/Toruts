@@ -28,12 +28,12 @@ namespace api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var studentList = await _context.Student.ToListAsync();
-            // var student = studentList.Select(t=>t.S)
-            return Ok();
+            var student = studentList.Select(t => t.ToStudentDto());
+            return Ok(student);
         }
 
         [HttpGet]
-        [Route("api/{username}/student")]
+        [Route("get/{username}")]
         public async Task<IActionResult> GetByUsername([FromRoute] string username)
         {
             var user = await _userManager.FindByNameAsync(username);
