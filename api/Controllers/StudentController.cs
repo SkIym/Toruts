@@ -99,8 +99,7 @@ namespace api.Controllers
             await _context.Student.AddAsync(student);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById()), new { id = student.Id }, student.ToStudentDto());
-
+            return CreatedAtAction(nameof(GetById), new { id = student.Id }, student.ToStudentDto());
         }
     }
 
