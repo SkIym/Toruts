@@ -36,11 +36,10 @@ export const InfoForm = () => {
                 token: JSON.parse(loggedInUserJSON)
             }))
 
-            // another dispatch here for creation of the tutor or student
-
             navigate("/")
             fnameReset()
             lnameReset()
+            phoneReset()
         } catch {
             return;
         }
@@ -60,24 +59,25 @@ export const InfoForm = () => {
                 <span>Phone Number</span>
                 <input {...phoneNumber} data-testid="phone-number"/>
             </div>
-            <div>
-                {type
-                ? 
-                    <div>
-                        <h2>Updating profile as a tutor...</h2>
-                        <button type="button" onClick={toggleForm}>I'm a student</button>
-                        <TutorForm></TutorForm>
-                    </div>
-                     
-                : 
-                    <div>
-                        <h2>Updating profile as a student</h2>
-                        <button type="button" onClick={toggleForm}>I'm a tutor</button>
-                        <StudentForm></StudentForm>
-                    </div>
-                }                        
-            </div>
+            <button type="submit">Update</button>
         </form>
+        <div>
+            {type
+            ? 
+                <div>
+                    <h2>Updating profile as a tutor...</h2>
+                    <button type="button" onClick={toggleForm}>I'm a student</button>
+                    <TutorForm></TutorForm>
+                </div>
+                    
+            : 
+                <div>
+                    <h2>Updating profile as a student</h2>
+                    <button type="button" onClick={toggleForm}>I'm a tutor</button>
+                    <StudentForm></StudentForm>
+                </div>
+            }                        
+            </div>
     </div>
 
 }
