@@ -1,12 +1,13 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserToken } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId } from "../types";
 import accountService from "../services/account";
+import tutorService from "../services/tutor";
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 
 const userSlice = createSlice({
     name: "user",
-    initialState: null as UserToken | null,
+    initialState: null as UserData | null,
     reducers: {
         setUser(_state, action) {
             return action.payload;
@@ -14,16 +15,37 @@ const userSlice = createSlice({
         clearUser() {
             return null;
         },
+        setType(state, action) {
+            const type = action.payload;
+            if (state)
+                state.type = type
+                return state
+        },
+        setRoleInfo(state, action) {
+            const info = action.payload;
+            if (state)
+                state.roleInfo = info
+                return state
+        },
+        setPrimaryInfo(state, action) {
+            const info = action.payload;
+            if (state)
+                state.primaryInfo = info
+                return state
+        }
     },
 });
 
-export const { setUser, clearUser } = userSlice.actions
+export const { setUser, clearUser, setType, setRoleInfo, setPrimaryInfo } = userSlice.actions
 
 export const signupUser = (creds: SignupInfo) => {
     console.log("signup reached")
     return async (dispatch: Dispatch) => {
         try {
             const user = await accountService.signup(creds);
+            user.type = null;
+            user.roleInfo = null;
+            user.primaryInfo = null;
             // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
@@ -61,15 +83,13 @@ export const loginUser = (creds: LoginInfo) => {
     };
 }
 
-export const addUserInfo = (info: UserInfo) => {
+export const addUserInfo = (username: string, info: UserInfo) => {
     console.log("user info reducer reached")
-    return async () => {
+    return async (dispatch: Dispatch) => {
         try {
-            if (info.token == null) {
-                return Promise.reject()
-            }
-            await accountService.setUserInfo(info)
-            useSuccessNotification(`Hello ${info.firstName}!`)
+            const primaryInfo = await accountService.setUserInfo(username, info)
+            dispatch(setPrimaryInfo(primaryInfo))
+            useSuccessNotification(`User information saved.`)
         } catch (err) {
             useErrorNotification(err)
             return Promise.reject()
@@ -85,11 +105,11 @@ export const logoutUser = () => {
     };
 };
 
-export const deleteUser = (token: UserToken) => {
+export const deleteUser = (user: UserData) => {
     return async (dispatch: Dispatch) => {
         try {
             window.localStorage.removeItem("loggedInUser");
-            accountService.deleteUser(token.userName)
+            accountService.deleteUser(user.userName)
             dispatch(clearUser());
             useSuccessNotification("Deleted user.")
         } catch (e) {
@@ -99,5 +119,31 @@ export const deleteUser = (token: UserToken) => {
         
     }
 }
+
+export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const tutorData = await tutorService.create(username, creds);
+            dispatch(setType('TUTOR'))
+            dispatch(setRoleInfo(tutorData))
+            useSuccessNotification(`You have signed up as a tutor!`)
+        } catch (e) {
+            useErrorNotification(e);
+            return Promise.reject();
+        }
+    }
+}
+
+// export const signAsStudent = (username: string, creds: StudentInfoWithoutId) => {
+//     return async (dispatch: Dispatch) => {
+//         try {
+//             const studentData = await studentService.create(username, creds);
+//             dispatch(setType('STUDENT'))
+//             dispatch(setInfo(studentData))
+//         } catch {
+//             return Promise.reject();
+//         }
+//     }
+// }
 
 export default userSlice.reducer

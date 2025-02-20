@@ -50,18 +50,6 @@ const TutorForm = () => {
         } catch {
             return;
         }
-        
-        console.log(
-            educ.value,
-            mode,
-            price.value,
-            areaExp.value,
-            tutorExp.value,
-            avail.value,
-            portrait.value,
-            status
-        )
-        return
     }
 
     return <form onSubmit={handleSubmit}>
