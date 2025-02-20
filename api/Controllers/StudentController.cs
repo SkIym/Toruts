@@ -103,6 +103,36 @@ namespace api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = student.Id }, student.ToStudentDto());
         }
+
+        [HttpPut("update/{username}")]
+        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateStudentDto updateDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound($"User '{username}' does not exist");
+            }
+
+            var student = await _context.Student.FirstOrDefaultAsync(s => s.UserId == user.Id);
+            if (student == null)
+            {
+                return NotFound($"User '{username}' does not have a student profile");
+            }
+
+            student.AreasOfImprovemnt = updateDto.AreasOfImprovement;
+            student.DegreeProgram = updateDto.DegreeProgram;
+
+            await _context.SaveChangesAsync();
+
+            return Ok($"User '{username}': Student profile has been updated successfully!");
+
+
+        }
+
     }
 
 }
