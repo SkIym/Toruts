@@ -17,6 +17,7 @@ export type UserToken = {
 export type UserInfo = {
     firstName: string;
     lastName: string;
+    phoneNumber: string;
     token: UserToken | null;
 }
 
