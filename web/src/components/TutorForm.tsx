@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { signAsTutor } from "../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
+import { UserType } from "../types";
 
 const TutorForm = () => {
     const { reset: educReset, ...educ} = useField('text');
@@ -145,10 +146,10 @@ const TutorForm = () => {
                 </div>
             </fieldset>
         </div>
-        { user?.userType 
-        ? <button type="submit">Create tutor account</button>
-        : null }
-        <button type="button" onClick={handleUpdate}>Update tutor information</button>
+        { user?.userType === UserType.TUTOR
+        ?  <button type="button" onClick={handleUpdate}>Update tutor information</button>
+        : <button type="submit">Create tutor account</button> }
+       
     </form>
 }
 

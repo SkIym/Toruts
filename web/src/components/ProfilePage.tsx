@@ -58,7 +58,9 @@ const ProfilePage = () => {
             </div>
             {user?.userType == UserType.TUTOR
             ? <TutorProfile></TutorProfile>
-            : <StudentProfile></StudentProfile>}
+            : (user?.userType == UserType.STUDENT 
+                ? <StudentProfile></StudentProfile>
+                : null )}
 
             <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
