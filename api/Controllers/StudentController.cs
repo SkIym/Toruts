@@ -128,8 +128,7 @@ namespace api.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok($"User '{username}': Student profile has been updated successfully!");
-
+            return Ok(student.ToStudentDto());
 
         }
 
