@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useField } from "../hooks"
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import { signAsTutor } from "../reducers/userReducer";
+import { useNavigate } from "react-router-dom";
 
 const TutorForm = () => {
     const { reset: educReset, ...educ} = useField('text');
+    const { reset: venueReset, ...venue} = useField('text');
     const { reset: priceReset, ...price} = useField('number');
     const { reset: areaExpReset, ...areaExp} = useField('text');
     const { reset: tutorExpReset, ...tutorExp} = useField('text');
@@ -10,6 +15,9 @@ const TutorForm = () => {
     const { reset: portraitReset, ...portrait} = useField('text');
     const [mode, setMode] = useState("0")
     const [status, setStatus] = useState("0")
+    const user = useSelector((state: RootState) => state.user);
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleModeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMode(e.target.value)
@@ -21,6 +29,28 @@ const TutorForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        try {
+            if (user)
+                await dispatch(signAsTutor(
+                    user.userName, 
+                    { 
+                        educAttainment: educ.value,
+                        learningMode: parseInt(mode),
+                        venue: venue.value,
+                        price: parseInt(price.value),
+                        areasOfExpertise: [areaExp.value],
+                        tutoringExperiences: tutorExp.value,
+                        availability: avail.value,
+                        portraitUrl: portrait.value,
+                        status: parseInt(status)
+                    }))
+                
+                navigate("/");
+        } catch {
+            return;
+        }
+        
         console.log(
             educ.value,
             mode,
@@ -73,6 +103,10 @@ const TutorForm = () => {
                     <label htmlFor="both">Both</label>
                 </div>
             </fieldset>
+        </div>
+        <div>
+            <span>Venue</span>
+            <input {...venue} data-testid="venue"/>
         </div>
         <div>
             <span>Price</span>
