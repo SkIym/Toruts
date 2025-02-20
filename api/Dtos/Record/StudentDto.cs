@@ -13,4 +13,10 @@ namespace api.Dtos.Record
 
 
     }
+    
+    public class UpdateStudentDto
+    {
+        public List<string>? AreasOfImprovement { get; set; }
+        public string? DegreeProgram { get; set; }
+    }
 }
