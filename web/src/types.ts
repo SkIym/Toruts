@@ -8,18 +8,45 @@ export interface LoginInfo {
     password: string;
 }
 
-export type UserToken = {
+export type UserType = 'TUTOR' | 'STUDENT' | null
+
+export type UserData = {
     userName: string;
     email: string;
     token: string;
+    type: UserType;
+    info: TutorInfo | StudentInfo | null
 }
 
 export type UserInfo = {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    token: UserToken | null;
+    token: string | null;
 }
+
+export type StudentInfo = {
+    id: number,
+    areasOfImprovement: string[],
+    degreeProgram: string
+}
+
+export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>
+
+export type TutorInfo = {
+    id: number,
+    educAttainment: string,
+    learningMode: number,
+    venue: string,
+    price: number,
+    areasOfExpertise: string[],
+    tutoringExperiences: string,
+    availability: string,
+    portraitUrl: string,
+    status: number
+}
+
+export type TutorInfoWithoutId = Omit<TutorInfo, 'id'>
 
 export interface ToggleObject {
     toggleVisibility: () => void 
