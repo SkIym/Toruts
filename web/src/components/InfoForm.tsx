@@ -1,7 +1,6 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useField } from "../hooks"
-import { AppDispatch } from "../../store"
-import { useNavigate } from "react-router-dom"
+import { AppDispatch, RootState } from "../../store"
 import { addUserInfo } from "../reducers/userReducer"
 import React, { useState } from "react"
 import TutorForm from "./TutorForm"
@@ -14,7 +13,7 @@ export const InfoForm = () => {
 
 
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate()
+    const user = useSelector((state: RootState) => state.user)
     const [type, setType] = useState(true);
 
     const toggleForm = () => {
@@ -25,18 +24,18 @@ export const InfoForm = () => {
         e.preventDefault()
         try {
             const loggedInUserJSON = window.localStorage.getItem("loggedInUser")
-            if (loggedInUserJSON == null) {
+            if (user == null || loggedInUserJSON == null) {
                 throw "not logged in";
             }
 
-            await dispatch(addUserInfo({
+            await dispatch(addUserInfo(
+                user.userName,
+                {
                 firstName: firstName.value,
                 lastName: lastName.value,
                 phoneNumber: phoneNumber.value,
                 token: JSON.parse(loggedInUserJSON)
             }))
-
-            navigate("/")
             fnameReset()
             lnameReset()
             phoneReset()
