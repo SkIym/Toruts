@@ -10,6 +10,8 @@ import StudentForm from "./StudentForm"
 export const InfoForm = () => {
     const { reset: fnameReset, ...firstName } = useField("text")
     const { reset: lnameReset, ...lastName } = useField("text")
+    const { reset: phoneReset, ...phoneNumber } = useField("text")
+
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate()
@@ -30,6 +32,7 @@ export const InfoForm = () => {
             await dispatch(addUserInfo({
                 firstName: firstName.value,
                 lastName: lastName.value,
+                phoneNumber: phoneNumber.value,
                 token: JSON.parse(loggedInUserJSON)
             }))
 
@@ -38,8 +41,7 @@ export const InfoForm = () => {
             navigate("/")
             fnameReset()
             lnameReset()
-        } catch (e) {
-            console.error(e)
+        } catch {
             return;
         }
     }
@@ -55,17 +57,21 @@ export const InfoForm = () => {
                 <input {...lastName} data-testid="last-name"/>
             </div>
             <div>
+                <span>Phone Number</span>
+                <input {...phoneNumber} data-testid="phone-number"/>
+            </div>
+            <div>
                 {type
                 ? 
                     <div>
-                        <h2>Signing up as a tutor...</h2>
+                        <h2>Updating profile as a tutor...</h2>
                         <button type="button" onClick={toggleForm}>I'm a student</button>
                         <TutorForm></TutorForm>
                     </div>
                      
                 : 
                     <div>
-                        <h2>Singing up as a student</h2>
+                        <h2>Updating profile as a student</h2>
                         <button type="button" onClick={toggleForm}>I'm a tutor</button>
                         <StudentForm></StudentForm>
                     </div>
