@@ -126,6 +126,7 @@ namespace api.Controllers
             };
 
             await _context.Tutor.AddAsync(tutor);
+            user.Tutor = tutor;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = tutor.Id }, tutor.ToTutorDto());

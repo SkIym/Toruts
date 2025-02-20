@@ -8,7 +8,7 @@ using api.Enums;
 
 namespace api.Dtos.Record
 {
-    public class TutorDto
+    public class TutorDto: RoleDto
     {
         public int Id { get; set; }
         [Required]
