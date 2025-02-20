@@ -18,7 +18,7 @@ const userSlice = createSlice({
         setType(state, action) {
             const type = action.payload;
             if (state)
-                state.type = type
+                state.userType = type
                 return state
         },
         setRoleInfo(state, action) {
@@ -75,6 +75,7 @@ export const loginUser = (creds: LoginInfo) => {
             // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
+            console.log(user)
             useSuccessNotification("Login succesful!")
         } catch (e) {
             useErrorNotification(e)

@@ -2,6 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { logoutUser, deleteUser } from "../reducers/userReducer";
 import { useNavigate, Link } from "react-router-dom";
+import { UserType } from "../types";
+import TutorProfile from "./TutorProfile";
+import StudentForm from "./StudentForm";
+import StudentProfile from "./StudentProfile";
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.user);
@@ -32,6 +36,10 @@ const ProfilePage = () => {
         }
     }
 
+    // console.log(user?.primaryInfo, user?.roleInfo, user?.type)
+
+    const primaryInfo = user?.primaryInfo;
+    const roleInfo = user?.roleInfo
 
     return (
         <div>
@@ -39,6 +47,19 @@ const ProfilePage = () => {
             <Link to={"/"}>
                 <h3>Home</h3>
             </Link>
+            <div>
+                <span>First Name: {primaryInfo?.firstName}</span>
+            </div>
+            <div>
+                <span>Last Name: {primaryInfo?.lastName}</span>
+            </div>
+            <div>
+                <span>Phone Number: {primaryInfo?.phoneNumber}</span>
+            </div>
+            {user?.userType == UserType.TUTOR
+            ? <TutorProfile></TutorProfile>
+            : <StudentProfile></StudentProfile>}
+
             <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
             <button onClick={handleLogout}>Logout</button>
