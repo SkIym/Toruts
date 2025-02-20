@@ -52,6 +52,10 @@ const TutorForm = () => {
         }
     }
 
+    const handleUpdate = async () => {
+        return;
+    }
+
     return <form onSubmit={handleSubmit}>
         <div>
             <span>Educational Attainment</span>
@@ -141,7 +145,10 @@ const TutorForm = () => {
                 </div>
             </fieldset>
         </div>
-        <button type="submit">Create tutor account</button>
+        { user?.userType 
+        ? <button type="submit">Create tutor account</button>
+        : null }
+        <button type="button" onClick={handleUpdate}>Update tutor information</button>
     </form>
 }
 
