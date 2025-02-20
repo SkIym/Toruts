@@ -8,12 +8,13 @@ namespace api.Models
     public class Student
     {
         public int Id { get; set; }
-        public List<string>? AreasOfImprovemnt { get; set; }
-        public string? DegreeProgram { get; set; }
+        public List<string>? AreasOfImprovemnt { get; set; } = [];
+        public string? DegreeProgram { get; set; } = string.Empty;
+
         // Foreign key to  User (Identity User uses ids of type string)
         public required string UserId { get; set; }
 
         // Navigation property
-        public required User User { get; set; }    
+        public required User User { get; set; }
     }
 }

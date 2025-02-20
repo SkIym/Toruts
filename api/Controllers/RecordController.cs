@@ -84,7 +84,7 @@ namespace api.Controllers
             await _context.SaveChangesAsync();
 
             // Return success message
-            return Ok("Updated user");
+            return Ok(user.ToUpdateUserDto());
         }
 
     }
