@@ -15,14 +15,14 @@ export type UserData = {
     email: string;
     token: string;
     type: UserType;
-    info: TutorInfo | StudentInfo | null
+    primaryInfo: UserInfo | null
+    roleInfo: TutorInfo | StudentInfo | null
 }
 
 export type UserInfo = {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    token: string | null;
 }
 
 export type StudentInfo = {
