@@ -132,5 +132,40 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = tutor.Id }, tutor.ToTutorDto());
 
         }
+
+        [HttpPut("update/{username}")]
+        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateTutorDto updateDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound($"User '{username}' does not exist");
+            }
+
+            var tutor = await _context.Tutor.FirstOrDefaultAsync(s => s.UserId == user.Id);
+            if (tutor == null)
+            {
+                return NotFound($"User '{username}' does not have a tutor profile");
+            }
+
+            tutor.EducAttainment = updateDto.EducAttainment;
+            tutor.LearningMode = updateDto.LearningMode;
+            tutor.Venue = updateDto.Venue;
+            tutor.Price = updateDto.Price;
+            tutor.AreasOfExpertise = updateDto.AreasOfExpertise;
+            tutor.TutoringExperiences = updateDto.TutoringExperiences;
+            tutor.Availability = updateDto.Availability;
+            tutor.PortraitUrl = updateDto.PortraitUrl;
+            tutor.Status = updateDto.Status;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(tutor.ToTutorDto());
+
+        }
     }
 }
