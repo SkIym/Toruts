@@ -5,8 +5,25 @@ const StudentInfoForm = () => {
     const { reset: areasReset, ...areas } = useField("text")
     const { reset: degreeReset, ...degree } = useField("text")
 
+    const dispatch = useDispatch<AppDispatch>()
+
     const handleInfo = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        try {
+            const loggedInUserJson = window.localStorage.getItem("loggedInUser")
+            if (loggedInUserJson == null) {
+                throw "not logged in"
+            }
+            await dispatch(signAsStudent("", {
+                areasOfImprovement: areas.value.split(","),
+                degreeProgram: degree.value
+            }))
+            areasReset()
+            degreeReset()
+        } catch (e) {
+            console.log(e)
+            return
+        }
     }
 
     return <div>
