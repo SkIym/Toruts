@@ -147,4 +147,17 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
 //     }
 // }
 
+export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const studentData = await studentService.create(username, info)
+            dispatch(setType("STUDENT"))
+            dispatch(setRoleInfo(studentData))
+            useSuccessNotification(`You have signed up as a student!`)
+        } catch (e) {
+            useErrorNotification(e)
+            return Promise.reject()
+        }
+    }
+}
 export default userSlice.reducer
