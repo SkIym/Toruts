@@ -1,4 +1,8 @@
-import { useField } from "../hooks"
+import { useDispatch } from "react-redux"
+import { useErrorNotification, useField } from "../hooks"
+import { AppDispatch } from "../../store"
+import { useNavigate } from "react-router-dom"
+import { signAsStudent } from "../reducers/userReducer"
 
 const StudentInfoForm = () => {
 
@@ -27,6 +31,7 @@ const StudentInfoForm = () => {
     }
 
     return <div>
+        <span>Student Info Form</span>
         <form onSubmit={handleInfo} id="student-info">
             <div>
                 <span>Areas of Improvement:</span>
