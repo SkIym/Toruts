@@ -1,7 +1,8 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
+import studentService from "../services/student"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 
@@ -19,19 +20,19 @@ const userSlice = createSlice({
             const type = action.payload;
             if (state)
                 state.userType = type
-                return state
+            return state
         },
         setRoleInfo(state, action) {
             const info = action.payload;
             if (state)
                 state.roleInfo = info
-                return state
+            return state
         },
         setPrimaryInfo(state, action) {
             const info = action.payload;
             if (state)
                 state.primaryInfo = info
-                return state
+            return state
         }
     },
 });
@@ -117,7 +118,7 @@ export const deleteUser = (user: UserData) => {
             useErrorNotification(e)
             return Promise.reject()
         }
-        
+
     }
 }
 
@@ -160,4 +161,17 @@ export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
         }
     }
 }
+
+export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const studentData = await studentService.create(username, info)
+        } catch (e) {
+            useErrorNotification(e)
+            return Promise.reject()
+        }
+    }
+
+}
+
 export default userSlice.reducer
