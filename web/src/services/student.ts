@@ -10,8 +10,9 @@ const create = async (username: string, creds: StudentInfoWithoutId) => {
 }
 
 const update = async (username: string, creds: StudentInfoWithoutId) => {
-    // TODO: Will make Update Function
     console.log("Requesting to update student account")
+    const { data } = await axios.put<StudentInfo>(`${url}/update/${username}`)
+    return data
 }
 
 export default {
