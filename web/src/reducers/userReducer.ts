@@ -4,7 +4,6 @@ import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
-import { warn } from "console";
 
 
 const userSlice = createSlice({
@@ -174,7 +173,7 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
     }
 }
 
-export const getTutors = (searchTerm: string, callback: (TutorInfo[])) => {
+export const getTutors = (searchTerm: string, callback: (t: TutorInfo[]) => void) => {
     return async (dispatch: Dispatch) => {
         console.log(searchTerm)
         try {
