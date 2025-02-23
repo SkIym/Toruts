@@ -1,6 +1,3 @@
-
-import './App.css'
-import './components/SignupForm'
 import { Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store'
@@ -13,15 +10,14 @@ const App = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [isReady, setIsReady] = useState(false);
 
-    useEffect(() => 
-        {
-            const getUser = async () => {
-                await dispatch(getLoggedInUser());
-                console.log("getting loggedinuser...")
-            }
-            
-            getUser();
-            setIsReady(true);
+    useEffect(() => {
+        const getUser = async () => {
+            await dispatch(getLoggedInUser());
+            console.log("getting loggedinuser...")
+        }
+
+        getUser();
+        setIsReady(true);
     }, [dispatch])
 
     if (!isReady) {
@@ -30,8 +26,8 @@ const App = () => {
 
     return isReady ? (
         <>
-            <Outlet/> 
-            <ToastContainer/>
+            <Outlet />
+            <ToastContainer />
         </>
     ) : null
 }
