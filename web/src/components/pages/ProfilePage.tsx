@@ -3,9 +3,9 @@ import { AppDispatch, RootState } from "../../../store";
 import { logoutUser, deleteUser } from "../../reducers/userReducer";
 import { useNavigate, Link } from "react-router-dom";
 import { UserType } from "../../types";
-import TutorProfile from "../TutorProfile";
-import StudentForm from "../StudentForm";
-import StudentProfile from "../StudentProfile";
+import TutorProfile from "../templates/TutorProfile";
+
+import StudentProfile from "../templates/StudentProfile";
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.user);
