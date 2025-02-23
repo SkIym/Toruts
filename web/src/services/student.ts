@@ -16,6 +16,15 @@ const update = async (username: string, creds: StudentInfoWithoutId) => {
     return data
 }
 
+const find = async (username: string) => {
+    const { data } = await axios.get<StudentInfo | null>(`${url}/get/${username}`)
+    if (data) {
+        return true
+    } else {
+        return false
+    }
+}
+
 export default {
-    create, update
+    create, update, find
 }
