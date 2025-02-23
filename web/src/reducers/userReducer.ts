@@ -1,5 +1,5 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo, TutorResult } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student"
@@ -173,12 +173,13 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
     }
 }
 
-export const getTutors = (searchTerm: string, callback: (t: TutorInfo[]) => void) => {
+export const getTutors = (searchTerm: string, callback: (t: TutorResult[]) => void) => {
     return async (dispatch: Dispatch) => {
         console.log(searchTerm)
         try {
             const tutors = await tutorService.search(searchTerm)
             callback(tutors)
+            console.log(tutors)
         } catch (e) {
             useErrorNotification(e)
             return Promise.reject()

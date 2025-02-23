@@ -97,7 +97,7 @@ namespace api.Controllers
                 }
 
                 var fullname = (tutor.User.FirstName + " " + tutor.User.LastName).ToLower();
-                if (fullname.Contains(query) || tutor.EducAttainment.Contains(query))
+                if (fullname.Contains(query) || tutor.EducAttainment.ToLower().Contains(query))
                 {
                     searchedTutors.Add(tutor);
                 }
