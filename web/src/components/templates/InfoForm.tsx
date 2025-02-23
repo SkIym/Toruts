@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useField } from "../hooks"
+import { useField } from "../../hooks"
 import { Link } from "react-router-dom"
-import { AppDispatch, RootState } from "../../store"
-import { addUserInfo } from "../reducers/userReducer"
+import { AppDispatch, RootState } from "../../../store"
+import { addUserInfo } from "../../reducers/userReducer"
 import React, { useState } from "react"
 import TutorForm from "./TutorForm"
 import StudentForm from "./StudentForm"
@@ -32,11 +32,11 @@ export const InfoForm = () => {
             await dispatch(addUserInfo(
                 user.userName,
                 {
-                firstName: firstName.value,
-                lastName: lastName.value,
-                phoneNumber: phoneNumber.value,
-                token: JSON.parse(loggedInUserJSON)
-            }))
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                    phoneNumber: phoneNumber.value,
+                    token: JSON.parse(loggedInUserJSON)
+                }))
             fnameReset()
             lnameReset()
             phoneReset()
@@ -55,35 +55,35 @@ export const InfoForm = () => {
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>
-                <input {...firstName} data-testid="first-name"/>
+                <input {...firstName} data-testid="first-name" />
             </div>
             <div>
                 <span>Last Name</span>
-                <input {...lastName} data-testid="last-name"/>
+                <input {...lastName} data-testid="last-name" />
             </div>
             <div>
                 <span>Phone Number</span>
-                <input {...phoneNumber} data-testid="phone-number"/>
+                <input {...phoneNumber} data-testid="phone-number" />
             </div>
             <button type="submit">Update</button>
         </form>
         <div>
             {type
-            ? 
+                ?
                 <div>
                     <h2>Updating profile as a tutor...</h2>
                     <button type="button" onClick={toggleForm}>I'm a student</button>
                     <TutorForm></TutorForm>
                 </div>
-                    
-            : 
+
+                :
                 <div>
                     <h2>Updating profile as a student</h2>
                     <button type="button" onClick={toggleForm}>I'm a tutor</button>
                     <StudentForm></StudentForm>
                 </div>
-            }                        
-            </div>
+            }
+        </div>
     </div>
 
 }

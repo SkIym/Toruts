@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux"
-import { AppDispatch } from "../../store"
-import { useField } from "../hooks"
-import { signAsStudent } from "../reducers/userReducer"
-import { UserData, StudentInfo } from "../types"
+import { AppDispatch } from "../../../store"
+import { useField } from "../../hooks"
+import { signAsStudent } from "../../reducers/userReducer"
+import { UserData } from "../../types"
 
 const StudentForm = () => {
 
