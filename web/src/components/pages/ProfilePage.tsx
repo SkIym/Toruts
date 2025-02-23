@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
-import { logoutUser, deleteUser } from "../reducers/userReducer";
+import { AppDispatch, RootState } from "../../../store";
+import { logoutUser, deleteUser } from "../../reducers/userReducer";
 import { useNavigate, Link } from "react-router-dom";
-import { UserType } from "../types";
-import TutorProfile from "./TutorProfile";
-import StudentForm from "./StudentForm";
-import StudentProfile from "./StudentProfile";
+import { UserType } from "../../types";
+import TutorProfile from "../templates/TutorProfile";
+
+import StudentProfile from "../templates/StudentProfile";
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.user);
@@ -57,10 +57,10 @@ const ProfilePage = () => {
                 <span>Phone Number: {primaryInfo?.phoneNumber}</span>
             </div>
             {user?.userType == UserType.TUTOR
-            ? <TutorProfile></TutorProfile>
-            : (user?.userType == UserType.STUDENT 
-                ? <StudentProfile></StudentProfile>
-                : null )}
+                ? <TutorProfile></TutorProfile>
+                : (user?.userType == UserType.STUDENT
+                    ? <StudentProfile></StudentProfile>
+                    : null)}
 
             <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
@@ -68,7 +68,7 @@ const ProfilePage = () => {
         </div>
 
     )
-        
+
 }
 
 export default ProfilePage

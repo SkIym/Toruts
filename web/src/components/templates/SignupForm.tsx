@@ -1,8 +1,8 @@
-import { useField } from "../hooks";
+import { useField } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signupUser } from "../reducers/userReducer";
-import { AppDispatch } from "../../store";
+import { signupUser } from "../../reducers/userReducer";
+import { AppDispatch } from "../../../store";
 
 
 export const SignUpForm = () => {
@@ -17,9 +17,10 @@ export const SignUpForm = () => {
         console.log("Handling...")
         try {
             await dispatch(signupUser({
-                username: username.value, 
-                email: email.value, 
-                password: password.value}))
+                username: username.value,
+                email: email.value,
+                password: password.value
+            }))
             navigate("/info")
         } catch {
             //
