@@ -11,6 +11,13 @@ const create = async (username: string, creds: TutorInfoWithoutId) => {
     return data
 }
 
+const search = async (searchTerm: string) => {
+    console.log("Searching tutors")
+    const { data } = await axios.get<TutorInfo[]>(`${url}/search/${searchTerm}`)
+    return data
+
+}
+
 export default {
-    create
+    create, search
 }
