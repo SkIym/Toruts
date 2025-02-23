@@ -57,10 +57,10 @@ const ProfilePage = () => {
                 <span>Phone Number: {primaryInfo?.phoneNumber}</span>
             </div>
             {user?.userType == UserType.TUTOR
-            ? <TutorProfile></TutorProfile>
-            : (user?.userType == UserType.STUDENT 
-                ? <StudentProfile></StudentProfile>
-                : null )}
+                ? <TutorProfile></TutorProfile>
+                : (user?.userType == UserType.STUDENT
+                    ? <StudentProfile></StudentProfile>
+                    : null)}
 
             <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
@@ -68,7 +68,7 @@ const ProfilePage = () => {
         </div>
 
     )
-        
+
 }
 
 export default ProfilePage
