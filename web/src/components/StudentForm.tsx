@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../store"
+import { useField } from "../hooks"
 import { signAsStudent } from "../reducers/userReducer"
+import { UserData, StudentInfo } from "../types"
 
 const StudentForm = () => {
 
@@ -16,7 +18,10 @@ const StudentForm = () => {
             if (loggedInUserJson == null) {
                 throw "not logged in"
             }
-            await dispatch(signAsStudent("", {
+
+            const user: UserData = JSON.parse(loggedInUserJson)
+
+            await dispatch(signAsStudent(user.userName, {
                 areasOfImprovement: areas.value.split(","),
                 degreeProgram: degree.value
             }))
