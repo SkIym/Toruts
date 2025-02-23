@@ -171,6 +171,12 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
             return Promise.reject()
         }
     }
+}
+
+export const getTutors = (searchTerm: string) => {
+    return async (dispatch: Dispatch) => {
+        console.log(searchTerm)
+    }
 
 }
 
