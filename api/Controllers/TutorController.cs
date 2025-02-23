@@ -147,7 +147,7 @@ namespace api.Controllers
                 return BadRequest("User already has a tutor account.");
             }
 
-            var tutor = new Tutor 
+            var tutor = new Tutor
             {
                 UserId = user.Id,
                 User = user,
@@ -175,7 +175,7 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
