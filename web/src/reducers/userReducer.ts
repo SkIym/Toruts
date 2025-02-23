@@ -136,22 +136,20 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     }
 }
 
-// export const signAsStudent = (username: string, creds: StudentInfoWithoutId) => {
-//     return async (dispatch: Dispatch) => {
-//         try {
-//             const studentData = await studentService.create(username, creds);
-//             dispatch(setType('STUDENT'))
-//             dispatch(setInfo(studentData))
-//         } catch {
-//             return Promise.reject();
-//         }
-//     }
-// }
-
 export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
         try {
+            const exists = await studentService.find(username)
+            // If exists, modify instead of creating
+            if (exists) {
+                const studentData = await studentService.update(username, info)
+                dispatch(setType("STUDENT"))
+                dispatch(setRoleInfo(studentData))
+                useSuccessNotification(`Updated your student record`)
+                return
+            }
             const studentData = await studentService.create(username, info)
+
             dispatch(setType("STUDENT"))
             dispatch(setRoleInfo(studentData))
             useSuccessNotification(`You have signed up as a student!`)
@@ -165,7 +163,9 @@ export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
 export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
         try {
-            const studentData = await studentService.create(username, info)
+            const studentData = await studentService.update(username, info)
+            dispatch(setRoleInfo(studentData))
+            useSuccessNotification(`Updated student data`)
         } catch (e) {
             useErrorNotification(e)
             return Promise.reject()
