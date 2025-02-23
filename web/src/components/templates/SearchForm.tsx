@@ -2,15 +2,21 @@ import { useDispatch } from "react-redux"
 import { useField } from "../../hooks"
 import { AppDispatch } from "../../../store"
 import { getTutors } from "../../reducers/userReducer"
+import { TutorInfo } from "../../types"
+import { useState } from "react"
 
 const SearchForm = () => {
-    const { reset: searchReset, ...search } = useField("text")
+    const { ...search } = useField("text")
     const dispatch = useDispatch<AppDispatch>()
+
+    const [tutors, setTutors] = useState<TutorInfo[]>([])
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            dispatch(getTutors(search.value))
+            dispatch(getTutors(search.value, (a: TutorInfo[]) => {
+                setTutors(a)
+            }))
 
         } catch (e) {
             console.log(e)
@@ -20,14 +26,17 @@ const SearchForm = () => {
 
     return (
         <div>
-            <form onSubmit={handleSearch} >
+            <form onSubmit={handleSearch}>
                 <input{...search} />
                 <button> search</button>
             </form>
 
             <div>
-                Tutor 1
-                Tutor 2
+                {
+                    tutors.map((tutor) => {
+                        return (<span>{tutor.id}</span>)
+                    })
+                }
             </div>
         </div>
     )
