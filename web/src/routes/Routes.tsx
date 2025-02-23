@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import { SignUpForm } from "../components/SignupForm";
 import LoginForm from "../components/LoginForm";
 import App from "../App";
-import ProfilePage from "../pages/ProfilePage";
+import ProfilePage from "../components/pages/ProfilePage";
 import ProtectedRoute from "./ProtectedRoute";
-import HomePage from "../pages/HomePage";
+import HomePage from "../components/pages/HomePage";
 import { InfoForm } from "../components/InfoForm";
 
 export const router = createBrowserRouter([
