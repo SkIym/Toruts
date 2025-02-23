@@ -68,6 +68,43 @@ namespace api.Controllers
             return Ok(tutor.ToTutorDto());
         }
 
+        [HttpGet]
+        [Route("search/{query}")]
+        public async Task<IActionResult> Search([FromRoute] string query)
+        {
+            var tutors = await _context.Tutor.ToListAsync();
+            query = query.ToLower();
+            if (tutors == null)
+            {
+                return NotFound("No Tutors Available");
+            }
+
+            // Get the user keys
+            foreach (var tutor in tutors)
+            {
+                tutor.User = _context.User
+                    .Where(u => u.Id == tutor.UserId)
+                    .First();
+            }
+
+            List<Tutor> searchedTutors = new List<Tutor>();
+
+            foreach (var tutor in tutors)
+            {
+                if (tutor == null)
+                {
+                    continue;
+                }
+
+                var fullname = (tutor.User.FirstName + " " + tutor.User.LastName).ToLower();
+                if (fullname.Contains(query) || tutor.EducAttainment.Contains(query))
+                {
+                    searchedTutors.Add(tutor);
+                }
+            }
+            return Ok(searchedTutors);
+        }
+
 
         // GET endpoint to get tutor by id
         [HttpGet("{id}")]
