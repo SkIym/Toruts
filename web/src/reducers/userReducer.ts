@@ -1,7 +1,8 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
+import studentService from "../services/student"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 
@@ -18,20 +19,20 @@ const userSlice = createSlice({
         setType(state, action) {
             const type = action.payload;
             if (state)
-                state.type = type
-                return state
+                state.userType = type
+            return state
         },
         setRoleInfo(state, action) {
             const info = action.payload;
             if (state)
                 state.roleInfo = info
-                return state
+            return state
         },
         setPrimaryInfo(state, action) {
             const info = action.payload;
             if (state)
                 state.primaryInfo = info
-                return state
+            return state
         }
     },
 });
@@ -75,6 +76,7 @@ export const loginUser = (creds: LoginInfo) => {
             // accountService.setToken(user.token);
             window.localStorage.setItem("loggedInUser", JSON.stringify(user));
             dispatch(setUser(user));
+            console.log(user)
             useSuccessNotification("Login succesful!")
         } catch (e) {
             useErrorNotification(e)
@@ -116,7 +118,7 @@ export const deleteUser = (user: UserData) => {
             useErrorNotification(e)
             return Promise.reject()
         }
-        
+
     }
 }
 
@@ -134,16 +136,42 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     }
 }
 
-// export const signAsStudent = (username: string, creds: StudentInfoWithoutId) => {
-//     return async (dispatch: Dispatch) => {
-//         try {
-//             const studentData = await studentService.create(username, creds);
-//             dispatch(setType('STUDENT'))
-//             dispatch(setInfo(studentData))
-//         } catch {
-//             return Promise.reject();
-//         }
-//     }
-// }
+export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const exists = await studentService.find(username)
+            // If exists, modify instead of creating
+            if (exists) {
+                const studentData = await studentService.update(username, info)
+                dispatch(setType("STUDENT"))
+                dispatch(setRoleInfo(studentData))
+                useSuccessNotification(`Updated your student record`)
+                return
+            }
+            const studentData = await studentService.create(username, info)
+
+            dispatch(setType("STUDENT"))
+            dispatch(setRoleInfo(studentData))
+            useSuccessNotification(`You have signed up as a student!`)
+        } catch (e) {
+            useErrorNotification(e)
+            return Promise.reject()
+        }
+    }
+}
+
+export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const studentData = await studentService.update(username, info)
+            dispatch(setRoleInfo(studentData))
+            useSuccessNotification(`Updated student data`)
+        } catch (e) {
+            useErrorNotification(e)
+            return Promise.reject()
+        }
+    }
+
+}
 
 export default userSlice.reducer

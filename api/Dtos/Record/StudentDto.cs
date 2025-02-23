@@ -2,7 +2,7 @@ using api.Enums;
 
 namespace api.Dtos.Record
 {
-    public class StudentDto
+    public class StudentDto: RoleDto
     {
         public int Id { get; set; }
 

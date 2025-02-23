@@ -8,13 +8,16 @@ export interface LoginInfo {
     password: string;
 }
 
-export type UserType = 'TUTOR' | 'STUDENT' | null
+export enum UserType {
+    TUTOR = 0,
+    STUDENT = 1,
+}
 
 export type UserData = {
     userName: string;
     email: string;
     token: string;
-    type: UserType;
+    userType: UserType | null;
     primaryInfo: UserInfo | null
     roleInfo: TutorInfo | StudentInfo | null
 }

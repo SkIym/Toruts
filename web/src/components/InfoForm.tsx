@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useField } from "../hooks"
+import { Link } from "react-router-dom"
 import { AppDispatch, RootState } from "../../store"
 import { addUserInfo } from "../reducers/userReducer"
 import React, { useState } from "react"
@@ -45,6 +46,12 @@ export const InfoForm = () => {
     }
     return <div id="information">
         <h2>Update your information</h2>
+        <Link to="/profile">
+            Back to Profile
+        </Link>
+        <Link to="/">
+            Home
+        </Link>
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>

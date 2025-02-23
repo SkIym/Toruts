@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using Microsoft.EntityFrameworkCore;
+using api.Enums;
+using api.Mappers;
 
 namespace api.Controllers
 {
@@ -43,7 +45,10 @@ namespace api.Controllers
             Console.WriteLine("Logging in...");
 
             // Find the user by username
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
+            var user = await _userManager.Users
+                    .Include(u => u.Tutor)
+                    .Include(u => u.Student)
+                    .FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
             // If user not found, return unauthorized
             if (user == null) return Unauthorized("Username does not exist");
@@ -56,13 +61,21 @@ namespace api.Controllers
             // NOTE: for security, username or password dapat sabihin nating mali not password lang kasi malalaman na tama ung username
             if (!result.Succeeded) return Unauthorized("Incorrect username or password");
 
+            var isTutor = user.Tutor != null;
+            var isStudent = user.Student != null;
+
+            Console.WriteLine(isTutor.ToString());
+
             // Return user details and JWT token
             return Ok(
                 new NewUserDto
                 {
                     UserName = user.UserName,
                     Email = user.Email,
-                    Token = _tokenService.CreateToken(user)
+                    Token = _tokenService.CreateToken(user),
+                    UserType = isTutor ? UserType.TUTOR : (isStudent ? UserType.STUDENT : null),
+                    PrimaryInfo = user.ToUpdateUserDto(),
+                    RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null)
                 }
             );
         }
