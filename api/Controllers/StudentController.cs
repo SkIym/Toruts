@@ -41,14 +41,14 @@ namespace api.Controllers
 
             if (user == null)
             {
-                return NotFound(username);
+                return Ok();
             }
 
             var student = await _context.Student.FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             if (student == null)
             {
-                return NotFound();
+                return Ok();
             }
 
             return Ok(student.ToStudentDto());
@@ -111,7 +111,7 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
