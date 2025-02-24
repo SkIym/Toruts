@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { useField } from "../../hooks"
+import { useErrorNotification, useField } from "../../hooks"
 import { AppDispatch } from "../../../store"
 import { getTutors } from "../../reducers/userReducer"
 import { TutorResult } from "../../types"
@@ -15,6 +15,11 @@ const SearchForm = () => {
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
+            if (search.value == "") {
+                useErrorNotification("Empty Search")
+                
+                return
+            }
             dispatch(getTutors(search.value, (a: TutorResult[]) => {
                 setTutors(a)
             }))
