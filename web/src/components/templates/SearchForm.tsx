@@ -8,6 +8,9 @@ import TutorSearchResult from "./TutorSearchResult"
 
 const SearchForm = () => {
     const { ...search } = useField("text")
+    const { ...minPrice } = useField("number")
+    const { ...maxPrice } = useField("number")
+
     const dispatch = useDispatch<AppDispatch>()
 
     const [tutors, setTutors] = useState<TutorResult[]>([])
@@ -32,8 +35,12 @@ const SearchForm = () => {
 
     return (
         <div>
+            <span>Search Tutors</span>
             <form onSubmit={handleSearch}>
-                <input{...search} />
+                <span>Search</span>
+                <input{...search} /> <br/>
+                <span>Filter</span><br/>
+                <span>Price: </span> <input {...minPrice} /> - <input {...maxPrice} />
                 <button> search</button>
             </form>
 
