@@ -50,7 +50,7 @@ const SearchForm = () => {
                     //     return (<span>{tutor.user.firstName} {tutor.user.lastName}</span>)
                     // })
                     tutors.map((tutor) => {
-                        return <TutorSearchResult {...tutor}/>
+                        return <TutorSearchResult {...tutor} />
                     })
                 }
             </div>
