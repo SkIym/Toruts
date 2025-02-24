@@ -2,8 +2,9 @@ import { useDispatch } from "react-redux"
 import { useField } from "../../hooks"
 import { AppDispatch } from "../../../store"
 import { getTutors } from "../../reducers/userReducer"
-import { TutorInfo, TutorResult } from "../../types"
+import { TutorResult } from "../../types"
 import { useState } from "react"
+import TutorSearchResult from "./TutorSearchResult"
 
 const SearchForm = () => {
     const { ...search } = useField("text")
@@ -33,8 +34,11 @@ const SearchForm = () => {
 
             <div>
                 {
+                    // tutors.map((tutor) => {
+                    //     return (<span>{tutor.user.firstName} {tutor.user.lastName}</span>)
+                    // })
                     tutors.map((tutor) => {
-                        return (<span>{tutor.user.firstName} {tutor.user.lastName}</span>)
+                        return <TutorSearchResult {...tutor}/>
                     })
                 }
             </div>
