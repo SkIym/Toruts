@@ -72,14 +72,18 @@ namespace api.Controllers
         [Route("search")]
         public async Task<IActionResult> SearchWithQuery(string? query, int? minPrice, int? maxPrice)
         {
-            var tutors = await _context.Tutor.ToListAsync();
+            var tutorRequest = _context.Tutor
+            .Where(u => u.Price >= ((minPrice == null) ? 0 : minPrice))
+            .Where(u => u.Price <= ((maxPrice == null) ? int.MaxValue : maxPrice));
 
-            if (tutors == null)
+            if (query != null)
             {
-                return NotFound("No Tutors Available");
+                tutorRequest = tutorRequest.Where(u =>
+                u.User.FirstName.ToLower().Contains(query) || u.User.LastName.ToLower().Contains(query));
             }
 
-            // Get the user keys
+            var tutors = await tutorRequest.ToListAsync();
+
             foreach (var tutor in tutors)
             {
                 tutor.User = _context.User
@@ -87,37 +91,7 @@ namespace api.Controllers
                     .First();
             }
 
-            if (query == null)
-            {
-                return Ok(tutors);
-            }
-            List<Tutor> searchedTutors = new List<Tutor>();
-
-            query = query.ToLower();
-            foreach (var tutor in tutors)
-            {
-                if (tutor == null)
-                {
-                    continue;
-                }
-                if (minPrice != null)
-                {
-                    if (tutor.Price < minPrice) continue;
-                }
-
-                if (maxPrice != null)
-                {
-                    if (tutor.Price > maxPrice) continue;
-                }
-
-                var fullname = (tutor.User.FirstName + " " + tutor.User.LastName).ToLower();
-                if (fullname.Contains(query) || tutor.EducAttainment.ToLower().Contains(query))
-                {
-                    searchedTutors.Add(tutor);
-                }
-
-            }
-            return Ok(searchedTutors);
+            return Ok(tutors);
         }
 
         // GET endpoint to get tutor by id
