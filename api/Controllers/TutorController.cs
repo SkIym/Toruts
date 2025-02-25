@@ -73,6 +73,7 @@ namespace api.Controllers
         public async Task<IActionResult> SearchWithQuery(string? query, int? minPrice, int? maxPrice)
         {
             var tutors = await _context.Tutor.ToListAsync();
+
             if (tutors == null)
             {
                 return NotFound("No Tutors Available");
@@ -99,12 +100,22 @@ namespace api.Controllers
                 {
                     continue;
                 }
+                if (minPrice != null)
+                {
+                    if (tutor.Price < minPrice) continue;
+                }
+
+                if (maxPrice != null)
+                {
+                    if (tutor.Price > maxPrice) continue;
+                }
 
                 var fullname = (tutor.User.FirstName + " " + tutor.User.LastName).ToLower();
                 if (fullname.Contains(query) || tutor.EducAttainment.ToLower().Contains(query))
                 {
                     searchedTutors.Add(tutor);
                 }
+
             }
             return Ok(searchedTutors);
         }
