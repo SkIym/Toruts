@@ -4,12 +4,11 @@ import SearchForm from "../templates/SearchForm"
 const HomePage = () => {
     return (
         <div>
-            <h1>OMG HELLO</h1>
-            <h2>There will be a list of tutors here and a search bar...</h2>
-            <SearchForm />
+            <h1>Toruts</h1>
             <Link to={"/profile?"}>
-                <p>Profile</p>
+                <h3>Profile</h3>
             </Link>
+            <SearchForm />
         </div>
 
     )
