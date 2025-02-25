@@ -69,11 +69,10 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("search/{query}")]
-        public async Task<IActionResult> Search([FromRoute] string query)
+        [Route("search")]
+        public async Task<IActionResult> SearchWithQuery(string? query, int? minPrice, int? maxPrice)
         {
             var tutors = await _context.Tutor.ToListAsync();
-            query = query.ToLower();
             if (tutors == null)
             {
                 return NotFound("No Tutors Available");
@@ -87,8 +86,13 @@ namespace api.Controllers
                     .First();
             }
 
+            if (query == null)
+            {
+                return Ok(tutors);
+            }
             List<Tutor> searchedTutors = new List<Tutor>();
 
+            query = query.ToLower();
             foreach (var tutor in tutors)
             {
                 if (tutor == null)
@@ -104,7 +108,6 @@ namespace api.Controllers
             }
             return Ok(searchedTutors);
         }
-
 
         // GET endpoint to get tutor by id
         [HttpGet("{id}")]
