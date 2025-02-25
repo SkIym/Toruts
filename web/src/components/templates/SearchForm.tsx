@@ -18,8 +18,9 @@ const SearchForm = () => {
     const [tutors, setTutors] = useState<TutorResult[]>([])
 
     useEffect(() => {
-        tutorService.search({ query: null, minPrice: null, maxPrice: null })
+        tutorService.search({ query: "", minPrice: null, maxPrice: null })
             .then(data => setTutors(data))
+            .catch()
     }, [])
 
     const handleSearch = async (e: React.FormEvent) => {
