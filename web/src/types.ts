@@ -69,3 +69,9 @@ export interface ToggleObject {
     toggleVisibility: () => void
     setInvisible: () => void
 }
+
+export type TutorSearch = {
+    query: string,
+    minPrice: number | null,
+    maxPrice: number | null
+}
