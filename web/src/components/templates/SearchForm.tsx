@@ -18,12 +18,14 @@ const SearchForm = () => {
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            if (search.value == "") {
-                useErrorNotification("Empty Search")
-                
-                return
-            }
-            dispatch(getTutors(search.value, (a: TutorResult[]) => {
+            const minPriceInt = parseInt(minPrice.value)
+            const maxPriceInt = parseInt(maxPrice.value)
+            dispatch(getTutors({
+                query: search.value,
+                minPrice: isNaN(minPriceInt) ? null : minPriceInt,
+                maxPrice: isNaN(maxPriceInt) ? null : maxPriceInt,
+
+            }, (a: TutorResult[]) => {
                 setTutors(a)
             }))
 
@@ -38,8 +40,8 @@ const SearchForm = () => {
             <span>Search Tutors</span>
             <form onSubmit={handleSearch}>
                 <span>Search</span>
-                <input{...search} /> <br/>
-                <span>Filter</span><br/>
+                <input{...search} /> <br />
+                <span>Filter</span><br />
                 <span>Price: </span> <input {...minPrice} /> - <input {...maxPrice} />
                 <button> search</button>
             </form>

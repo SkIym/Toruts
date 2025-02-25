@@ -1,6 +1,6 @@
 import axios from "axios";
 import { serverURL } from "../constants";
-import { TutorInfo, TutorInfoWithoutId, TutorResult } from "../types";
+import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types";
 
 const url = serverURL + "tutors"
 
@@ -11,9 +11,9 @@ const create = async (username: string, creds: TutorInfoWithoutId) => {
     return data
 }
 
-const search = async (searchTerm: string) => {
+const search = async (query: TutorSearch) => {
     console.log("Searching tutors")
-    const { data } = await axios.get<TutorResult[]>(`${url}/search/${searchTerm}`)
+    const { data } = await axios.get<TutorResult[]>(`${url}/search/`, { params: query })
     return data
 
 }
