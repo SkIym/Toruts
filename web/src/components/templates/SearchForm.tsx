@@ -3,8 +3,10 @@ import { useErrorNotification, useField } from "../../hooks"
 import { AppDispatch } from "../../../store"
 import { getTutors } from "../../reducers/userReducer"
 import { TutorResult } from "../../types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TutorSearchResult from "./TutorSearchResult"
+
+import tutorService from "../../services/tutor"
 
 const SearchForm = () => {
     const { ...search } = useField("text")
@@ -14,6 +16,11 @@ const SearchForm = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     const [tutors, setTutors] = useState<TutorResult[]>([])
+
+    useEffect(() => {
+        tutorService.search({ query: null, minPrice: null, maxPrice: null })
+            .then(data => setTutors(data))
+    }, [])
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -48,9 +55,6 @@ const SearchForm = () => {
 
             <div>
                 {
-                    // tutors.map((tutor) => {
-                    //     return (<span>{tutor.user.firstName} {tutor.user.lastName}</span>)
-                    // })
                     tutors.map((tutor) => {
                         return <TutorSearchResult {...tutor} />
                     })
