@@ -68,6 +68,31 @@ namespace api.Controllers
             return Ok(tutor.ToTutorDto());
         }
 
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> SearchWithQuery(string? query, int? minPrice, int? maxPrice)
+        {
+            var tutorRequest = _context.Tutor
+            .Where(u => u.Price >= ((minPrice == null) ? 0 : minPrice))
+            .Where(u => u.Price <= ((maxPrice == null) ? int.MaxValue : maxPrice));
+
+            if (query != null)
+            {
+                tutorRequest = tutorRequest.Where(u =>
+                u.User.FirstName.ToLower().Contains(query) || u.User.LastName.ToLower().Contains(query));
+            }
+
+            var tutors = await tutorRequest.ToListAsync();
+
+            foreach (var tutor in tutors)
+            {
+                tutor.User = _context.User
+                    .Where(u => u.Id == tutor.UserId)
+                    .First();
+            }
+
+            return Ok(tutors);
+        }
 
         // GET endpoint to get tutor by id
         [HttpGet("{id}")]
@@ -110,7 +135,7 @@ namespace api.Controllers
                 return BadRequest("User already has a tutor account.");
             }
 
-            var tutor = new Tutor 
+            var tutor = new Tutor
             {
                 UserId = user.Id,
                 User = user,
@@ -138,7 +163,7 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
