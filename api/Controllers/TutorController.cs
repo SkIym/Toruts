@@ -79,7 +79,7 @@ namespace api.Controllers
             if (query != null)
             {
                 tutorRequest = tutorRequest.Where(u =>
-                u.User.FirstName.ToLower().Contains(query) || u.User.LastName.ToLower().Contains(query));
+                u.User.FirstName.ToLower().Contains(query.ToLower()) || u.User.LastName.ToLower().Contains(query.ToLower()));
             }
 
             var tutors = await tutorRequest.ToListAsync();
