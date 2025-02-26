@@ -171,21 +171,23 @@ namespace api.Controllers
                 return NotFound($"User '{username}' does not exist");
             }
 
-            var tutor = await _context.Tutor.FirstOrDefaultAsync(s => s.UserId == user.Id);
+            var tutor = await _context.Tutor.FirstOrDefaultAsync(t => t.UserId == user.Id);
             if (tutor == null)
             {
                 return NotFound($"User '{username}' does not have a tutor profile");
             }
 
-            tutor.EducAttainment = updateDto.EducAttainment;
-            tutor.LearningMode = updateDto.LearningMode;
-            tutor.Venue = updateDto.Venue;
-            tutor.Price = updateDto.Price;
-            tutor.AreasOfExpertise = updateDto.AreasOfExpertise;
-            tutor.TutoringExperiences = updateDto.TutoringExperiences;
-            tutor.Availability = updateDto.Availability;
-            tutor.PortraitUrl = updateDto.PortraitUrl;
-            tutor.Status = updateDto.Status;
+            _context.Entry(tutor).CurrentValues.SetValues(updateDto);
+
+            // tutor.EducAttainment = updateDto.EducAttainment;
+            // tutor.LearningMode = updateDto.LearningMode;
+            // tutor.Venue = updateDto.Venue;
+            // tutor.Price = updateDto.Price;
+            // tutor.AreasOfExpertise = updateDto.AreasOfExpertise;
+            // tutor.TutoringExperiences = updateDto.TutoringExperiences;
+            // tutor.Availability = updateDto.Availability;
+            // tutor.PortraitUrl = updateDto.PortraitUrl;
+            // tutor.Status = updateDto.Status;
 
             await _context.SaveChangesAsync();
 
