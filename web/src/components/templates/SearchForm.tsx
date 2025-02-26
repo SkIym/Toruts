@@ -55,8 +55,10 @@ const SearchForm = () => {
             </form>
 
             <div>
-                {
-                    tutors.map((tutor) => {
+
+                {tutors.length === 0 
+                ?   "No tutors found :( "
+                :   tutors.map((tutor) => {
                         return <TutorSearchResult {...tutor} />
                     })
                 }
