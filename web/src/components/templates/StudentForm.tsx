@@ -1,17 +1,18 @@
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "../../../store"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../../store"
 import { useField } from "../../hooks"
 import { signAsStudent } from "../../reducers/userReducer"
 import { UserData } from "../../types"
+import { UserType } from "../../types"
 
 const StudentForm = () => {
 
     const { reset: areasReset, ...areas } = useField("text")
     const { reset: degreeReset, ...degree } = useField("text")
-
+    const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>()
 
-    const handleInfo = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
             const loggedInUserJson = window.localStorage.getItem("loggedInUser")
@@ -33,9 +34,13 @@ const StudentForm = () => {
         }
     }
 
+    const handleUpdate = async () => {
+        return;
+    }
+
     return <div>
         <span>Student Info Form</span>
-        <form onSubmit={handleInfo} id="student-info">
+        <form onSubmit={handleSubmit} id="student-info">
             <div>
                 <span>Areas of Improvement:</span>
                 <input {...areas} data-testid="areas" />
@@ -44,7 +49,9 @@ const StudentForm = () => {
                 <span>Degree Program</span>
                 <input {...degree} data-testid="areas" />
             </div>
-            <button type="submit"> Upload</button>
+            {user?.userType === UserType.TUTOR
+                        ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
+                        : <button type="submit">Create tutor account</button>}
         </form>
     </div>
 }
