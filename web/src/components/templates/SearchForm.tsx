@@ -31,6 +31,7 @@ const SearchForm = () => {
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault()
+        setIsReady(false)
         try {
             const minPriceInt = parseInt(minPrice.value)
             const maxPriceInt = parseInt(maxPrice.value)
@@ -41,6 +42,7 @@ const SearchForm = () => {
 
             }, (a: TutorResult[]) => {
                 setTutors(a)
+                setIsReady(true)
             }))
 
         } catch (e) {
