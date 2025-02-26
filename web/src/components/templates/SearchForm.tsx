@@ -16,11 +16,17 @@ const SearchForm = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     const [tutors, setTutors] = useState<TutorResult[]>([])
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
-        tutorService.search({ query: "", minPrice: null, maxPrice: null })
-            .then(data => setTutors(data))
-            .catch()
+        const getTutors = async () => {
+            console.log('Getting tutors')
+            const result = await tutorService.search({ query: "", minPrice: null, maxPrice: null })
+            setTutors(result)
+            setIsReady(true)
+        }
+        
+        getTutors();
     }, [])
 
     const handleSearch = async (e: React.FormEvent) => {
@@ -46,23 +52,28 @@ const SearchForm = () => {
     return (
         <div>
             <span>Search Tutors</span>
-            <form onSubmit={handleSearch}>
-                <span>Search</span>
-                <input{...search} /> <br />
-                <span>Filter</span><br />
-                <span>Price: </span> <input {...minPrice} /> - <input {...maxPrice} />
-                <button> search</button>
-            </form>
-
-            <div>
-
-                {tutors.length === 0 
-                ?   "No tutors found :( "
-                :   tutors.map((tutor) => {
-                        return <TutorSearchResult {...tutor} />
-                    })
-                }
-            </div>
+            
+            {isReady
+            ?   
+                <div>
+                     <form onSubmit={handleSearch}>
+                        <span>Search</span>
+                        <input{...search} /> <br />
+                        <span>Filter</span><br />
+                        <span>Price: </span> <input {...minPrice} /> - <input {...maxPrice} />
+                        <button> search</button>
+                    </form>
+                    <div>
+                        {tutors.length === 0 
+                        ?   "No tutors found :( "
+                        :   tutors.map((tutor) => {
+                                return <TutorSearchResult {...tutor} />
+                            })
+                        }
+                    </div>
+                </div>  
+            :   <div>Loading</div>
+            }
         </div>
     )
 }
