@@ -63,7 +63,7 @@ const SearchForm = () => {
                         <input {...search} data-testid="search" /> <br />
                         <span>Filter</span><br />
                         <span>Price: </span> <input {...minPrice} data-testid="minPrice" /> - <input {...maxPrice} data-testid="maxPrice" />
-                        <button> Search </button>
+                        <button data-testid="search-button"> Search </button>
                     </form>
                     <div>
                         {tutors.length === 0 
