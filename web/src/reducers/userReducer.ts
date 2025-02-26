@@ -1,5 +1,5 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo, TutorResult, TutorSearch, UserType } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfoWithoutId, StudentInfoWithoutId, TutorResult, TutorSearch, UserType } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student"
@@ -189,7 +189,7 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
 }
 
 export const getTutors = (query: TutorSearch, callback: (t: TutorResult[]) => void) => {
-    return async (dispatch: Dispatch) => {
+    return async (_: Dispatch) => {
         console.log(query)
         try {
             const tutors = await tutorService.search(query)

@@ -36,7 +36,7 @@ export const InfoForm = () => {
                     firstName: firstName.value,
                     lastName: lastName.value,
                     phoneNumber: phoneNumber.value,
-                    token: JSON.parse(loggedInUserJSON)
+                    // token: JSON.parse(loggedInUserJSON)
                 }))
             fnameReset()
             lnameReset()
