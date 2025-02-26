@@ -127,19 +127,19 @@ const TutorForm = () => {
             <input {...price} data-testid="price" step=".01" />
         </div>
         <div>
-            <span>Area of expertise</span>
+            <span>Area of expertise [optional]:</span>
             <input {...areaExp} data-testid="areaExp" />
         </div>
         <div>
-            <span>Tutoring experience</span>
+            <span>Tutoring experience [optional]:</span>
             <input {...tutorExp} data-testid="tutorExp" />
         </div>
         <div>
-            <span>Availability</span>
+            <span>Availability [optional]:</span>
             <input {...avail} data-testid="avail" />
         </div>
         <div>
-            <span>Portrait URL</span>
+            <span>Portrait URL [optional]: </span>
             <input {...portrait} data-testid="portrait" />
         </div>
         <div>

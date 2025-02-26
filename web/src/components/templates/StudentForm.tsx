@@ -41,11 +41,11 @@ const StudentForm = () => {
         <span>Student Info Form</span>
         <form onSubmit={handleSubmit} id="student-info">
             <div>
-                <span>Areas of Improvement:</span>
+                <span>Areas of Improvement [optional]:</span>
                 <input {...areas} data-testid="areas" />
             </div>
             <div>
-                <span>Degree Program</span>
+                <span>Degree Program [optional]:</span>
                 <input {...degree} data-testid="areas"  pattern="[A-Za-z]+" title="Please enter only alphabetical characters."/>
             </div>
             {user?.userType === UserType.STUDENT
