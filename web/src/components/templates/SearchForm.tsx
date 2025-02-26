@@ -60,10 +60,10 @@ const SearchForm = () => {
                 <div>
                      <form onSubmit={handleSearch}>
                         <span>Search</span>
-                        <input{...search} /> <br />
+                        <input {...search} data-testid="search" /> <br />
                         <span>Filter</span><br />
-                        <span>Price: </span> <input {...minPrice} /> - <input {...maxPrice} />
-                        <button> search</button>
+                        <span>Price: </span> <input {...minPrice} data-testid="minPrice" /> - <input {...maxPrice} data-testid="maxPrice" />
+                        <button> Search </button>
                     </form>
                     <div>
                         {tutors.length === 0 
