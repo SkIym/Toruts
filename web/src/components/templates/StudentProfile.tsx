@@ -1,8 +1,10 @@
+import { StudentInfo } from "../../types"
 
-const StudentProfile = () => {
+const StudentProfile = ({ info }: { info: StudentInfo}) => {
     return (
         <div>
-            STUDENT INFO HERE
+            <p>Program: {info.degreeProgram}</p>
+            <p>Areas of Improvement: {info.areasOfImprovement}</p>
         </div>
     )
 }

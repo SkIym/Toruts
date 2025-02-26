@@ -1,5 +1,5 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo, TutorResult, TutorSearch } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo, TutorResult, TutorSearch, UserType } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student"
@@ -26,6 +26,7 @@ const userSlice = createSlice({
             const info = action.payload;
             if (state)
                 state.roleInfo = info
+                console.log(state?.roleInfo)
             return state
         },
         setPrimaryInfo(state, action) {
@@ -44,7 +45,7 @@ export const signupUser = (creds: SignupInfo) => {
     return async (dispatch: Dispatch) => {
         try {
             const user = await accountService.signup(creds);
-            user.type = null;
+            user.userType = null;
             user.roleInfo = null;
             user.primaryInfo = null;
             // accountService.setToken(user.token);
@@ -129,6 +130,20 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
             dispatch(setType('TUTOR'))
             dispatch(setRoleInfo(tutorData))
             useSuccessNotification(`You have signed up as a tutor!`)
+        } catch (e) {
+            useErrorNotification(e);
+            return Promise.reject();
+        }
+    }
+}
+
+export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const tutorData = await tutorService.update(username, creds);
+            dispatch(setType(UserType.TUTOR))
+            dispatch(setRoleInfo(tutorData))
+            useSuccessNotification(`Updated your tutor record`)
         } catch (e) {
             useErrorNotification(e);
             return Promise.reject();

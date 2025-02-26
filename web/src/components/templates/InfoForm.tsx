@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useField } from "../../hooks"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AppDispatch, RootState } from "../../../store"
 import { addUserInfo } from "../../reducers/userReducer"
 import React, { useState } from "react"
@@ -15,6 +15,7 @@ export const InfoForm = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: RootState) => state.user)
+    const navigate = useNavigate();
     const [type, setType] = useState(true);
 
     const toggleForm = () => {
@@ -40,6 +41,7 @@ export const InfoForm = () => {
             fnameReset()
             lnameReset()
             phoneReset()
+            navigate('/profile')
         } catch {
             return;
         }

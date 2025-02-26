@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useField } from "../../hooks"
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
-import { signAsTutor } from "../../reducers/userReducer";
+import { signAsTutor, updateAsTutor } from "../../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
-import { UserType } from "../../types";
+import { TutorInfo, UserType } from "../../types";
 
 const TutorForm = () => {
     const { reset: educReset, ...educ } = useField('text');
@@ -54,7 +54,28 @@ const TutorForm = () => {
     }
 
     const handleUpdate = async () => {
-        return;
+        const info = user?.roleInfo as TutorInfo
+        try {
+            if (user)
+                
+                await dispatch(updateAsTutor(
+                    user.userName,
+                    {
+                        educAttainment: educ.value || info.educAttainment,
+                        learningMode: parseInt(mode) || info.learningMode,
+                        venue: venue.value || info.venue,
+                        price: parseInt(price.value) || info.price,
+                        areasOfExpertise: areaExp.value ? [areaExp.value] : info.areasOfExpertise,
+                        tutoringExperiences: tutorExp.value || info.tutoringExperiences,
+                        availability: avail.value || info.availability,
+                        portraitUrl: portrait.value || info.portraitUrl,
+                        status: parseInt(status) || info.status
+                    }))
+
+            navigate("/profile");
+        } catch {
+            return;
+        }
     }
 
     return <form onSubmit={handleSubmit}>

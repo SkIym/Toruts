@@ -4,6 +4,7 @@ import { useField } from "../../hooks"
 import { signAsStudent } from "../../reducers/userReducer"
 import { UserData } from "../../types"
 import { UserType } from "../../types"
+import { useNavigate } from "react-router-dom"
 
 const StudentForm = () => {
 
@@ -11,6 +12,7 @@ const StudentForm = () => {
     const { reset: degreeReset, ...degree } = useField("text")
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>()
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -28,14 +30,11 @@ const StudentForm = () => {
             }))
             areasReset()
             degreeReset()
+            navigate('/profile')
         } catch (e) {
             console.log(e)
             return
         }
-    }
-
-    const handleUpdate = async () => {
-        return;
     }
 
     return <div>
@@ -50,7 +49,7 @@ const StudentForm = () => {
                 <input {...degree} data-testid="areas" />
             </div>
             {user?.userType === UserType.STUDENT
-                        ? <button type="button" onClick={handleUpdate}>Update student information</button>
+                        ? <button type="submit">Update student information</button>
                         : <button type="submit">Create student account</button>}
         </form>
     </div>

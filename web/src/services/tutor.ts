@@ -18,6 +18,12 @@ const search = async (query: TutorSearch) => {
 
 }
 
+const update = async (username: string, creds: TutorInfoWithoutId) => {
+    console.log("Requresting to update tutor record")
+    const { data } = await axios.put<TutorInfo>(`${url}/update/${username}`, creds)
+    return data;
+}
+
 export default {
-    create, search
+    create, search, update
 }

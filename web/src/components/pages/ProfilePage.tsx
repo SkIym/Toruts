@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import { logoutUser, deleteUser } from "../../reducers/userReducer";
 import { useNavigate, Link } from "react-router-dom";
-import { UserType } from "../../types";
+import { StudentInfo, TutorInfo, UserType } from "../../types";
 import TutorProfile from "../templates/TutorProfile";
 
 import StudentProfile from "../templates/StudentProfile";
@@ -43,7 +43,7 @@ const ProfilePage = () => {
 
     return (
         <div>
-            <h1>OMG HELLO {user.userName}</h1>
+            <h1>OMG HELLO {user?.userName}</h1>
             <Link to={"/"}>
                 <h3>Home</h3>
             </Link>
@@ -57,9 +57,9 @@ const ProfilePage = () => {
                 <span>Phone Number: {primaryInfo?.phoneNumber}</span>
             </div>
             {user?.userType == UserType.TUTOR
-                ? <TutorProfile></TutorProfile>
+                ? <TutorProfile info={roleInfo as TutorInfo}></TutorProfile>
                 : (user?.userType == UserType.STUDENT
-                    ? <StudentProfile></StudentProfile>
+                    ? <StudentProfile info={roleInfo as StudentInfo}></StudentProfile>
                     : null)}
 
             <button onClick={() => navigate('/info')}>Edit Profile</button>
