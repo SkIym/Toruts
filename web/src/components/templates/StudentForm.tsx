@@ -49,9 +49,9 @@ const StudentForm = () => {
                 <span>Degree Program</span>
                 <input {...degree} data-testid="areas" />
             </div>
-            {user?.userType === UserType.TUTOR
-                        ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
-                        : <button type="submit">Create tutor account</button>}
+            {user?.userType === UserType.STUDENT
+                        ? <button type="button" onClick={handleUpdate}>Update student information</button>
+                        : <button type="submit">Create student account</button>}
         </form>
     </div>
 }
