@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build: ./web
+    ports:
+      - 5173
+  backend:
+    build: ./api
+    ports:
+      - 5177
