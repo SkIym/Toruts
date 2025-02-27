@@ -1,18 +1,5 @@
-FROM node as frontend
+FROM node as front
 
-COPY ./web ./web
-WORKDIR /web
+COPY . .
 RUN npm i
 CMD [ "yarn", "run", "dev" ]
-
-# Backend
-# FROM mcr.microsoft.com/dotnet/aspnet:8.0 as backend
-# COPY . .
-# WORKDIR /api
-
-# CMD [ "ls", "-la" ]
-
-# COPY --link *.csproj .
-# RUN dotnet restore
-
-# CMD [ "ls", "-la" ]
