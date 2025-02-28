@@ -7,6 +7,7 @@ RUN dotnet restore
 
 # RUN dotnet restore
 EXPOSE 5177
+ENV ASPNETCORE_URLS=http://0.0.0.0:5177
 
 # CMD [ "ls","-la" ]
-ENTRYPOINT [ "ls",  "." ]
+ENTRYPOINT ["dotnet", "run"]
