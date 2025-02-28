@@ -1,26 +1,15 @@
-networks:
-  meow:
-    driver: bridge
-
 services:
-  backend:
-    build: api/.
-    network_mode: "host"
-    ports:
-      - "5177:5177"
-
   frontend:
-    build: web/.
-    network_mode: "host"
+    build: web/
     ports:
       - "5173:5173"
-    depends_on:
-      - backend
-
-  test:
-    build: .
-    network_mode: "host"
-    depends_on:
-      - backend
-      - frontend
-    command: [ "curl", "http://127.0.0.1:5173" ]
+    environment:
+      - PORT=5173
+      - VITE_PORT=5173
+  backend:
+    build: api/
+    ports:
+      - "5177:5177"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5172;http://+:5173

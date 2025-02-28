@@ -1,8 +1,13 @@
 FROM node
-COPY . .
-WORKDIR web
 
-RUN npm i
+WORKDIR /app
+COPY package.json .
+
+ENV PORT=5173
 EXPOSE 5173
 
-CMD [ "yarn", "run", "dev" ]
+RUN npm i
+
+COPY . . 
+
+CMD [ "npm", "run", "dev" ]
