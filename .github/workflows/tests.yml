@@ -10,7 +10,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup Docker Containers
-        run: docker compose up --build
+        run: docker compose up --build -d
       - name: Install Playwright
         run: npx playwright install --with-deps chromium
       - name: Run Tests
