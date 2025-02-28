@@ -4,19 +4,23 @@ networks:
 
 services:
   backend:
-    build: ./api
+    build: api/.
+    network_mode: "host"
     ports:
       - "5177:5177"
-    networks:
-      - meow
 
   frontend:
-    build: ./web
+    build: web/.
+    network_mode: "host"
     ports:
       - "5173:5173"
-    expose:
-      - 5173
     depends_on:
       - backend
-    networks:
-      - meow
+
+  test:
+    build: .
+    network_mode: "host"
+    depends_on:
+      - backend
+      - frontend
+    command: [ "curl", "http://127.0.0.1:5173" ]
