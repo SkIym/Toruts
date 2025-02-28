@@ -1,3 +1,7 @@
+networks:
+  meow:
+    driver: bridge
+
 services:
   frontend:
     build: web/
@@ -6,6 +10,8 @@ services:
     environment:
       - PORT=5173
       - VITE_PORT=5173
+    networks:
+      - meow
   backend:
     build: api/
     ports:
@@ -13,3 +19,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5172;http://+:5173
+    networks:
+      - meow
+  test:
+    build: .
+    ports:
+      - "9000:9000"
+    environment:
+      - PLAYWRIGHT_HTML_PORT=9000
+      - PLAYWRIGHT_HTML_OUTPUT_DIR="test_out"
+      - PLAYWRIGHT_HTML_OPEN="always"
+      - PLAYWRIGHT_HTML_HOST=0.0.0.0
+    depends_on:
+      - frontend
+    networks:
+      - meow
