@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright
-        run: npx playwright install
+        run: npx playwright install --with-deps chromium
       - name: Run Tests
         run: npx playwright test
       - name: Cleanup Docker Containers
@@ -32,4 +32,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-  
