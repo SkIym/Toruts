@@ -31,6 +31,5 @@ jobs:
           path: playwright-report/
           retention-days: 30
       - name: Cleanup Docker Containers
-        rune: docker compose down
+        run: docker compose down
   
-    
