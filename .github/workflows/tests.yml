@@ -1,6 +1,10 @@
 name: Playwright Tests
 
 on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
   workflow_dispatch:
 
 jobs:
@@ -26,5 +30,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+      - name: Cleanup Docker Containers
+        rune: docker compose down
   
     
