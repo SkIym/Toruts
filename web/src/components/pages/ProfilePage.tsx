@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
-import { logoutUser, deleteUser } from "../../reducers/userReducer";
+import { logoutUser, deleteUser, switchMode } from "../../reducers/userReducer";
 import { useNavigate, Link } from "react-router-dom";
 import { StudentInfo, TutorInfo, UserType } from "../../types";
 import TutorProfile from "../templates/TutorProfile";
@@ -36,6 +36,22 @@ const ProfilePage = () => {
         }
     }
 
+    const handleSwitch = async () => {
+        console.log(user)
+        if (user){
+            const userType = user.userType
+            if (userType !== null) {
+                try {
+                    console.log("Handling switching modes")
+                    const toUserType = userType === UserType.STUDENT ? UserType.TUTOR : UserType.STUDENT
+                    await dispatch(switchMode(toUserType, user?.userName))
+                } catch {
+                    return
+                }
+            }
+        }
+    }
+
     // console.log(user?.primaryInfo, user?.roleInfo, user?.type)
 
     const primaryInfo = user?.primaryInfo;
@@ -65,6 +81,11 @@ const ProfilePage = () => {
             <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
             <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleSwitch}>
+                {user?.userType === UserType.TUTOR
+                ? "Switch to Student Mode"
+                : "Switch to Tutor Mode"}
+            </button>
         </div>
 
     )

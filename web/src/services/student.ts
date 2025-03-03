@@ -25,6 +25,11 @@ const find = async (username: string) => {
     }
 }
 
+const get = async (username: string) => {
+    const { data } = await axios.get<StudentInfo>(`${url}/get/${username}`)
+    return data;
+}
+
 export default {
-    create, update, find
+    create, update, find, get
 }

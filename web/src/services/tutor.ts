@@ -24,6 +24,11 @@ const update = async (username: string, creds: TutorInfoWithoutId) => {
     return data;
 }
 
+const get = async (username: string) => {
+    const { data } = await axios.get<TutorInfo>(`${url}/get/${username}`)
+    return data;
+}
+
 export default {
-    create, search, update
+    create, search, update, get
 }

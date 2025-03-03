@@ -240,4 +240,28 @@ export const getTutors = (query: TutorSearch, callback: (t: TutorResult[]) => vo
 
 }
 
+export const switchMode = (toUserType: UserType, username: string) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            let roleInfo = null
+            if (toUserType == UserType.STUDENT) {
+                roleInfo = await studentService.get(username)
+            } else {
+                roleInfo = await tutorService.get(username)
+            }
+            const user = getLocalUser();
+            if (user) {
+                user.roleInfo = roleInfo;
+                user.userType = toUserType;
+                updateLocalUser(user);
+                dispatch(setUser(user));
+            }
+            useSuccessNotification(`You have switched to your ${UserType[toUserType]} account!`)   
+        } catch (e) {
+            useErrorNotification(e)
+            return Promise.reject()
+        }
+    }
+}
+
 export default userSlice.reducer
