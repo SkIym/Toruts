@@ -81,7 +81,7 @@ const TutorForm = () => {
     return <form onSubmit={handleSubmit}>
         <div>
             <span>Educational Attainment</span>
-            <input {...educ} data-testid="educ"  pattern="[A-Za-z]+" title="Please enter only alphabetical characters."/>
+            <input {...educ} data-testid="educ"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
         </div>
         <div>
             <fieldset>
@@ -120,7 +120,7 @@ const TutorForm = () => {
         </div>
         <div>
             <span>Venue</span>
-            <input {...venue} data-testid="venue"  pattern="[A-Za-z]+" title="Please enter only alphabetical characters."/>
+            <input {...venue} data-testid="venue"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
         </div>
         <div>
             <span>Price</span>
