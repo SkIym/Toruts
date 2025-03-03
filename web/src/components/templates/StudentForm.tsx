@@ -44,7 +44,7 @@ const StudentForm = () => {
                     await dispatch(updateStudent(
                         user.userName,
                         {
-                            areasOfImprovement: [areas.value] || info.areasOfImprovement,
+                            areasOfImprovement: areas.value ? [areas.value] : info.areasOfImprovement,
                             degreeProgram: degree.value || info.degreeProgram
                         }))
                 navigate("/profile");
