@@ -26,7 +26,7 @@ const login = async (creds: LoginInfo) => {
 
 const setUserInfo = async (username: string, info: UserInfo) => {
     console.log("info reached") 
-    const { data } = await axios.put<UserData>(`${serverURL}record/update/${username}`, info)
+    const { data } = await axios.put<UserInfo>(`${serverURL}record/update/${username}`, info)
     return data
 }
 

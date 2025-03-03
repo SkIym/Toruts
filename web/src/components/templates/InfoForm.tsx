@@ -63,11 +63,11 @@ export const InfoForm = () => {
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>
-                <input {...firstName} data-testid="first-name"  pattern="[A-Za-z]+" title="Please enter only alphabetical characters."/>
+                <input {...firstName} data-testid="first-name"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
             </div>
             <div>
                 <span>Last Name</span>
-                <input {...lastName} data-testid="last-name"  pattern="[A-Za-z]+" title="Please enter only alphabetical characters."/>
+                <input {...lastName} data-testid="last-name"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
             </div>
             <div>
                 <span>Phone Number</span>

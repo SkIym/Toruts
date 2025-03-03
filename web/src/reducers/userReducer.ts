@@ -92,6 +92,12 @@ export const addUserInfo = (username: string, info: UserInfo) => {
         try {
             const primaryInfo = await accountService.setUserInfo(username, info)
             dispatch(setPrimaryInfo(primaryInfo))
+            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+            if (loggedInUserJSON) {
+                const user: UserData = JSON.parse(loggedInUserJSON);
+                user.primaryInfo = primaryInfo
+                dispatch(setUser(user));
+            }
             useSuccessNotification(`User information saved.`)
         } catch (err) {
             useErrorNotification(err)
@@ -129,6 +135,13 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
             const tutorData = await tutorService.create(username, creds);
             dispatch(setType('TUTOR'))
             dispatch(setRoleInfo(tutorData))
+            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+            if (loggedInUserJSON) {
+                const user: UserData = JSON.parse(loggedInUserJSON);
+                user.roleInfo = tutorData
+                user.userType = UserType.TUTOR
+                dispatch(setUser(user));
+            }
             useSuccessNotification(`You have signed up as a tutor!`)
         } catch (e) {
             useErrorNotification(e);
@@ -143,6 +156,12 @@ export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
             const tutorData = await tutorService.update(username, creds);
             dispatch(setType(UserType.TUTOR))
             dispatch(setRoleInfo(tutorData))
+            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+            if (loggedInUserJSON) {
+                const user: UserData = JSON.parse(loggedInUserJSON);
+                user.roleInfo = tutorData
+                dispatch(setUser(user));
+            }
             useSuccessNotification(`Updated your tutor record`)
         } catch (e) {
             useErrorNotification(e);
@@ -160,6 +179,13 @@ export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
                 const studentData = await studentService.update(username, info)
                 dispatch(setType("STUDENT"))
                 dispatch(setRoleInfo(studentData))
+                const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+                if (loggedInUserJSON) {
+                    const user: UserData = JSON.parse(loggedInUserJSON);
+                    user.roleInfo = studentData;
+                    user.userType = UserType.STUDENT
+                    dispatch(setUser(user));
+                }
                 useSuccessNotification(`Updated your student record`)
                 return
             }
@@ -167,6 +193,12 @@ export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
 
             dispatch(setType("STUDENT"))
             dispatch(setRoleInfo(studentData))
+            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+            if (loggedInUserJSON) {
+                const user: UserData = JSON.parse(loggedInUserJSON);
+                user.roleInfo = studentData;
+                dispatch(setUser(user));
+            }
             useSuccessNotification(`You have signed up as a student!`)
         } catch (e) {
             useErrorNotification(e)
