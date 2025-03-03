@@ -49,7 +49,7 @@ export const InfoForm = () => {
     return <div id="information">
         <h2>Update your information</h2>
 
-        { user?.userType 
+        { user?.userType !== null
         ? <div>
             <Link to="/profile">
             Back to Profile
