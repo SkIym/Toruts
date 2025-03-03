@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../store"
 import { useField } from "../../hooks"
-import { signAsStudent } from "../../reducers/userReducer"
-import { UserData } from "../../types"
+import { signAsStudent, updateStudent } from "../../reducers/userReducer"
+import { StudentInfo, UserData } from "../../types"
 import { UserType } from "../../types"
 import { useNavigate } from "react-router-dom"
 
@@ -37,6 +37,22 @@ const StudentForm = () => {
         }
     }
 
+    const handleUpdate = async () => {
+        const info = user?.roleInfo as StudentInfo
+            try {
+                if (user)
+                    await dispatch(updateStudent(
+                        user.userName,
+                        {
+                            areasOfImprovement: [areas.value] || info.areasOfImprovement,
+                            degreeProgram: degree.value || info.degreeProgram
+                        }))
+                navigate("/profile");
+            } catch {
+                return;
+            }
+    }
+
     return <div>
         <span>Student Info Form</span>
         <form onSubmit={handleSubmit} id="student-info">
@@ -49,7 +65,7 @@ const StudentForm = () => {
                 <input {...degree} data-testid="degree"  pattern="[A-Za-z]+" title="Please enter only alphabetical characters."/>
             </div>
             {user?.userType === UserType.STUDENT
-                        ? <button type="submit">Update student information</button>
+                        ? <button type="button" onClick={handleUpdate}>Update student information</button>
                         : <button type="submit">Create student account</button>}
         </form>
     </div>
