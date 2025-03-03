@@ -6,6 +6,20 @@ import studentService from "../services/student"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 
+const LOCAL_STORAGE_KEY = "loggedInUser";
+const updateLocalUser = (user: UserData | null) => {
+  if (user) {
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+  } else {
+    window.localStorage.removeItem(LOCAL_STORAGE_KEY);
+  }
+};
+
+const getLocalUser = (): UserData | null => {
+    const loggedInUserJSON = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+    return loggedInUserJSON ? JSON.parse(loggedInUserJSON) : null;
+  };
+
 const userSlice = createSlice({
     name: "user",
     initialState: null as UserData | null,
@@ -17,22 +31,19 @@ const userSlice = createSlice({
             return null;
         },
         setType(state, action) {
-            const type = action.payload;
             if (state)
-                state.userType = type
+                state.userType = action.payload
             return state
         },
         setRoleInfo(state, action) {
-            const info = action.payload;
             if (state)
-                state.roleInfo = info
+                state.roleInfo = action.payload
                 console.log(state?.roleInfo)
             return state
         },
         setPrimaryInfo(state, action) {
-            const info = action.payload;
             if (state)
-                state.primaryInfo = info
+                state.primaryInfo = action.payload
             return state
         }
     },
@@ -40,6 +51,7 @@ const userSlice = createSlice({
 
 export const { setUser, clearUser, setType, setRoleInfo, setPrimaryInfo } = userSlice.actions
 
+// Signup
 export const signupUser = (creds: SignupInfo) => {
     console.log("signup reached")
     return async (dispatch: Dispatch) => {
@@ -48,8 +60,7 @@ export const signupUser = (creds: SignupInfo) => {
             user.userType = null;
             user.roleInfo = null;
             user.primaryInfo = null;
-            // accountService.setToken(user.token);
-            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+            updateLocalUser(user);
             dispatch(setUser(user));
             useSuccessNotification("Signup succesful!")
         } catch (e) {
@@ -59,15 +70,17 @@ export const signupUser = (creds: SignupInfo) => {
     };
 };
 
+// Get user from local storage
 export const getLoggedInUser = () => {
     return async (dispatch: Dispatch) => {
-        const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-        if (loggedInUserJSON) {
-            const user = JSON.parse(loggedInUserJSON);
+        const user = getLocalUser();
+        if (user) {
             dispatch(setUser(user));
         }
     };
 };
+
+// Login
 
 export const loginUser = (creds: LoginInfo) => {
     console.log("login reducer reached")
@@ -75,7 +88,7 @@ export const loginUser = (creds: LoginInfo) => {
         try {
             const user = await accountService.login(creds);
             // accountService.setToken(user.token);
-            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+            updateLocalUser(user);
             dispatch(setUser(user));
             console.log(user)
             useSuccessNotification("Login succesful!")
@@ -86,16 +99,18 @@ export const loginUser = (creds: LoginInfo) => {
     };
 }
 
+// Add or update user's primary information
+
 export const addUserInfo = (username: string, info: UserInfo) => {
     console.log("user info reducer reached")
     return async (dispatch: Dispatch) => {
         try {
             const primaryInfo = await accountService.setUserInfo(username, info)
             dispatch(setPrimaryInfo(primaryInfo))
-            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-            if (loggedInUserJSON) {
-                const user: UserData = JSON.parse(loggedInUserJSON);
-                user.primaryInfo = primaryInfo
+            const user = getLocalUser();
+            if (user) {
+                user.primaryInfo = primaryInfo;
+                updateLocalUser(user);
                 dispatch(setUser(user));
             }
             useSuccessNotification(`User information saved.`)
@@ -106,19 +121,22 @@ export const addUserInfo = (username: string, info: UserInfo) => {
     }
 
 }
+
+// Logout   
 export const logoutUser = () => {
     return async (dispatch: Dispatch) => {
-        window.localStorage.removeItem("loggedInUser");
+        updateLocalUser(null);
         dispatch(clearUser());
         useSuccessNotification("Logged out.")
     };
 };
 
+// Delete account
 export const deleteUser = (user: UserData) => {
     return async (dispatch: Dispatch) => {
         try {
-            window.localStorage.removeItem("loggedInUser");
-            accountService.deleteUser(user.userName)
+            updateLocalUser(null);
+            await accountService.deleteUser(user.userName)
             dispatch(clearUser());
             useSuccessNotification("Deleted user.")
         } catch (e) {
@@ -129,15 +147,13 @@ export const deleteUser = (user: UserData) => {
     }
 }
 
+// Sign up as a tutor
 export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
         try {
             const tutorData = await tutorService.create(username, creds);
-            dispatch(setType('TUTOR'))
-            dispatch(setRoleInfo(tutorData))
-            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-            if (loggedInUserJSON) {
-                const user: UserData = JSON.parse(loggedInUserJSON);
+            const user = getLocalUser();
+            if (user) {
                 user.roleInfo = tutorData
                 user.userType = UserType.TUTOR
                 dispatch(setUser(user));
@@ -150,17 +166,18 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     }
 }
 
+// Update user's tutor information
+
 export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
         try {
             const tutorData = await tutorService.update(username, creds);
-            dispatch(setType(UserType.TUTOR))
-            dispatch(setRoleInfo(tutorData))
-            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-            if (loggedInUserJSON) {
-                const user: UserData = JSON.parse(loggedInUserJSON);
-                user.roleInfo = tutorData
-                dispatch(setUser(user));
+            const user = getLocalUser();
+            if (user) {
+              user.userType = UserType.TUTOR;
+              user.roleInfo = tutorData;
+              updateLocalUser(user);
+              dispatch(setUser(user));
             }
             useSuccessNotification(`Updated your tutor record`)
         } catch (e) {
@@ -170,34 +187,17 @@ export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     }
 }
 
+// Signup as a student
 export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
         try {
-            const exists = await studentService.find(username)
-            // If exists, modify instead of creating
-            if (exists) {
-                const studentData = await studentService.update(username, info)
-                dispatch(setType("STUDENT"))
-                dispatch(setRoleInfo(studentData))
-                const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-                if (loggedInUserJSON) {
-                    const user: UserData = JSON.parse(loggedInUserJSON);
-                    user.roleInfo = studentData;
-                    user.userType = UserType.STUDENT
-                    dispatch(setUser(user));
-                }
-                useSuccessNotification(`Updated your student record`)
-                return
-            }
             const studentData = await studentService.create(username, info)
-
-            dispatch(setType("STUDENT"))
-            dispatch(setRoleInfo(studentData))
-            const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-            if (loggedInUserJSON) {
-                const user: UserData = JSON.parse(loggedInUserJSON);
-                user.roleInfo = studentData;
-                dispatch(setUser(user));
+            const user = getLocalUser();
+            if (user) {
+              user.userType = UserType.STUDENT;
+              user.roleInfo = studentData;
+              updateLocalUser(user);
+              dispatch(setUser(user));
             }
             useSuccessNotification(`You have signed up as a student!`)
         } catch (e) {
@@ -211,7 +211,12 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
         try {
             const studentData = await studentService.update(username, info)
-            dispatch(setRoleInfo(studentData))
+            const user = getLocalUser();
+            if (user) {
+                user.roleInfo = studentData;
+                updateLocalUser(user);
+                dispatch(setUser(user));
+            }
             useSuccessNotification(`Updated student data`)
         } catch (e) {
             useErrorNotification(e)
