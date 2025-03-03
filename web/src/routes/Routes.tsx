@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 
 import ProtectedRoute from "./ProtectedRoute";
+import UserTypeProtectedRoute from "./UserTypeProtectedRoute";
 
 import ProfilePage from "../components/pages/ProfilePage";
 import HomePage from "../components/pages/HomePage";
@@ -20,7 +21,9 @@ export const router = createBrowserRouter([
                 path: "profile",
                 element: (
                     <ProtectedRoute>
-                        <ProfilePage />
+                        <UserTypeProtectedRoute>
+                            <ProfilePage />
+                        </UserTypeProtectedRoute>
                     </ProtectedRoute>)
             },
             { path: "login", element: <LoginPage /> },

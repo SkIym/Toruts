@@ -48,12 +48,18 @@ export const InfoForm = () => {
     }
     return <div id="information">
         <h2>Update your information</h2>
-        <Link to="/profile">
+
+        { user?.userType 
+        ? <div>
+            <Link to="/profile">
             Back to Profile
-        </Link>
-        <Link to="/">
-            Home
-        </Link>
+            </Link>
+            <Link to="/">
+                Home
+            </Link>
+        </div>
+        : null
+        }
         <form onSubmit={handleInformation} id="user-information-form">
             <div>
                 <span>First Name</span>
