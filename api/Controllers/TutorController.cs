@@ -101,11 +101,6 @@ namespace api.Controllers
 
             // then execute
             var tutors = await tutorsQuery.ToListAsync();
-            if (tutors == null || tutors.Count == 0)
-            {
-                return NotFound("No Tutors Available");
-            }
-
             return Ok(tutors);
         }
 
