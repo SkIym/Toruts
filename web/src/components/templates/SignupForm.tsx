@@ -27,7 +27,7 @@ export const SignUpForm = () => {
                 lastName: lastName.value,
                 phoneNumber: phoneNumber.value
             }))
-            navigate("/info")
+            navigate("/choose_type")
         } catch {
             //
         }

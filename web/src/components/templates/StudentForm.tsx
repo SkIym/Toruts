@@ -64,9 +64,10 @@ const StudentForm = () => {
                 <span>Degree Program [optional]:</span>
                 <input {...degree} data-testid="degree"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
             </div>
-            {user?.userType === UserType.STUDENT
+            {/* {user?.userType === UserType.STUDENT
                         ? <button type="button" onClick={handleUpdate}>Update student information</button>
-                        : <button type="submit">Create student account</button>}
+                        : <button type="submit">Create student account</button>} */}
+            <button type="submit">Create student account</button>
         </form>
     </div>
 }

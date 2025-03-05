@@ -9,6 +9,7 @@ import HomePage from "../components/pages/HomePage";
 import LoginPage from "../components/pages/LoginPage";
 import SignupPage from "../components/pages/SignupPage";
 import InfoPage from "../components/pages/InfoPage";
+import ChoosingPage from "../components/pages/ChoosingPage";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
             },
             { path: "login", element: <LoginPage /> },
             { path: "signup", element: <SignupPage /> },
+            { path: "choose_type", element: <ChoosingPage /> },
             {
                 path: "info",
                 element: (

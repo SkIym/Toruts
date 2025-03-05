@@ -170,9 +170,10 @@ const TutorForm = () => {
                 </div>
             </fieldset>
         </div>
-        {user?.userType === UserType.TUTOR
+        {/* {user?.userType === UserType.TUTOR
             ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
-            : <button type="submit">Create tutor account</button>}
+            : <button type="submit">Create tutor account</button>} */}
+        <button type="submit">Create tutor account</button>
 
     </form>
 }

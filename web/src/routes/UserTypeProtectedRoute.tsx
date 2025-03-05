@@ -12,7 +12,7 @@ const UserTypeProtectedRoute = ({ children }: Props) => {
     return user?.userType !== null ? (
         <>{children}</>
     ) : (
-        <Navigate to="/info" state={{ from: location }} replace />
+        <Navigate to="/choose_type" state={{ from: location }} replace />
     );
 };
 
