@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Mappers;
 using Microsoft.EntityFrameworkCore;
+using api.Enums;
 
 namespace api.Controllers
 {
@@ -72,23 +73,37 @@ namespace api.Controllers
         [Route("search")]
         public async Task<IActionResult> SearchWithQuery(string? query, int? minPrice, int? maxPrice)
         {
-            var tutorRequest = _context.Tutor
-            .Where(u => u.Price >= ((minPrice == null) ? 0 : minPrice))
-            .Where(u => u.Price <= ((maxPrice == null) ? int.MaxValue : maxPrice));
+            // build query first
+            var tutorsQuery = _context.Tutor
+                                .Include(t => t.User)
+                                .AsQueryable();
+            
+            tutorsQuery = tutorsQuery.Where(t => t.Status == Status.Active);
 
-            if (query != null)
+            if (minPrice.HasValue)
             {
-                tutorRequest = tutorRequest.Where(u =>
-                u.User.FirstName.ToLower().Contains(query.ToLower()) || u.User.LastName.ToLower().Contains(query.ToLower()));
+                tutorsQuery = tutorsQuery.Where(t => t.Price >= minPrice.Value);
+            }
+            if (maxPrice.HasValue)
+            {
+                tutorsQuery = tutorsQuery.Where(t => t.Price <= maxPrice.Value);
             }
 
-            var tutors = await tutorRequest.ToListAsync();
-
-            foreach (var tutor in tutors)
+            if (!string.IsNullOrWhiteSpace(query))
             {
-                tutor.User = _context.User
-                    .Where(u => u.Id == tutor.UserId)
-                    .First();
+                query = query.ToLower();
+
+                tutorsQuery = tutorsQuery.Where(t => (
+                    t.User.FirstName + " " + t.User.LastName).ToLower().Contains(query) ||
+                    t.EducAttainment.ToLower().Contains(query)
+                );
+            }
+
+            // then execute
+            var tutors = await tutorsQuery.ToListAsync();
+            if (tutors == null || tutors.Count == 0)
+            {
+                return NotFound("No Tutors Available");
             }
 
             return Ok(tutors);
