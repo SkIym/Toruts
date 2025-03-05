@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import { signAsTutor, updateAsTutor } from "../../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
-import { TutorInfo, UserType } from "../../types";
+import { Status, TutorInfo, UserType } from "../../types";
 
 const TutorForm = () => {
     const { reset: educReset, ...educ } = useField('text');
@@ -15,7 +15,7 @@ const TutorForm = () => {
     const { reset: availReset, ...avail } = useField('text');
     const { reset: portraitReset, ...portrait } = useField('text');
     const [mode, setMode] = useState("0")
-    const [status, setStatus] = useState("0")
+    const [status, setStatus] = useState(Status.Active)
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
@@ -25,7 +25,11 @@ const TutorForm = () => {
     }
 
     const handleStatusRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setStatus(e.target.value)
+        if (e.target.value === "0") {
+            setStatus(Status.Active)
+        } else {
+            setStatus(Status.Inactive)
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,7 +48,7 @@ const TutorForm = () => {
                         tutoringExperiences: tutorExp.value,
                         availability: avail.value,
                         portraitUrl: portrait.value,
-                        status: parseInt(status)
+                        status: status
                     }))
 
             navigate("/");
@@ -57,7 +61,6 @@ const TutorForm = () => {
         const info = user?.roleInfo as TutorInfo
         try {
             if (user)
-                
                 await dispatch(updateAsTutor(
                     user.userName,
                     {
@@ -69,7 +72,7 @@ const TutorForm = () => {
                         tutoringExperiences: tutorExp.value || info.tutoringExperiences,
                         availability: avail.value || info.availability,
                         portraitUrl: portrait.value || info.portraitUrl,
-                        status: parseInt(status) || info.status
+                        status: status === null ? info.status : status
                     }))
 
             navigate("/profile");

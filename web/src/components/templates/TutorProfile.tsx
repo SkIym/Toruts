@@ -1,8 +1,10 @@
-import { TutorInfo } from "../../types"
+import { Status, TutorInfo } from "../../types"
 
 const TutorProfile = ({info}: {info: TutorInfo}) => {
+    {console.log(info.status)}
     return (
         <div>
+            <h3>Status: {info.status === Status.Active ? 'ACTIVE' : 'INACTIVE'}</h3>
             <p>Education: {info.educAttainment}</p>
             <p>Venue: {info.venue}</p>
             <p>Learning Mode: {info.learningMode}</p>
