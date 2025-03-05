@@ -2,6 +2,9 @@ export interface SignupInfo {
     username: string;
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
 }
 export interface LoginInfo {
     username: string;

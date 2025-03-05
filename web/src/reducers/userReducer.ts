@@ -59,7 +59,6 @@ export const signupUser = (creds: SignupInfo) => {
             const user = await accountService.signup(creds);
             user.userType = null;
             user.roleInfo = null;
-            user.primaryInfo = null;
             updateLocalUser(user);
             dispatch(setUser(user));
             useSuccessNotification("Signup succesful!")
