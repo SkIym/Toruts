@@ -59,7 +59,7 @@ const ProfilePage = () => {
 
     return (
         <div>
-            <h1>OMG HELLO {user?.userName}</h1>
+            <h1>OMG HELLO {user?.primaryInfo?.firstName}</h1>
             <Link to={"/"}>
                 <h3>Home</h3>
             </Link>

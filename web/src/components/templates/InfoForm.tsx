@@ -6,21 +6,20 @@ import { addUserInfo } from "../../reducers/userReducer"
 import React, { useState } from "react"
 import TutorForm from "./TutorForm"
 import StudentForm from "./StudentForm"
+import { StudentInfo, UserInfo, UserType, TutorInfo } from "../../types"
 
-export const InfoForm = () => {
-    const { reset: fnameReset, ...firstName } = useField("text")
-    const { reset: lnameReset, ...lastName } = useField("text")
-    const { reset: phoneReset, ...phoneNumber } = useField("text")
+export const InfoForm = ()  => {
+    const user = useSelector((state: RootState) => state.user);
+    
+    const primaryInfo = user?.primaryInfo
+    const roleInfo = user?.roleInfo
 
+    const { reset: fnameReset, ...firstName } = useField("text", primaryInfo?.firstName)
+    const { reset: lnameReset, ...lastName } = useField("text", primaryInfo?.lastName)
+    const { reset: phoneReset, ...phoneNumber } = useField("text", primaryInfo?.phoneNumber)
 
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: RootState) => state.user)
     const navigate = useNavigate();
-    const [type, setType] = useState(true);
-
-    const toggleForm = () => {
-        setType(!type)
-    }
 
     const handleInformation = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -47,7 +46,7 @@ export const InfoForm = () => {
         }
     }
     return <div id="information">
-        <h2>Update your information</h2>
+        <h2>Update your primary information: </h2>
 
         { user?.userType !== null
         ? <div>
@@ -73,24 +72,15 @@ export const InfoForm = () => {
                 <span>Phone Number</span>
                 <input {...phoneNumber} data-testid="phone-number" pattern="[0-9]+" title="Please enter only numeric characters."/>
             </div>
-            <button type="submit">Update</button>
+            
+            <button type="submit">Update primary information</button>
+
         </form>
         <div>
-            {type
-                ?
-                <div>
-                    <h2>Updating profile as a tutor...</h2>
-                    <button type="button" onClick={toggleForm}>I'm a student</button>
-                    <TutorForm></TutorForm>
-                </div>
-
-                :
-                <div>
-                    <h2>Updating profile as a student</h2>
-                    <button type="button" onClick={toggleForm}>I'm a tutor</button>
-                    <StudentForm></StudentForm>
-                </div>
-            }
+            <h2>Updating your role information:</h2>
+            {user?.userType === UserType.TUTOR 
+            ? <TutorForm info={user.roleInfo as TutorInfo}></TutorForm>
+            : <StudentForm info={user?.roleInfo as StudentInfo}></StudentForm>}
         </div>
     </div>
 

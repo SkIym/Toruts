@@ -155,6 +155,7 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
             if (user) {
                 user.roleInfo = tutorData
                 user.userType = UserType.TUTOR
+                updateLocalUser(user);
                 dispatch(setUser(user));
             }
             useSuccessNotification(`You have signed up as a tutor!`)

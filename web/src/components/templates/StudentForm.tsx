@@ -6,7 +6,7 @@ import { StudentInfo, UserData } from "../../types"
 import { UserType } from "../../types"
 import { useNavigate } from "react-router-dom"
 
-const StudentForm = () => {
+const StudentForm = ({info}: {info: StudentInfo}) => {
 
     const { reset: areasReset, ...areas } = useField("text")
     const { reset: degreeReset, ...degree } = useField("text")
@@ -45,7 +45,7 @@ const StudentForm = () => {
                         user.userName,
                         {
                             areasOfImprovement: areas.value ? [areas.value] : info.areasOfImprovement,
-                            degreeProgram: degree.value || info.degreeProgram
+                            degreeProgram: degree.value
                         }))
                 navigate("/profile");
             } catch {
@@ -64,10 +64,10 @@ const StudentForm = () => {
                 <span>Degree Program [optional]:</span>
                 <input {...degree} data-testid="degree"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
             </div>
-            {/* {user?.userType === UserType.STUDENT
+            {user?.userType === UserType.STUDENT
                         ? <button type="button" onClick={handleUpdate}>Update student information</button>
-                        : <button type="submit">Create student account</button>} */}
-            <button type="submit">Create student account</button>
+                        : <button type="submit">Create student account</button>}
+            {/* <button type="submit">Create student account</button> */}
         </form>
     </div>
 }

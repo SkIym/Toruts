@@ -6,22 +6,30 @@ import { signAsTutor, updateAsTutor } from "../../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
 import { Status, TutorInfo, UserType } from "../../types";
 
-const TutorForm = () => {
-    const { reset: educReset, ...educ } = useField('text');
-    const { reset: venueReset, ...venue } = useField('text');
-    const { reset: priceReset, ...price } = useField('number');
-    const { reset: areaExpReset, ...areaExp } = useField('text');
-    const { reset: tutorExpReset, ...tutorExp } = useField('text');
-    const { reset: availReset, ...avail } = useField('text');
-    const { reset: portraitReset, ...portrait } = useField('text');
-    const [mode, setMode] = useState("0")
-    const [status, setStatus] = useState(Status.Active)
+
+const TutorForm = ({info}: {info: TutorInfo}) => {
+    const { reset: educReset, ...educ } = useField('text', info?.educAttainment);
+    const { reset: venueReset, ...venue } = useField('text', info?.venue);
+    const { reset: priceReset, ...price } = useField('number', info?.price.toString());
+    const { reset: areaExpReset, ...areaExp } = useField('text', info?.areasOfExpertise[0]);
+    const { reset: tutorExpReset, ...tutorExp } = useField('text', info?.tutoringExperiences);
+    const { reset: availReset, ...avail } = useField('text', info?.availability);
+    const { reset: portraitReset, ...portrait } = useField('text', info?.portraitUrl);
+    const [mode, setMode] = useState(info?.learningMode === null ? 0 : info?.learningMode)
+    const [status, setStatus] = useState(info?.status === null ? Status.Active: info?.status)
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
     const handleModeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMode(e.target.value)
+        if (e.target.value == "0") {
+            setMode(0)
+        }
+        else if (e.target.value == "1"){
+            setMode(1)
+        } else {
+            setMode(2)
+        }
     }
 
     const handleStatusRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +49,7 @@ const TutorForm = () => {
                     user.userName,
                     {
                         educAttainment: educ.value,
-                        learningMode: parseInt(mode),
+                        learningMode: mode,
                         venue: venue.value,
                         price: parseInt(price.value),
                         areasOfExpertise: [areaExp.value],
@@ -64,14 +72,14 @@ const TutorForm = () => {
                 await dispatch(updateAsTutor(
                     user.userName,
                     {
-                        educAttainment: educ.value || info.educAttainment,
-                        learningMode: parseInt(mode) || info.learningMode,
-                        venue: venue.value || info.venue,
-                        price: parseInt(price.value) || info.price,
+                        educAttainment: educ.value ,
+                        learningMode: mode,
+                        venue: venue.value,
+                        price: parseInt(price.value),
                         areasOfExpertise: areaExp.value ? [areaExp.value] : info.areasOfExpertise,
-                        tutoringExperiences: tutorExp.value || info.tutoringExperiences,
-                        availability: avail.value || info.availability,
-                        portraitUrl: portrait.value || info.portraitUrl,
+                        tutoringExperiences: tutorExp.value,
+                        availability: avail.value,
+                        portraitUrl: portrait.value,
                         status: status === null ? info.status : status
                     }))
 
@@ -95,7 +103,7 @@ const TutorForm = () => {
                         id="online"
                         name="mode"
                         value="0"
-                        defaultChecked
+                        checked={mode === 0}
                         onChange={handleModeRadio} />
                     <label htmlFor="online">Online</label>
                 </div>
@@ -106,6 +114,7 @@ const TutorForm = () => {
                         id="f2f"
                         name="mode"
                         value="1"
+                        checked={mode === 1}
                         onChange={handleModeRadio} />
                     <label htmlFor="f2f">F2F</label>
                 </div>
@@ -116,6 +125,7 @@ const TutorForm = () => {
                         id="both"
                         name="mode"
                         value="2"
+                        checked={mode === 2}
                         onChange={handleModeRadio} />
                     <label htmlFor="both">Both</label>
                 </div>
@@ -154,7 +164,7 @@ const TutorForm = () => {
                         id="active"
                         name="status"
                         value="0"
-                        defaultChecked
+                        checked={status === Status.Active}
                         onChange={handleStatusRadio} />
                     <label htmlFor="active">Active</label>
                 </div>
@@ -164,16 +174,16 @@ const TutorForm = () => {
                         type="radio"
                         id="inactive"
                         name="status"
-                        value="1"
+                        checked={status === Status.Inactive}
                         onChange={handleStatusRadio} />
                     <label htmlFor="inactive">Inactive</label>
                 </div>
             </fieldset>
         </div>
-        {/* {user?.userType === UserType.TUTOR
+        {user?.userType === UserType.TUTOR
             ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
-            : <button type="submit">Create tutor account</button>} */}
-        <button type="submit">Create tutor account</button>
+            : <button type="submit">Create tutor account</button>}
+        {/* <button type="submit">Create tutor account</button> */}
 
     </form>
 }

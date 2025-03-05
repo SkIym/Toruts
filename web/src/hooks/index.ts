@@ -2,8 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-export const useField = (type: string) => {
-  const [value, setValue] = useState("");
+export const useField = (type: string, defValue?: string) => {
+  const [value, setValue] = useState(defValue ? defValue : "");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
