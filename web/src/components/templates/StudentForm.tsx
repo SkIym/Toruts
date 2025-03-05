@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom"
 
 const StudentForm = ({info}: {info: StudentInfo}) => {
 
-    const { reset: areasReset, ...areas } = useField("text")
-    const { reset: degreeReset, ...degree } = useField("text")
+    const { reset: areasReset, ...areas } = useField("text", info?.areasOfImprovement[0])
+    const { reset: degreeReset, ...degree } = useField("text", info?.degreeProgram)
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate();
