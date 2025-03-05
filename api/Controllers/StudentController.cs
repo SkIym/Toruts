@@ -41,14 +41,14 @@ namespace api.Controllers
 
             if (user == null)
             {
-                return Ok();
+                return NotFound(username);
             }
 
             var student = await _context.Student.FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             if (student == null)
             {
-                return Ok();
+                return NotFound();
             }
 
             return Ok(student.ToStudentDto());
