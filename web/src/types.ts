@@ -49,19 +49,7 @@ export type TutorInfo = {
     status: number
 }
 
-export type TutorResult = {
-    id: number,
-    educAttainment: string,
-    learningMode: number,
-    venue: string,
-    price: number,
-    areasOfExpertise: string[],
-    tutoringExperiences: string,
-    availability: string,
-    portraitUrl: string,
-    status: number,
-    user: UserInfo
-}
+export type TutorResult = TutorInfo & {user: UserInfo}
 
 export type TutorInfoWithoutId = Omit<TutorInfo, 'id'>
 
