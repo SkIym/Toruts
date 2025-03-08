@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const useField = (type: string, defValue?: string) => {
   const [value, setValue] = useState(defValue ? defValue : "");
