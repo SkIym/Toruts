@@ -67,7 +67,7 @@ const SearchForm = () => {
                     </form>
                     <div>
                         {tutors.length === 0 
-                        ?   "No tutors found :( "
+                        ?   "No tutors found :(. The name or subject you're trying to find is non-existent. Try adjusting your filters instead. "
                         :   tutors.map((tutor) => {
                                 return <TutorSearchResult {...tutor} />
                             })
