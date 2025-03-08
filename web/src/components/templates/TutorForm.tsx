@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Status, TutorInfo, UserType } from "../../types";
 
 
-const aresOfExpSeparator = " "
+const areasOfExpSeparator = " "
 
 const TutorForm = ({ info }: { info: TutorInfo }) => {
     const { reset: educReset, ...educ } = useField('text', info?.educAttainment);
@@ -54,7 +54,7 @@ const TutorForm = ({ info }: { info: TutorInfo }) => {
                         learningMode: mode,
                         venue: venue.value,
                         price: parseInt(price.value),
-                        areasOfExpertise: areaExp.value.split(aresOfExpSeparator),
+                        areasOfExpertise: areaExp.value.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: tutorExp.value,
                         availability: avail.value,
                         portraitUrl: portrait.value,
@@ -78,7 +78,7 @@ const TutorForm = ({ info }: { info: TutorInfo }) => {
                         learningMode: mode,
                         venue: venue.value,
                         price: parseInt(price.value),
-                        areasOfExpertise: areaExp.value ? areaExp.value.split(aresOfExpSeparator) : info.areasOfExpertise,
+                        areasOfExpertise: areaExp.value ? areaExp.value.toLowerCase().split(areasOfExpSeparator) : info.areasOfExpertise,
                         tutoringExperiences: tutorExp.value,
                         availability: avail.value,
                         portraitUrl: portrait.value,
