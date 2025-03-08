@@ -5,7 +5,17 @@ import { AppDispatch } from "../../../store";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import "index.css";
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+
 
 const LoginForm = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -16,11 +26,7 @@ const LoginForm = () => {
         password: z.string().nonempty({ message: "Password is required" })
     })
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<LogInSchemaType>({  resolver: zodResolver(LogInSchema)})
+    const loginForm = useForm<LogInSchemaType>({  resolver: zodResolver(LogInSchema)})
 
     type LogInSchemaType = z.infer<typeof LogInSchema>
 
@@ -38,21 +44,41 @@ const LoginForm = () => {
 
     return (
         <div id="login">
-            <h1 data-testid="heading" className="page-title">Welcome to Toruts, ka-peyups!</h1>
-            <form onSubmit={handleSubmit(handleLogin)} data-testid="form" id="login-form">
-                <div>
-                    <span>Username:</span>
-                    <input {...register("username")} data-testid="username" />
-                    {errors.username && <span className="input-error" >{errors.username.message}</span>}
-                </div>
-                <div>
-                    <span>Password:</span>
-                    <input {...register("password")} data-testid="password" type="password"/>
-                    {errors.password && <span className="input-error" >{errors.password.message}</span>}
-                </div>
+            <Form {...loginForm}>
+                <form onSubmit={loginForm.handleSubmit(handleLogin)} data-testid="form" id="login-form" className="space-y-8">
+                    <FormField
+                        control = {loginForm.control}
+                        name = "username"
+                        render ={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Username" {...field} data-test-id="username"/>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control = {loginForm.control}
+                        name = "password"
+                        render ={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Password" {...field} data-test-id="password" type="password" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className="flex flex-row gap-4 justify-content">
                 <button data-testid="login-button" type="submit">Login</button>
-            </form>
-            <button data-testid="signup-button" onClick={() => navigate("/signup")}>Sign up</button>
+                        <Button type="submit" data-testid="login-button">Login</Button>
+                        <Button variant="outline" onClick={() => navigate("/signup")} data-testid="signup-button">Sign up instead</Button>
+                    </div>
+                </form>
+            </Form>
         </div>
     );
 };
