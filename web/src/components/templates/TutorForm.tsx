@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Status, TutorInfo, UserType } from "../../types";
 
 
-const TutorForm = ({info}: {info: TutorInfo}) => {
+const TutorForm = ({ info }: { info: TutorInfo }) => {
     const { reset: educReset, ...educ } = useField('text', info?.educAttainment);
     const { reset: venueReset, ...venue } = useField('text', info?.venue);
     const { reset: priceReset, ...price } = useField('number', info?.price.toString());
@@ -16,7 +16,7 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
     const { reset: availReset, ...avail } = useField('text', info?.availability);
     const { reset: portraitReset, ...portrait } = useField('text', info?.portraitUrl);
     const [mode, setMode] = useState(info?.learningMode === null ? 0 : info?.learningMode)
-    const [status, setStatus] = useState(info?.status === null ? Status.Active: info?.status)
+    const [status, setStatus] = useState(info?.status === null ? Status.Active : info?.status)
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
@@ -25,7 +25,7 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
         if (e.target.value == "0") {
             setMode(0)
         }
-        else if (e.target.value == "1"){
+        else if (e.target.value == "1") {
             setMode(1)
         } else {
             setMode(2)
@@ -52,7 +52,7 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
                         learningMode: mode,
                         venue: venue.value,
                         price: parseInt(price.value),
-                        areasOfExpertise: [areaExp.value],
+                        areasOfExpertise: areaExp.value.split(" "),
                         tutoringExperiences: tutorExp.value,
                         availability: avail.value,
                         portraitUrl: portrait.value,
@@ -72,7 +72,7 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
                 await dispatch(updateAsTutor(
                     user.userName,
                     {
-                        educAttainment: educ.value ,
+                        educAttainment: educ.value,
                         learningMode: mode,
                         venue: venue.value,
                         price: parseInt(price.value),
@@ -90,104 +90,104 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
     }
 
     return <div>
-            <h3>Signing up as a tutor...</h3>
-    
+        <h3>Signing up as a tutor...</h3>
+
         <form onSubmit={handleSubmit}>
 
-        <div>
-            <span>Educational Attainment</span>
-            <input {...educ} data-testid="educ"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
-        </div>
-        <div>
-            <fieldset>
-                <legend>Select your offered learning mode: </legend>
-                <div>
-                    <input
-                        type="radio"
-                        id="online"
-                        name="mode"
-                        value="0"
-                        checked={mode === 0}
-                        onChange={handleModeRadio} />
-                    <label htmlFor="online">Online</label>
-                </div>
+            <div>
+                <span>Educational Attainment</span>
+                <input {...educ} data-testid="educ" pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters." />
+            </div>
+            <div>
+                <fieldset>
+                    <legend>Select your offered learning mode: </legend>
+                    <div>
+                        <input
+                            type="radio"
+                            id="online"
+                            name="mode"
+                            value="0"
+                            checked={mode === 0}
+                            onChange={handleModeRadio} />
+                        <label htmlFor="online">Online</label>
+                    </div>
 
-                <div>
-                    <input
-                        type="radio"
-                        id="f2f"
-                        name="mode"
-                        value="1"
-                        checked={mode === 1}
-                        onChange={handleModeRadio} />
-                    <label htmlFor="f2f">F2F</label>
-                </div>
+                    <div>
+                        <input
+                            type="radio"
+                            id="f2f"
+                            name="mode"
+                            value="1"
+                            checked={mode === 1}
+                            onChange={handleModeRadio} />
+                        <label htmlFor="f2f">F2F</label>
+                    </div>
 
-                <div>
-                    <input
-                        type="radio"
-                        id="both"
-                        name="mode"
-                        value="2"
-                        checked={mode === 2}
-                        onChange={handleModeRadio} />
-                    <label htmlFor="both">Both</label>
-                </div>
-            </fieldset>
-        </div>
-        <div>
-            <span>Venue</span>
-            <input {...venue} data-testid="venue"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
-        </div>
-        <div>
-            <span>Price</span>
-            <input {...price} data-testid="price" step=".01" />
-        </div>
-        <div>
-            <span>Area of expertise [optional]:</span>
-            <input {...areaExp} data-testid="areaExp" />
-        </div>
-        <div>
-            <span>Tutoring experience [optional]:</span>
-            <input {...tutorExp} data-testid="tutorExp" />
-        </div>
-        <div>
-            <span>Availability [optional]:</span>
-            <input {...avail} data-testid="avail" />
-        </div>
-        <div>
-            <span>Portrait URL [optional]: </span>
-            <input {...portrait} data-testid="portrait" />
-        </div>
-        <div>
-            <fieldset>
-                <legend>Select your status:</legend>
-                <div>
-                    <input
-                        type="radio"
-                        id="active"
-                        name="status"
-                        value="0"
-                        checked={status === Status.Active}
-                        onChange={handleStatusRadio} />
-                    <label htmlFor="active">Active</label>
-                </div>
+                    <div>
+                        <input
+                            type="radio"
+                            id="both"
+                            name="mode"
+                            value="2"
+                            checked={mode === 2}
+                            onChange={handleModeRadio} />
+                        <label htmlFor="both">Both</label>
+                    </div>
+                </fieldset>
+            </div>
+            <div>
+                <span>Venue</span>
+                <input {...venue} data-testid="venue" pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters." />
+            </div>
+            <div>
+                <span>Price</span>
+                <input {...price} data-testid="price" step=".01" />
+            </div>
+            <div>
+                <span>Area of expertise [optional]:</span>
+                <input {...areaExp} data-testid="areaExp" />
+            </div>
+            <div>
+                <span>Tutoring experience [optional]:</span>
+                <input {...tutorExp} data-testid="tutorExp" />
+            </div>
+            <div>
+                <span>Availability [optional]:</span>
+                <input {...avail} data-testid="avail" />
+            </div>
+            <div>
+                <span>Portrait URL [optional]: </span>
+                <input {...portrait} data-testid="portrait" />
+            </div>
+            <div>
+                <fieldset>
+                    <legend>Select your status:</legend>
+                    <div>
+                        <input
+                            type="radio"
+                            id="active"
+                            name="status"
+                            value="0"
+                            checked={status === Status.Active}
+                            onChange={handleStatusRadio} />
+                        <label htmlFor="active">Active</label>
+                    </div>
 
-                <div>
-                    <input
-                        type="radio"
-                        id="inactive"
-                        name="status"
-                        checked={status === Status.Inactive}
-                        onChange={handleStatusRadio} />
-                    <label htmlFor="inactive">Inactive</label>
-                </div>
-            </fieldset>
-        </div>
-        {user?.userType === UserType.TUTOR
-            ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
-            : <button type="submit">Create tutor account</button>}
-        {/* <button type="submit">Create tutor account</button> */}
+                    <div>
+                        <input
+                            type="radio"
+                            id="inactive"
+                            name="status"
+                            checked={status === Status.Inactive}
+                            onChange={handleStatusRadio} />
+                        <label htmlFor="inactive">Inactive</label>
+                    </div>
+                </fieldset>
+            </div>
+            {user?.userType === UserType.TUTOR
+                ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
+                : <button type="submit">Create tutor account</button>}
+            {/* <button type="submit">Create tutor account</button> */}
 
         </form>
     </div>
