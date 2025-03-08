@@ -1,29 +1,29 @@
-import { SignUpForm } from "../templates/SignupForm"
-import { UserType } from "../../types"
-import TutorForm from "../templates/TutorForm"
-import StudentForm from "../templates/StudentForm"
+import SignUpForm from "../templates/SignupForm";
+import { UserType } from "../../types";
+import TutorForm from "../templates/TutorForm";
+import StudentForm from "../templates/StudentForm";
 
-const SignupPage = ({type}: {type: UserType | null}) => {
-    switch (type) {
-        case UserType.TUTOR:
-            return (
-                <div>
-                    <TutorForm info={null}/>
-                </div>
-            )
-        case UserType.STUDENT:
-            return (
-                <div>
-                    <StudentForm info={null}/>
-                </div>
-            )
-        default:
-            return (
-                <div data-testid="page" id="signup">
-                    <SignUpForm />
-                </div>
-            )
-    }
-}
+const SignupPage = ({ type }: { type: UserType | null }) => {
+  let child;
 
-export default SignupPage
+  switch (type) {
+    case UserType.TUTOR:
+      child = <TutorForm info={null} />;
+      break;
+    case UserType.STUDENT:
+      child = <StudentForm info={null}/>;
+      break;
+    default:
+      child = <SignUpForm />;
+  }
+
+  return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 flex-col gap-y-9">
+      <div className="w-full max-w-sm shadow-lg rounded-sm p-8">
+        {child}
+      </div>
+    </div>
+  );
+};
+
+export default SignupPage;

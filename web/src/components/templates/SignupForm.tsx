@@ -1,69 +1,187 @@
-import { useField } from "../../hooks";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { signupUser } from "../../reducers/userReducer";
 import { AppDispatch } from "../../../store";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
+const SignUpSchema = z.object({
+  firstName: z
+    .string()
+    .nonempty({ message: "First Name is required" })
+    .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
+  lastName: z
+    .string()
+    .nonempty({ message: "Last Name is required" })
+    .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
+  phoneNumber: z
+    .string()
+    .nonempty({ message: "Phone Number is required" })
+    .regex(/^[0-9]+$/, "Please enter only numeric characters."),
+  username: z.string().nonempty({ message: "Username is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().nonempty({ message: "Password is required" }),
+});
 
-export const SignUpForm = () => {
-    const { reset: fnameReset, ...firstName } = useField("text")
-    const { reset: lnameReset, ...lastName } = useField("text")
-    const { reset: phoneReset, ...phoneNumber } = useField("text")
-    const { reset: usernameReset, ...username } = useField("text");
-    const { reset: emailReset, ...email } = useField("text");
-    const { reset: passwordReset, ...password } = useField("password");
-    const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
+type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
-    const handleSignups = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        console.log("Handling...")
-        try {
-            await dispatch(signupUser({
-                username: username.value,
-                email: email.value,
-                password: password.value,
-                firstName: firstName.value,
-                lastName: lastName.value,
-                phoneNumber: phoneNumber.value
-            }))
-            navigate("/choose_type")
-        } catch {
-            //
-        }
+const SignupForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  // Set up the form using react-hook-form and zod for validation.
+  const signUpForm = useForm<SignUpSchemaType>({
+    resolver: zodResolver(SignUpSchema),
+  });
+
+  const handleSignup: SubmitHandler<SignUpSchemaType> = async (formData) => {
+    try {
+      await dispatch(
+        signupUser({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phoneNumber: formData.phoneNumber,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        })
+      );
+      navigate("/choose_type");
+    } catch (err) {
+      // Optionally handle errors here.
     }
+  };
 
-    return <div>
-        <h1 data-testid="heading">Sign up</h1>
-        <form onSubmit={handleSignups} data-testid="form" id="signup-form" action="/">
-            <div>
-                <span>First Name</span>
-                <input {...firstName} data-testid="first-name"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
-            </div>
-            <div>
-                <span>Last Name</span>
-                <input {...lastName} data-testid="last-name"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
-            </div>
-            <div>
-                <span>Phone Number</span>
-                <input {...phoneNumber} data-testid="phone-number" pattern="[0-9]+" title="Please enter only numeric characters."/>
-            </div>
-            <div>
-                <span>Username:</span>
-                <input {...username} data-testid="username" />
-            </div>
-            <div>
-                <span>Email:</span>
-                <input {...email} data-testid="email" />
-            </div>
-            <div>
-                <span>Password:</span>
-                <input {...password} data-testid="password" />
-            </div>
-            <button data-testid="signup-button" type="submit">Sign up</button>
+  return (
+    <div id="signup">
+      <h1 data-testid="heading">Sign up</h1>
+      <Form {...signUpForm}>
+        <form
+          onSubmit={signUpForm.handleSubmit(handleSignup)}
+          id="signup-form"
+          data-testid="form"
+          className="space-y-8"
+        >
+          <FormField
+            control={signUpForm.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="First Name"
+                    {...field}
+                    data-test-id="first-name"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={signUpForm.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Last Name"
+                    {...field}
+                    data-test-id="last-name"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={signUpForm.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Phone Number"
+                    {...field}
+                    data-test-id="phone-number"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={signUpForm.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Username"
+                    {...field}
+                    data-test-id="username"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={signUpForm.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Email" {...field} data-test-id="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={signUpForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Password"
+                    {...field}
+                    data-test-id="password"
+                    type="password"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-row gap-4 justify-between">
+            <Button type="submit" data-testid="signup-button">Sign up</Button>
+            <Button variant="outline" onClick={() => navigate("/login")} data-testid="login-button">
+              Login instead
+              </Button>
+          </div>
         </form>
-        <button data-test="login-button" onClick={() => navigate("/login")}>Login instead</button>
+      </Form>
     </div>
-}
+  );
+};
 
-
+export default SignupForm;
