@@ -22,8 +22,8 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const LogInSchema = z.object({
-        username: z.string().nonempty({ message: "Username is required" }),
-        password: z.string().nonempty({ message: "Password is required" })
+        username: z.string().nonempty({ message: "required" }),
+        password: z.string().nonempty({ message: "required" })
     })
 
     const loginForm = useForm<LogInSchemaType>({  resolver: zodResolver(LogInSchema)})
@@ -51,11 +51,13 @@ const LoginForm = () => {
                         name = "username"
                         render ={({ field }) => (
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <div className="flex flex-row justify-between"> 
+                                    <FormLabel>Username</FormLabel>
+                                    <FormMessage />
+                                </div>
                                 <FormControl>
                                     <Input placeholder="Username" {...field} data-test-id="username"/>
                                 </FormControl>
-                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -64,11 +66,13 @@ const LoginForm = () => {
                         name = "password"
                         render ={({ field }) => (
                             <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <div className="flex flex-row justify-between"> 
+                                    <FormLabel>Password</FormLabel>
+                                    <FormMessage />
+                                </div>
                                 <FormControl>
                                     <Input placeholder="Password" {...field} data-test-id="password" type="password" />
                                 </FormControl>
-                                <FormMessage />
                             </FormItem>
                         )}
                     />
