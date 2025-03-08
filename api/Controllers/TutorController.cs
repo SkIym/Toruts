@@ -97,6 +97,12 @@ namespace api.Controllers
                     t.User.FirstName + " " + t.User.LastName).ToLower().Contains(query) ||
                     t.EducAttainment.ToLower().Contains(query)
                 );
+
+                tutorsQuery.Where(t => t.AreasOfExpertise != null).Where(
+                    t =>
+                        query.Split(' ', StringSplitOptions.None)
+                        .ToHashSet()
+                        .IsSubsetOf(t.AreasOfExpertise));
             }
 
             // then execute
