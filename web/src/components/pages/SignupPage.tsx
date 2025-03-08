@@ -1,11 +1,29 @@
 import { SignUpForm } from "../templates/SignupForm"
+import { UserType } from "../../types"
+import TutorForm from "../templates/TutorForm"
+import StudentForm from "../templates/StudentForm"
 
-const SignupPage = () => {
-    return (
-        <div>
-            <SignUpForm />
-        </div>
-    )
+const SignupPage = ({type}: {type: UserType | null}) => {
+    switch (type) {
+        case UserType.TUTOR:
+            return (
+                <div>
+                    <TutorForm />
+                </div>
+            )
+        case UserType.STUDENT:
+            return (
+                <div>
+                    <StudentForm/>
+                </div>
+            )
+        default:
+            return (
+                <div>
+                    <SignUpForm />
+                </div>
+            )
+    }
 }
 
 export default SignupPage

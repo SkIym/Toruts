@@ -28,14 +28,12 @@ const ChooseTypeForm = () => {
                 {type
                     ?
                     <div>
-                        <h3>Signing up as a tutor...</h3>
                         <button type="button" onClick={toggleForm}>I'm a student</button>
                         <TutorForm></TutorForm>
                     </div>
 
                     :
                     <div>
-                        <h3>Signing up as a student</h3>
                         <button type="button" onClick={toggleForm}>I'm a tutor</button>
                         <StudentForm></StudentForm>
                     </div>

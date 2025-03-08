@@ -10,6 +10,7 @@ import LoginPage from "../components/pages/LoginPage";
 import SignupPage from "../components/pages/SignupPage";
 import InfoPage from "../components/pages/InfoPage";
 import ChoosingPage from "../components/pages/ChoosingPage";
+import { UserType } from "../types";
 
 
 export const router = createBrowserRouter([
@@ -28,8 +29,10 @@ export const router = createBrowserRouter([
                     </ProtectedRoute>)
             },
             { path: "login", element: <LoginPage /> },
-            { path: "signup", element: <SignupPage /> },
+            { path: "signup", element: <SignupPage type={null}/> },
             { path: "choose_type", element: <ChoosingPage /> },
+            { path: "signup-tutor" , element: <SignupPage type={UserType.TUTOR}/>},
+            { path: "signup-student" , element: <SignupPage type={UserType.STUDENT}/>},
             {
                 path: "info",
                 element: (

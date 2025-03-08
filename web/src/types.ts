@@ -29,6 +29,7 @@ export type UserData = {
     userType: UserType | null;
     primaryInfo: UserInfo | null
     roleInfo: TutorInfo | StudentInfo | null
+    dual: boolean;
 }
 
 export type UserInfo = {

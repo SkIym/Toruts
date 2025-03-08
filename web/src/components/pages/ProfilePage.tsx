@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import { logoutUser, deleteUser, switchMode } from "../../reducers/userReducer";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { StudentInfo, TutorInfo, UserType } from "../../types";
 import TutorProfile from "../templates/TutorProfile";
 
@@ -52,6 +52,17 @@ const ProfilePage = () => {
         }
     }
 
+    const handleSignup = async () => {
+        if (user) {
+            console.log(user)
+            if (user.userType == UserType.TUTOR) {
+                navigate("/signup-student")
+            } else {
+                navigate("/signup-tutor")
+            }
+        }
+    }
+
     // console.log(user?.primaryInfo, user?.roleInfo, user?.type)
 
     const primaryInfo = user?.primaryInfo;
@@ -81,11 +92,28 @@ const ProfilePage = () => {
             <button onClick={() => navigate('/info')}>Edit Profile</button>
             <button onClick={handleDelete}>Delete Profile</button>
             <button onClick={handleLogout}>Logout</button>
-            <button onClick={handleSwitch}>
-                {user?.userType === UserType.TUTOR
-                ? "Switch to Student Mode"
-                : "Switch to Tutor Mode"}
-            </button>
+
+            {
+                user?.dual 
+                ? 
+                (
+                    <button onClick={handleSwitch}>
+                        {user?.userType === UserType.TUTOR
+                        ? "Switch to Student Mode"
+                        : "Switch to Tutor Mode"}
+                    </button>
+                )
+                :
+                (
+                    <button onClick={handleSignup}>
+                        {user?.userType === UserType.TUTOR
+                        ? "Sign up as a student"
+                        : "Sign up as a tutor"}
+                    </button>
+                )
+
+            }
+            
         </div>
 
     )

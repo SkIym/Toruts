@@ -54,7 +54,7 @@ const StudentForm = ({info}: {info: StudentInfo}) => {
     }
 
     return <div>
-        <span>Student Info Form</span>
+        <h3>Signing up as a student</h3>
         <form onSubmit={handleSubmit} id="student-info">
             <div>
                 <span>Areas of Improvement [optional]:</span>

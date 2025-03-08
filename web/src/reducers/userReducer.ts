@@ -59,6 +59,7 @@ export const signupUser = (creds: SignupInfo) => {
             const user = await accountService.signup(creds);
             user.userType = null;
             user.roleInfo = null;
+            user.dual = false;
             updateLocalUser(user);
             dispatch(setUser(user));
             useSuccessNotification("Signup succesful!")
@@ -146,6 +147,13 @@ export const deleteUser = (user: UserData) => {
     }
 }
 
+const hasOtherAccount = (user: UserData): boolean => {
+    if ( user && user.userType) {
+        return true
+    }
+    return false
+}
+
 // Sign up as a tutor
 export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
     return async (dispatch: Dispatch) => {
@@ -154,6 +162,7 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
             const user = getLocalUser();
             if (user) {
                 user.roleInfo = tutorData
+                if (hasOtherAccount(user)) user.dual = true
                 user.userType = UserType.TUTOR
                 updateLocalUser(user);
                 dispatch(setUser(user));
@@ -194,10 +203,11 @@ export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
             const studentData = await studentService.create(username, info)
             const user = getLocalUser();
             if (user) {
-              user.userType = UserType.STUDENT;
-              user.roleInfo = studentData;
-              updateLocalUser(user);
-              dispatch(setUser(user));
+                if (hasOtherAccount(user)) user.dual = true
+                user.userType = UserType.STUDENT;
+                user.roleInfo = studentData;
+                updateLocalUser(user);
+                dispatch(setUser(user));
             }
             useSuccessNotification(`You have signed up as a student!`)
         } catch (e) {

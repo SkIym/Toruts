@@ -89,7 +89,11 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
         }
     }
 
-    return <form onSubmit={handleSubmit}>
+    return <div>
+            <h3>Signing up as a tutor...</h3>
+    
+        <form onSubmit={handleSubmit}>
+
         <div>
             <span>Educational Attainment</span>
             <input {...educ} data-testid="educ"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
@@ -185,7 +189,8 @@ const TutorForm = ({info}: {info: TutorInfo}) => {
             : <button type="submit">Create tutor account</button>}
         {/* <button type="submit">Create tutor account</button> */}
 
-    </form>
+        </form>
+    </div>
 }
 
 export default TutorForm
