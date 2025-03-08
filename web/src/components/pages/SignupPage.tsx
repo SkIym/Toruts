@@ -19,7 +19,7 @@ const SignupPage = ({ type }: { type: UserType | null }) => {
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 flex-col gap-y-9">
-      <div className="w-full max-w-sm shadow-lg rounded-sm p-8 bg-white">
+      <div className="w-full max-w-4xl shadow-lg rounded-sm p-8 bg-white">
         {child}
       </div>
     </div>
