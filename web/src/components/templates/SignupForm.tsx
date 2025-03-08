@@ -19,21 +19,21 @@ import { Input } from "@/components/ui/input";
 const SignUpSchema = z.object({
     firstName: z
         .string()
-        .nonempty({ message: "First Name is required" })
+        .nonempty({ message: "required" })
         .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
     lastName: z
         .string()
-        .nonempty({ message: "Last Name is required" })
+        .nonempty({ message: "required" })
         .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
     phoneNumber: z
         .string()
-        .nonempty({ message: "Phone Number is required" })
+        .nonempty({ message: "required" })
         .regex(/^[0-9]+$/, "Please enter only numeric characters."),
-    username: z.string().nonempty({ message: "Username is required" }),
+    username: z.string().nonempty({ message: "required" }),
     email: z.string().email({ message: "Invalid email address" }),
     password: z
         .string()
-        .nonempty({ message: "Password is required" })
+        .nonempty({ message: "required" })
         .min(8)
         .regex(/(?=.*[^A-Za-z0-9])/, {
             message: "Password must contain at least one non-alphanumeric character.",
@@ -89,7 +89,10 @@ const SignupForm = () => {
                 name="firstName"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <div className="flex flex-row justify-between"> 
+                        <FormLabel>First Name</FormLabel>
+                        <FormMessage />
+                    </div>
                     <FormControl>
                     <Input
                         placeholder="First Name"
@@ -97,7 +100,6 @@ const SignupForm = () => {
                         data-test-id="first-name"
                     />
                     </FormControl>
-                    <FormMessage />
                 </FormItem>
                 )}
             />
@@ -106,7 +108,10 @@ const SignupForm = () => {
                 name="lastName"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <div className="flex flex-row justify-between"> 
+                        <FormLabel>Last Name</FormLabel>
+                        <FormMessage />
+                    </div>
                     <FormControl>
                     <Input
                         placeholder="Last Name"
@@ -114,7 +119,6 @@ const SignupForm = () => {
                         data-test-id="last-name"
                     />
                     </FormControl>
-                    <FormMessage />
                 </FormItem>
                 )}
             />
@@ -123,7 +127,10 @@ const SignupForm = () => {
                 name="phoneNumber"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <div className="flex flex-row justify-between"> 
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormMessage />
+                    </div>
                     <FormControl>
                     <Input
                         placeholder="Phone Number"
@@ -131,7 +138,6 @@ const SignupForm = () => {
                         data-test-id="phone-number"
                     />
                     </FormControl>
-                    <FormMessage />
                 </FormItem>
                 )}
             />
@@ -142,7 +148,10 @@ const SignupForm = () => {
                     name="username"
                     render={({ field }) => (
                     <FormItem>
+                        <div className="flex flex-row justify-between"> 
                         <FormLabel>Username</FormLabel>
+                        <FormMessage />
+                    </div>
                         <FormControl>
                         <Input
                             placeholder="Username"
@@ -150,7 +159,6 @@ const SignupForm = () => {
                             data-test-id="username"
                         />
                         </FormControl>
-                        <FormMessage />
                     </FormItem>
                     )}
                 />
@@ -159,11 +167,13 @@ const SignupForm = () => {
                     name="email"
                     render={({ field }) => (
                     <FormItem>
+                        <div className="flex flex-row justify-between"> 
                         <FormLabel>Email</FormLabel>
+                        <FormMessage />
+                    </div>
                         <FormControl>
                         <Input placeholder="Email" {...field} data-test-id="email" />
                         </FormControl>
-                        <FormMessage />
                     </FormItem>
                     )}
                 />
@@ -174,7 +184,10 @@ const SignupForm = () => {
                 name="password"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <div className="flex flex-row justify-between"> 
+                        <FormLabel>Password</FormLabel>
+                        <FormMessage />
+                    </div>
                     <FormControl>
                     <Input
                         placeholder="Password"
@@ -183,7 +196,6 @@ const SignupForm = () => {
                         type="password"
                     />
                     </FormControl>
-                    <FormMessage />
                 </FormItem>
                 )}
             />
@@ -192,7 +204,10 @@ const SignupForm = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
+                    <div className="flex flex-row justify-between"> 
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormMessage />
+                    </div>
                     <FormControl>
                     <Input
                         placeholder="Confirm Password"
@@ -201,7 +216,6 @@ const SignupForm = () => {
                         type="password"
                     />
                     </FormControl>
-                    <FormMessage />
                 </FormItem>
                 )}
             />
