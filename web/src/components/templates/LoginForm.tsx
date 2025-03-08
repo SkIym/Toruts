@@ -1,25 +1,36 @@
-import { useField } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../store";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import "index.css";
 
 const LoginForm = () => {
-    const { reset: usernameReset, ...username } = useField("text");
-    const { reset: passwordReset, ...password } = useField("password");
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const LogInSchema = z.object({
+        username: z.string().nonempty({ message: "Username is required" }),
+        password: z.string().nonempty({ message: "Password is required" })
+    })
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<LogInSchemaType>({  resolver: zodResolver(LogInSchema)})
+
+    type LogInSchemaType = z.infer<typeof LogInSchema>
+
+    const handleLogin: SubmitHandler<LogInSchemaType> = async (formData) => {
         try {
             await dispatch(loginUser({
-                username: username.value,
-                password: password.value
+                username: formData.username,
+                password: formData.password
             }));
             navigate("/");
-            usernameReset()
-            passwordReset()
         } catch (err) {
             return err;
         }
@@ -28,14 +39,16 @@ const LoginForm = () => {
     return (
         <div id="login">
             <h1 data-testid="heading" className="page-title">Welcome to Toruts, ka-peyups!</h1>
-            <form onSubmit={handleLogin} data-testid="form" id="login-form">
+            <form onSubmit={handleSubmit(handleLogin)} data-testid="form" id="login-form">
                 <div>
                     <span>Username:</span>
-                    <input {...username} data-testid="username" />
+                    <input {...register("username")} data-testid="username" />
+                    {errors.username && <span className="input-error" >{errors.username.message}</span>}
                 </div>
                 <div>
                     <span>Password:</span>
-                    <input {...password} data-testid="password" />
+                    <input {...register("password")} data-testid="password" type="password"/>
+                    {errors.password && <span className="input-error" >{errors.password.message}</span>}
                 </div>
                 <button data-testid="login-button" type="submit">Login</button>
             </form>
