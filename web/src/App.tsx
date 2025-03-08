@@ -4,6 +4,7 @@ import { AppDispatch } from '../store'
 import { useEffect, useState } from 'react'
 import { getLoggedInUser } from './reducers/userReducer'
 import { ToastContainer } from 'react-toastify'
+import { Toaster } from "@/components/ui/sonner"
 import "./index.css"
 
 const App = () => {
@@ -28,7 +29,7 @@ const App = () => {
     return isReady ? (
         <div>
             <Outlet />
-            <ToastContainer />
+            <Toaster />
         </div>
     ) : null
 }
