@@ -1,6 +1,6 @@
 import { Status, TutorInfo } from "../../types"
 
-const TutorProfile = ({info}: {info: TutorInfo}) => {
+const TutorProfile = ({ info }: { info: TutorInfo }) => {
     return (
         <div>
             <h3>Status: {info.status === Status.Active ? 'ACTIVE' : 'INACTIVE'}</h3>
@@ -8,7 +8,7 @@ const TutorProfile = ({info}: {info: TutorInfo}) => {
             <p>Venue: {info.venue}</p>
             <p>Learning Mode: {info.learningMode}</p>
             <p>Price: {info.price}</p>
-            <p>Areas of Expertise: {info.areasOfExpertise}</p>
+            <p>Areas of Expertise: {info.areasOfExpertise.join(" ")}</p>
             <p>Tutoring experience:{info.tutoringExperiences}</p>
             <p>Availability: {info.availability}</p>
         </div>
