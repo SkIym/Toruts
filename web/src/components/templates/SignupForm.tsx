@@ -17,22 +17,33 @@ import {
 import { Input } from "@/components/ui/input";
 
 const SignUpSchema = z.object({
-  firstName: z
-    .string()
-    .nonempty({ message: "First Name is required" })
-    .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
-  lastName: z
-    .string()
-    .nonempty({ message: "Last Name is required" })
-    .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
-  phoneNumber: z
-    .string()
-    .nonempty({ message: "Phone Number is required" })
-    .regex(/^[0-9]+$/, "Please enter only numeric characters."),
-  username: z.string().nonempty({ message: "Username is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().nonempty({ message: "Password is required" }),
-});
+    firstName: z
+        .string()
+        .nonempty({ message: "First Name is required" })
+        .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
+    lastName: z
+        .string()
+        .nonempty({ message: "Last Name is required" })
+        .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
+    phoneNumber: z
+        .string()
+        .nonempty({ message: "Phone Number is required" })
+        .regex(/^[0-9]+$/, "Please enter only numeric characters."),
+    username: z.string().nonempty({ message: "Username is required" }),
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z
+        .string()
+        .nonempty({ message: "Password is required" })
+        .min(8)
+        .regex(/(?=.*[^A-Za-z0-9])/, {
+            message: "Password must contain at least one non-alphanumeric character.",
+        }),
+    confirmPassword: z.string()
+        
+    }).refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"]
+    });
 
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
@@ -65,7 +76,6 @@ const SignupForm = () => {
 
   return (
     <div id="signup">
-      <h1 data-testid="heading">Sign up</h1>
       <Form {...signUpForm}>
         <form
           onSubmit={signUpForm.handleSubmit(handleSignup)}
@@ -158,7 +168,7 @@ const SignupForm = () => {
                     )}
                 />
             </div>
-            <div>
+            <div className="grid grid-cols-2 gap-5">
             <FormField
                 control={signUpForm.control}
                 name="password"
@@ -177,12 +187,31 @@ const SignupForm = () => {
                 </FormItem>
                 )}
             />
+            <FormField
+                control={signUpForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                    <Input
+                        placeholder="Confirm Password"
+                        {...field}
+                        data-test-id="confirm-password"
+                        type="password"
+                    />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
             </div>
           <div className="flex flex-row gap-4 justify-between">
-            <Button type="submit" data-testid="signup-button">Sign up</Button>
             <Button variant="outline" onClick={() => navigate("/login")} data-testid="login-button">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.85355 3.14645C7.04882 3.34171 7.04882 3.65829 6.85355 3.85355L3.70711 7H12.5C12.7761 7 13 7.22386 13 7.5C13 7.77614 12.7761 8 12.5 8H3.70711L6.85355 11.1464C7.04882 11.3417 7.04882 11.6583 6.85355 11.8536C6.65829 12.0488 6.34171 12.0488 6.14645 11.8536L2.14645 7.85355C1.95118 7.65829 1.95118 7.34171 2.14645 7.14645L6.14645 3.14645C6.34171 2.95118 6.65829 2.95118 6.85355 3.14645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
               Login instead
-              </Button>
+            </Button>
+            <Button type="submit" data-testid="signup-button">Sign up</Button>
           </div>
         </form>
       </Form>
