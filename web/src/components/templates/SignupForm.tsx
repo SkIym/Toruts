@@ -73,105 +73,111 @@ const SignupForm = () => {
           data-testid="form"
           className="space-y-8"
         >
-          <FormField
-            control={signUpForm.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="First Name"
-                    {...field}
-                    data-test-id="first-name"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={signUpForm.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Last Name"
-                    {...field}
-                    data-test-id="last-name"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={signUpForm.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Phone Number"
-                    {...field}
-                    data-test-id="phone-number"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={signUpForm.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Username"
-                    {...field}
-                    data-test-id="username"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={signUpForm.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email" {...field} data-test-id="email" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={signUpForm.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Password"
-                    {...field}
-                    data-test-id="password"
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="grid grid-cols-3 gap-5">
+                <FormField
+                control={signUpForm.control}
+                name="firstName"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                    <Input
+                        placeholder="First Name"
+                        {...field}
+                        data-test-id="first-name"
+                    />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={signUpForm.control}
+                name="lastName"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                    <Input
+                        placeholder="Last Name"
+                        {...field}
+                        data-test-id="last-name"
+                    />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            <FormField
+                control={signUpForm.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                    <Input
+                        placeholder="Phone Number"
+                        {...field}
+                        data-test-id="phone-number"
+                    />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            </div>
+            <div className="grid grid-cols-2 gap-5">
+                    <FormField
+                    control={signUpForm.control}
+                    name="username"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                        <Input
+                            placeholder="Username"
+                            {...field}
+                            data-test-id="username"
+                        />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={signUpForm.control}
+                    name="email"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                        <Input placeholder="Email" {...field} data-test-id="email" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+            </div>
+            <div>
+            <FormField
+                control={signUpForm.control}
+                name="password"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                    <Input
+                        placeholder="Password"
+                        {...field}
+                        data-test-id="password"
+                        type="password"
+                    />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+            </div>
           <div className="flex flex-row gap-4 justify-between">
             <Button type="submit" data-testid="signup-button">Sign up</Button>
             <Button variant="outline" onClick={() => navigate("/login")} data-testid="login-button">
