@@ -17,8 +17,8 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
     const { reset: tutorExpReset, ...tutorExp } = useField('text', info?.tutoringExperiences);
     const { reset: availReset, ...avail } = useField('text', info?.availability);
     const { reset: portraitReset, ...portrait } = useField('text', info?.portraitUrl);
-    const [mode, setMode] = useState(info?.learningMode === null ? 0 : info?.learningMode)
-    const [status, setStatus] = useState(info?.status === null ? Status.Active : info?.status)
+    const [mode, setMode] = useState(info?.learningMode === undefined ? 0 : info?.learningMode)
+    const [status, setStatus] = useState(info?.status === undefined ? Status.Active : info?.status)
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();

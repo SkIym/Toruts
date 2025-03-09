@@ -21,7 +21,7 @@ const LoginForm = () => {
             usernameReset()
             passwordReset()
         } catch (err) {
-            return;
+            return err;
         }
     };
 
