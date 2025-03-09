@@ -11,6 +11,7 @@ using api.Data;
 using api.Mappers;
 using Microsoft.EntityFrameworkCore;
 using api.Enums;
+using api.Service;
 
 namespace api.Controllers
 {
@@ -77,7 +78,7 @@ namespace api.Controllers
             var tutorsQuery = _context.Tutor
                                 .Include(t => t.User)
                                 .AsQueryable();
-            
+
             tutorsQuery = tutorsQuery.Where(t => t.Status == Status.Active);
 
             if (minPrice.HasValue)
@@ -92,10 +93,12 @@ namespace api.Controllers
             if (!string.IsNullOrWhiteSpace(query))
             {
                 query = query.ToLower();
+                var tokens = query.Split(' ');
 
                 tutorsQuery = tutorsQuery.Where(t => (
                     t.User.FirstName + " " + t.User.LastName).ToLower().Contains(query) ||
-                    t.EducAttainment.ToLower().Contains(query)
+                    t.EducAttainment.ToLower().Contains(query) ||
+                    t.AreasOfExpertise == null ? true : t.AreasOfExpertise.Intersect(tokens).Count() > 0
                 );
             }
 
