@@ -9,7 +9,7 @@ import { Status, TutorInfo, UserType } from "../../types";
 
 const areasOfExpSeparator = " "
 
-const TutorForm = ({ info }: { info: TutorInfo }) => {
+const TutorForm = ({ info }: { info: TutorInfo | null }) => {
     const { reset: educReset, ...educ } = useField('text', info?.educAttainment);
     const { reset: venueReset, ...venue } = useField('text', info?.venue);
     const { reset: priceReset, ...price } = useField('number', info?.price.toString());

@@ -6,7 +6,7 @@ import { StudentInfo, UserData } from "../../types"
 import { UserType } from "../../types"
 import { useNavigate } from "react-router-dom"
 
-const StudentForm = ({info}: {info: StudentInfo}) => {
+const StudentForm = ({info}: {info: StudentInfo | null }) => {
 
     const { reset: areasReset, ...areas } = useField("text", info?.areasOfImprovement[0])
     const { reset: degreeReset, ...degree } = useField("text", info?.degreeProgram)

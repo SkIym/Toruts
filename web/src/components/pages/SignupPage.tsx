@@ -8,13 +8,13 @@ const SignupPage = ({type}: {type: UserType | null}) => {
         case UserType.TUTOR:
             return (
                 <div>
-                    <TutorForm />
+                    <TutorForm info={null}/>
                 </div>
             )
         case UserType.STUDENT:
             return (
                 <div>
-                    <StudentForm/>
+                    <StudentForm info={null}/>
                 </div>
             )
         default:
