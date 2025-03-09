@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import { logoutUser, deleteUser, switchMode } from "../../reducers/userReducer";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { StudentInfo, TutorInfo, UserType } from "../../types";
 import TutorProfile from "../templates/TutorProfile";
 

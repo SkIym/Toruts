@@ -3,16 +3,15 @@ import { useField } from "../../hooks"
 import { Link, useNavigate } from "react-router-dom"
 import { AppDispatch, RootState } from "../../../store"
 import { addUserInfo } from "../../reducers/userReducer"
-import React, { useState } from "react"
+import React from "react"
 import TutorForm from "./TutorForm"
 import StudentForm from "./StudentForm"
-import { StudentInfo, UserInfo, UserType, TutorInfo } from "../../types"
+import { StudentInfo, UserType, TutorInfo } from "../../types"
 
 export const InfoForm = ()  => {
     const user = useSelector((state: RootState) => state.user);
     
     const primaryInfo = user?.primaryInfo
-    const roleInfo = user?.roleInfo
 
     const { reset: fnameReset, ...firstName } = useField("text", primaryInfo?.firstName)
     const { reset: lnameReset, ...lastName } = useField("text", primaryInfo?.lastName)

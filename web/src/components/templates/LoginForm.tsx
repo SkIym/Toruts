@@ -38,7 +38,7 @@ const LoginForm = () => {
             }));
             navigate("/");
         } catch (err) {
-            return;
+            return err;
         }
     };
 

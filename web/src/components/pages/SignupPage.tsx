@@ -8,10 +8,10 @@ const SignupPage = ({ type }: { type: UserType | null }) => {
 
   switch (type) {
     case UserType.TUTOR:
-      child = <TutorForm />;
+      child = <TutorForm info={null} />;
       break;
     case UserType.STUDENT:
-      child = <StudentForm />;
+      child = <StudentForm info={null}/>;
       break;
     default:
       child = <SignUpForm />;
