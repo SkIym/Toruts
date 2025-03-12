@@ -4,7 +4,7 @@ import SearchForm from "../templates/SearchForm"
 const HomePage = () => {
     return (
         <div>
-            <h1>Toruts</h1>
+            <h1 className="text-red-500">Toruts</h1>
             <Link to={"/profile?"}>
                 <h3>Profile</h3>
             </Link>
