@@ -76,7 +76,8 @@ namespace api.Controllers
                     Token = _tokenService.CreateToken(user),
                     UserType = isTutor ? UserType.TUTOR : (isStudent ? UserType.STUDENT : null),
                     PrimaryInfo = user.ToUpdateUserDto(),
-                    RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null)
+                    RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null),
+                    Dual = isTutor && isStudent
                 }
             );
         }

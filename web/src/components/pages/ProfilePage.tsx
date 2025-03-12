@@ -64,7 +64,7 @@ const ProfilePage = () => {
     }
 
     // console.log(user?.primaryInfo, user?.roleInfo, user?.type)
-
+    console.log(user)
     const primaryInfo = user?.primaryInfo;
     const roleInfo = user?.roleInfo
 
