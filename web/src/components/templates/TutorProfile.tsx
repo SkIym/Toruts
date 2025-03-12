@@ -2,7 +2,7 @@ import { Status, TutorInfo } from "../../types"
 
 const TutorProfile = ({ info }: { info: TutorInfo }) => {
     return (
-        <div>
+        <div data-testid="tutor-profile">
             <h3>Status: {info.status === Status.Active ? 'ACTIVE' : 'INACTIVE'}</h3>
             <p>Education: {info.educAttainment}</p>
             <p>Venue: {info.venue}</p>

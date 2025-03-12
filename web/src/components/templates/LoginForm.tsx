@@ -27,8 +27,8 @@ const LoginForm = () => {
 
     return (
         <div id="login">
-            <h1 className="page-title">Welcome to Toruts, ka-peyups!</h1>
-            <form onSubmit={handleLogin} id="login-form">
+            <h1 data-testid="heading" className="page-title">Welcome to Toruts, ka-peyups!</h1>
+            <form onSubmit={handleLogin} data-testid="form" id="login-form">
                 <div>
                     <span>Username:</span>
                     <input {...username} data-testid="username" />
@@ -37,9 +37,9 @@ const LoginForm = () => {
                     <span>Password:</span>
                     <input {...password} data-testid="password" />
                 </div>
-                <button type="submit">Login</button>
+                <button data-testid="login-button" type="submit">Login</button>
             </form>
-            <button onClick={() => navigate("/signup")}>Sign up</button>
+            <button data-testid="signup-button" onClick={() => navigate("/signup")}>Sign up</button>
         </div>
     );
 };

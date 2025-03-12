@@ -34,8 +34,8 @@ export const SignUpForm = () => {
     }
 
     return <div>
-        <h1>Sign up</h1>
-        <form onSubmit={handleSignups} action="/">
+        <h1 data-testid="heading">Sign up</h1>
+        <form onSubmit={handleSignups} data-testid="form" id="signup-form" action="/">
             <div>
                 <span>First Name</span>
                 <input {...firstName} data-testid="first-name"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
@@ -60,9 +60,9 @@ export const SignUpForm = () => {
                 <span>Password:</span>
                 <input {...password} data-testid="password" />
             </div>
-            <button type="submit">Sign up</button>
+            <button data-testid="signup-button" type="submit">Sign up</button>
         </form>
-        <button onClick={() => navigate("/login")}>Login instead</button>
+        <button data-test="login-button" onClick={() => navigate("/login")}>Login instead</button>
     </div>
 }
 

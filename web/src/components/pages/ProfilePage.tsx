@@ -69,8 +69,8 @@ const ProfilePage = () => {
     const roleInfo = user?.roleInfo
 
     return (
-        <div>
-            <h1>OMG HELLO {user?.primaryInfo?.firstName}</h1>
+        <div data-testid="page" id="profile">
+            <h1 data-testid="heading">OMG HELLO {user?.primaryInfo?.firstName}</h1>
             <Link to={"/"}>
                 <h3>Home</h3>
             </Link>
@@ -89,15 +89,15 @@ const ProfilePage = () => {
                     ? <StudentProfile info={roleInfo as StudentInfo}></StudentProfile>
                     : null)}
 
-            <button onClick={() => navigate('/info')}>Edit Profile</button>
-            <button onClick={handleDelete}>Delete Profile</button>
-            <button onClick={handleLogout}>Logout</button>
+            <button data-testid="edit-button" onClick={() => navigate('/info')}>Edit Profile</button>
+            <button data-testid="delete-button" onClick={handleDelete}>Delete Profile</button>
+            <button data-testid="logout-button" onClick={handleLogout}>Logout</button>
 
             {
                 user?.dual 
                 ? 
                 (
-                    <button onClick={handleSwitch}>
+                    <button data-testid="switch-button" onClick={handleSwitch}>
                         {user?.userType === UserType.TUTOR
                         ? "Switch to Student Mode"
                         : "Switch to Tutor Mode"}
@@ -105,7 +105,7 @@ const ProfilePage = () => {
                 )
                 :
                 (
-                    <button onClick={handleSignup}>
+                    <button data-testid="signup-button" onClick={handleSignup}>
                         {user?.userType === UserType.TUTOR
                         ? "Sign up as a student"
                         : "Sign up as a tutor"}

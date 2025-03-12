@@ -2,7 +2,7 @@ import ChooseTypeForm from "../templates/ChooseTypeForm"
 
 const ChoosingPage = () => {
 
-    return <div>
+    return <div data-testid="page" id="choose">
         <ChooseTypeForm />
     </div>
 
