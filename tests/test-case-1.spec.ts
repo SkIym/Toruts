@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { quickDelete, quickSignup, quickLogin, logout, done, deleteWith } from './helper';
+import { quickDelete, quickSignup, quickLogin, logout, done, deleteWith, loadPage, clickButton, loadForm } from './helper';
 
 test.describe.configure({ mode: 'parallel' });
 
@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Test Case 1: Visibility', () => {
-    test.skip('Test Case 1.1: Home Page', async({ page }) => {
+    test('Test Case 1.1: Home Page', async({ page }) => {
         const heading = await page.getByRole('heading', { name: /Toruts/ });
         const search = await page.getByTestId('search');
         const minPrice = await page.getByTestId('minPrice');
@@ -33,7 +33,7 @@ test.describe('Test Case 1: Visibility', () => {
         done('1.1');
     })
 
-    test.skip('Test Case 1.2: Login Page', async({ page }) => {
+    test('Test Case 1.2: Login Page', async({ page }) => {
         await page.goto('/login');
         await page.waitForLoadState();
 
@@ -58,7 +58,7 @@ test.describe('Test Case 1: Visibility', () => {
         done('1.2');
     })
 
-    test.skip('Test Case 1.3: Signup Page', async ({ page }) => {
+    test('Test Case 1.3: Signup Page', async ({ page }) => {
         await page.goto('/signup');
         await page.waitForLoadState();
 
@@ -90,21 +90,11 @@ test.describe('Test Case 1: Visibility', () => {
 
     test('Test Case 1.4: Update Profile Page', async ({ page }) => {
         await quickSignup(page, '1-4');
-
-        const test = await page.getByTestId('heading').innerText();
-        
-        console.log(`Test: ${test}`)
-        if (test == 'Sign up') {
-            await deleteWith(page, 'test-case-1-4', 'Abc123!?');
-            await page.waitForLoadState();
-            await quickSignup(page, '1-4');
-        }
         
         await expect(page.getByTestId('heading')).toHaveText(/Who/);
         await expect(page.getByTestId('student-button')).toBeVisible();
         
         const test2 = await page.getByTestId('heading').innerText();
-        console.log(`Test: ${test2}`)
 
         await expect(page.getByTestId('heading-tutor')).toBeVisible();
         await expect(page.getByTestId('create')).toBeVisible();
@@ -121,9 +111,9 @@ test.describe('Test Case 1: Visibility', () => {
         await expect(page.getByTestId('status-active')).toBeVisible();
         await expect(page.getByTestId('status-inactive')).toBeVisible();
 
-        await page.getByTestId('student-button').click();
+        await clickButton(page, 'student-button');
         await page.waitForLoadState();
-        await page.waitForTimeout(1000);
+        await loadForm(page, 'student-form');
         
         await expect(page.getByTestId('tutor-button')).toBeVisible();
         await expect(page.getByTestId('heading-student')).toBeVisible();
@@ -131,7 +121,7 @@ test.describe('Test Case 1: Visibility', () => {
         await expect(page.getByTestId('areas')).toBeVisible();
         await expect(page.getByTestId('degree')).toBeVisible();
 
-        await page.getByTestId('create').click();
+        await clickButton(page, 'create');
         await page.waitForLoadState();
         await page.waitForTimeout(1000);
 
@@ -140,13 +130,12 @@ test.describe('Test Case 1: Visibility', () => {
         done('1.4');
     })
 
-    test.skip('Test Case 1.5: Profile Page', async ({ page }) => {
+    test('Test Case 1.5: Profile Page', async ({ page }) => {
         await quickLogin(page, '1-5');
         await page.goto('/profile');
-        await page.waitForLoadState();
-        await page.waitForTimeout(500);
+        await loadPage(page, 'profile')
 
-        await expect(page.getByRole('heading', { name: /HELLO/ })).toHaveText(/test-case-1/);
+        await expect(page.getByTestId('heading')).toHaveText(/Test/);
         await expect(page.getByText(/First/)).toHaveText(/Test/);
         await expect(page.getByText(/Last/)).toHaveText(/Case/);
         await expect(page.getByText(/Phone/)).toHaveText(/1/);
@@ -154,5 +143,31 @@ test.describe('Test Case 1: Visibility', () => {
         await logout(page);
         
         done('1.5');
+    })
+
+    test('Test Case 1.6: Tutor Profile Page', async ({ page }) => {
+        await quickLogin(page, '1-6');
+        await page.goto('/profile');
+        await loadPage(page, 'profile');
+
+        await expect(page.getByTestId('heading')).toHaveText(/Test/);
+        await expect(page.getByTestId('tutor-profile')).toBeVisible();
+
+        await logout(page);
+
+        done('1.6');
+    })
+
+    test('Test Case 1.7: Student Profile Page', async ({ page }) => {
+        await quickLogin(page, '1-7');
+        await page.goto('/profile');
+        await loadPage(page, 'profile');
+
+        await expect(page.getByTestId('heading')).toHaveText(/Test/);
+        await expect(page.getByTestId('student-profile')).toBeVisible();
+
+        await logout(page);
+
+        done('1.7');
     })
 })
