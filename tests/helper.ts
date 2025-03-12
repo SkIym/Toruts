@@ -1,39 +1,67 @@
-export const loginWith = async (page: any, username: string, password: string) => {
-    await page.goto('/login');
-    await page.waitForLoadState();
-    await page.waitForTimeout(5000);
-
-    await page.getByTestId('username').fill(username);
-    await page.getByTestId('password').fill(password);
-    await page.waitForTimeout(500);
-
-    await page.getByRole('button', { name: /Login/ }).click();
-    await page.waitForLoadState();
-    await page.waitForTimeout(500);
+export const load = async (page: any, toLoad: string | RegExp) => {
+    let time = 0;
+    let currentPage: string | null = await page.getByTestId('page').getAttribute('id');
+    while (currentPage?.match(toLoad) && time < 1000) {
+        time += 1;
+        currentPage = await page.getByTestId('page').getAttribute('id');
+    }
+    if (time < 10000) {
+        console.log(`Time to load ${toLoad}: ${time}`);
+        return null
+    } else {
+        console.log(`Failed to load ${toLoad}`)
+        return 'Error'
+    }
 }
 
-export const signupWith = async (page: any, username: string, email: string, password: string) => {
+export const loginWith = async (page: any, username: string, password: string) => {
+    await page.goto('/login');
+    await load(page, 'login');
+
+    while (await load(page, 'home') != null) {
+        await page.getByTestId('username').fill(username);
+        await page.getByTestId('password').fill(password);
+        await page.waitForTimeout(500);
+    
+        await page.getByTestId('login-button').click();
+        console.log(`Logging in with ${username}...`)
+    }
+    console.log(`Successful logging in ${username}`)
+}
+
+export const signupWith = async (page: any, firstName: string, lastName: string, phoneNumber: string, username: string, email: string, password: string) => {
     await page.goto('/signup');
     await page.waitForLoadState();
-    await page.waitForTimeout(1000);
+    await load(page, 'signup');
 
+    await page.getByTestId('first-name').fill(firstName);
+    await page.getByTestId('last-name').fill(lastName);
+    await page.getByTestId('phone-number').fill(phoneNumber);
     await page.getByTestId('username').fill(username);
     await page.getByTestId('email').fill(email);
     await page.getByTestId('password').fill(password);
     await page.waitForTimeout(500);
 
-    await page.getByRole('button', { name : /Sign up/ }).click();
+    await page.getByTestId('signup-button').click();
+    console.log(`Signing up ${firstName} ${lastName} with ${username}...`)
     await page.waitForLoadState();
     await page.waitForTimeout(500);
+
 }
 
 export const deleteWith = async (page: any, username: string, password: string) => {
     await loginWith(page, username, password);
     await page.goto('/profile');
-    await page.waitForLoadState();
-    await page.waitForTimeout(3000);
+    if(await load(page, 'profile') != null && await load(page,'choose') == null) {
+        await page.getByTestId('student-button').click();
+        await page.waitForTimeout(500);
+        await page.getByTestId('create').click();
+        await page.goto('/profile');
+        if(await load(page, 'profile')) console.log('Error');
+    }
 
-    await page.getByRole('button', { name: /Delete/ }).click();
+    await page.getByTestId('delete-button').click();
+    console.log(`Deleting ${username}...`)
     await page.waitForLoadState();
     await page.waitForTimeout(500);
 }
@@ -71,7 +99,7 @@ export const quickLogin = async (page: any, testCase: string) => {
 export const quickSignup = async (page: any, testCase: string) => {
     const username = `test-case-${testCase}`;
     const email = `test@case${testCase}.test`;
-    await signupWith(page, username, email, 'Abc123!?')
+    await signupWith(page, 'Test', 'Case', '0', username, email, 'Abc123!?')
 }
 
 export const quickDelete = async (page: any) => {
