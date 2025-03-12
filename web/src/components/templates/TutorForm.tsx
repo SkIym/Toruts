@@ -94,7 +94,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
     return <div>
         <h3 data-testid="heading-tutor">Signing up as a tutor...</h3>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testid="form" id="tutor-form">
 
             <div>
                 <span>Educational Attainment</span>

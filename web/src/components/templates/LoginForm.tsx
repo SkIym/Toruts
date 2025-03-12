@@ -28,7 +28,7 @@ const LoginForm = () => {
     return (
         <div id="login">
             <h1 data-testid="heading" className="page-title">Welcome to Toruts, ka-peyups!</h1>
-            <form onSubmit={handleLogin} id="login-form">
+            <form onSubmit={handleLogin} data-testid="form" id="login-form">
                 <div>
                     <span>Username:</span>
                     <input {...username} data-testid="username" />

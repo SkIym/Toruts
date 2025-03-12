@@ -70,7 +70,7 @@ const ProfilePage = () => {
 
     return (
         <div data-testid="page" id="profile">
-            <h1>OMG HELLO {user?.primaryInfo?.firstName}</h1>
+            <h1 data-testid="heading">OMG HELLO {user?.primaryInfo?.firstName}</h1>
             <Link to={"/"}>
                 <h3>Home</h3>
             </Link>
