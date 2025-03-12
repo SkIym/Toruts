@@ -17,5 +17,7 @@ namespace api.Dtos.Account
         public UpdateUserDto? PrimaryInfo {get; set;}
 
         public RoleDto? RoleInfo { get; set; }
+
+        public bool Dual { get; set; }
     }
 }
