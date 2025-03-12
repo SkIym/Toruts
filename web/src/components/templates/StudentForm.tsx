@@ -54,7 +54,7 @@ const StudentForm = ({info}: {info: StudentInfo | null }) => {
     }
 
     return <div>
-        <h3>Signing up as a student</h3>
+        <h3 data-testid="heading-student">Signing up as a student</h3>
         <form onSubmit={handleSubmit} id="student-info">
             <div>
                 <span>Areas of Improvement [optional]:</span>
@@ -65,8 +65,8 @@ const StudentForm = ({info}: {info: StudentInfo | null }) => {
                 <input {...degree} data-testid="degree"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
             </div>
             {user?.userType === UserType.STUDENT
-                        ? <button type="button" onClick={handleUpdate}>Update student information</button>
-                        : <button type="submit">Create student account</button>}
+                        ? <button data-testid="update" type="button" onClick={handleUpdate}>Update student information</button>
+                        : <button data-testid="create" type="submit">Create student account</button>}
             {/* <button type="submit">Create student account</button> */}
         </form>
     </div>

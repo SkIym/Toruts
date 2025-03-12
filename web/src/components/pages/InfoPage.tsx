@@ -2,7 +2,7 @@ import { InfoForm } from "../templates/InfoForm";
 
 const InfoPage = () => {
     return (
-        <div>
+        <div data-testid="page" id="edit">
             <InfoForm />
         </div>
     )

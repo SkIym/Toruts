@@ -19,7 +19,7 @@ const SignupPage = ({type}: {type: UserType | null}) => {
             )
         default:
             return (
-                <div>
+                <div data-testid="page" id="signup">
                     <SignUpForm />
                 </div>
             )

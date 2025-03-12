@@ -2,7 +2,7 @@ import LoginForm from "../templates/LoginForm"
 
 const LoginPage = () => {
 
-    return <div>
+    return <div data-testid="page" id="login">
         <LoginForm />
     </div>
 

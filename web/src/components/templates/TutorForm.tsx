@@ -92,7 +92,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
     }
 
     return <div>
-        <h3>Signing up as a tutor...</h3>
+        <h3 data-testid="heading-tutor">Signing up as a tutor...</h3>
 
         <form onSubmit={handleSubmit}>
 
@@ -105,6 +105,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
                     <legend>Select your offered learning mode: </legend>
                     <div>
                         <input
+                            data-testid="mode-online"
                             type="radio"
                             id="online"
                             name="mode"
@@ -116,6 +117,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
 
                     <div>
                         <input
+                            data-testid="mode-f2f"
                             type="radio"
                             id="f2f"
                             name="mode"
@@ -127,6 +129,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
 
                     <div>
                         <input
+                            data-testid="mode-both"
                             type="radio"
                             id="both"
                             name="mode"
@@ -166,6 +169,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
                     <legend>Select your status:</legend>
                     <div>
                         <input
+                            data-testid="status-active"
                             type="radio"
                             id="active"
                             name="status"
@@ -177,6 +181,7 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
 
                     <div>
                         <input
+                            data-testid="status-inactive"
                             type="radio"
                             id="inactive"
                             name="status"
@@ -187,8 +192,8 @@ const TutorForm = ({ info }: { info: TutorInfo | null }) => {
                 </fieldset>
             </div>
             {user?.userType === UserType.TUTOR
-                ? <button type="button" onClick={handleUpdate}>Update tutor information</button>
-                : <button type="submit">Create tutor account</button>}
+                ? <button data-testid="update" type="button" onClick={handleUpdate}>Update tutor information</button>
+                : <button data-testid="create" type="submit">Create tutor account</button>}
             {/* <button type="submit">Create tutor account</button> */}
 
         </form>

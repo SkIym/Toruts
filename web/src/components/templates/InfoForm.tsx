@@ -45,7 +45,7 @@ export const InfoForm = ()  => {
         }
     }
     return <div id="information">
-        <h2>Update your primary information: </h2>
+        <h2 data-testid="heading">Update your primary information: </h2>
 
         { user?.userType !== null
         ? <div>
@@ -72,11 +72,11 @@ export const InfoForm = ()  => {
                 <input {...phoneNumber} data-testid="phone-number" pattern="[0-9]+" title="Please enter only numeric characters."/>
             </div>
             
-            <button type="submit">Update primary information</button>
+            <button data-testid="update-button" type="submit">Update primary information</button>
 
         </form>
         <div>
-            <h2>Updating your role information:</h2>
+            <h2 data-testid="role-heading">Updating your role information:</h2>
             {user?.userType === UserType.TUTOR 
             ? <TutorForm info={user.roleInfo as TutorInfo}></TutorForm>
             : <StudentForm info={user?.roleInfo as StudentInfo}></StudentForm>}
