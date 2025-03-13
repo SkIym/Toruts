@@ -14,7 +14,7 @@ const SignupPage = ({ type }: { type: UserType | null }) => {
       child = <StudentForm info={null}/>;
       break;
     default:
-      child = <SignUpForm />;
+      child = <div data-testid="page" id="signup"> <SignUpForm /> </div>
   }
 
   return (

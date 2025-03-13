@@ -55,7 +55,7 @@ const StudentForm = ({info}: {info: StudentInfo | null }) => {
 
     return <div>
         <h3 data-testid="heading-student">Signing up as a student</h3>
-        <form onSubmit={handleSubmit} data-testid="form" id="student-form">
+        <form onSubmit={handleSubmit} id="student-info">
             <div>
                 <span>Areas of Improvement [optional]:</span>
                 <input {...areas} data-testid="areas" />
