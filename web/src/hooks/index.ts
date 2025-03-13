@@ -64,7 +64,7 @@ export const useErrorNotification = (e: unknown) => {
                 toast.error('Page does not exist')
                 break;
             default:
-                toast.success(e.message)
+                toast.error(e.message)
                 break;
         }
     } else {
