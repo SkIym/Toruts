@@ -153,11 +153,11 @@ test.describe('Test Case 2: Functionality', () => {
     test('Test Case 2.12: Error Profile Edit', async({ page }) => {
         await quickLogin(page, '2-12');
 
+        await page.goto('/info');
+        await loadPage(page, 'edit');
         await addInfo(page, '', '', '');
 
-        await expect(page.getByRole('heading', { name: /HELLO/ })).not.toBeVisible();
-
-        await logout(page);
+        await expect(page.getByTestId('page')).toHaveAttribute('id', 'edit');
         
         done('2.12');
     })
