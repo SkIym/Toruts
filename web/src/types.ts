@@ -22,6 +22,12 @@ export enum Status {
     Pending = 2
 }
 
+export enum LearningMode {
+    Online = 0,
+    F2F = 1,
+    Hybrid = 2
+}
+
 export type UserData = {
     userName: string;
     email: string;

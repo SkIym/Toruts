@@ -1,202 +1,349 @@
-import { useState } from "react";
-import { useField } from "../../hooks"
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import { signAsTutor, updateAsTutor } from "../../reducers/userReducer";
 import { useNavigate } from "react-router-dom";
-import { Status, TutorInfo, UserType } from "../../types";
+import { LearningMode, Status, TutorInfo } from "../../types";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 
+const TutorSchema = z.object({
+    educAttainment: z
+        .string()
+        .nonempty({ message: "required"})
+        .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
+    venue: z    
+        .string()
+        .nonempty({ message: "required"})
+        .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
+    price: z
+        .string()
+        .transform((n) => Number(n) || 0),
+    areasExp: z
+        .string()
+        .nonempty({ message: "required"})
+        .transform((s) => s.toLowerCase().split(areasOfExpSeparator)),
+    tutorExp: z
+        .string()
+        .or(z.literal('')),
+    avail: z
+        .string()
+        .or(z.literal('')),
+    portrait: z
+        .custom<File>((v) => v instanceof File, {
+            message: 'required'
+        }),
+    mode: z
+        .string()
+        .transform((m) => {
+            if (m === '0') return LearningMode.Online
+            else if (m === '1') return LearningMode.F2F
+            else return LearningMode.Hybrid
+        }),
+    status: z
+    .string()
+        .transform((m) => {
+            if (m === '0') return Status.Active
+            else if (m === '1') return Status.Inactive
+            else return Status.Pending
+        })
+})
+
+type TutorSchemaType = z.infer<typeof TutorSchema>
+
+type Props = {
+    info?: TutorInfo
+}
 
 const areasOfExpSeparator = " "
 
-const TutorForm = ({ info }: { info: TutorInfo | null }) => {
-    const { reset: educReset, ...educ } = useField('text', info?.educAttainment);
-    const { reset: venueReset, ...venue } = useField('text', info?.venue);
-    const { reset: priceReset, ...price } = useField('number', info?.price.toString());
-    const { reset: areaExpReset, ...areaExp } = useField('text', info?.areasOfExpertise[0]);
-    const { reset: tutorExpReset, ...tutorExp } = useField('text', info?.tutoringExperiences);
-    const { reset: availReset, ...avail } = useField('text', info?.availability);
-    const { reset: portraitReset, ...portrait } = useField('text', info?.portraitUrl);
-    const [mode, setMode] = useState(info?.learningMode === undefined ? 0 : info?.learningMode)
-    const [status, setStatus] = useState(info?.status === undefined ? Status.Active : info?.status)
+const TutorForm = ({ info }: Props) => {
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleModeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value == "0") {
-            setMode(0)
-        }
-        else if (e.target.value == "1") {
-            setMode(1)
-        } else {
-            setMode(2)
-        }
-    }
+    const tutorForm = useForm<TutorSchemaType>({
+        defaultValues: info ? {
+            educAttainment: info.educAttainment,
+            venue: info.venue,
+            price: info.price,
+            areasExp: info.areasOfExpertise,
+            tutorExp: info.tutoringExperiences,
+            avail: info.availability,
+            portrait: info.portraitUrl,
+            mode: info.learningMode,
+            status: info.status
+        }: undefined,
+        resolver: zodResolver(TutorSchema),
+    });
 
-    const handleStatusRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value === "0") {
-            setStatus(Status.Active)
-        } else {
-            setStatus(Status.Inactive)
-        }
-    }
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
+    const handleSubmit: SubmitHandler<TutorSchemaType> = async (formData) => {
         try {
-            if (user)
+            // edit
+            if (info && user) {
+                await dispatch(updateAsTutor(
+                    user.userName,
+                    {
+                        educAttainment: formData.educAttainment,
+                        learningMode: formData.mode,
+                        venue: formData.venue,
+                        price: formData.price,
+                        areasOfExpertise: formData.areasExp,
+                        tutoringExperiences: formData.tutorExp,
+                        availability: formData.avail,
+                        portraitUrl: formData.portrait,
+                        status: formData.status
+                    }))
+            }
+            // create
+            else if (user) {
                 await dispatch(signAsTutor(
                     user.userName,
                     {
-                        educAttainment: educ.value,
-                        learningMode: mode,
-                        venue: venue.value,
-                        price: parseInt(price.value),
-                        areasOfExpertise: areaExp.value.toLowerCase().split(areasOfExpSeparator),
-                        tutoringExperiences: tutorExp.value,
-                        availability: avail.value,
-                        portraitUrl: portrait.value,
-                        status: status
+                        educAttainment: formData.educAttainment,
+                        learningMode: formData.mode,
+                        venue: formData.venue,
+                        price: formData.price,
+                        areasOfExpertise: formData.areasExp,
+                        tutoringExperiences: formData.tutorExp,
+                        availability: formData.avail,
+                        portraitUrl: formData.portrait,
+                        status: formData.status
                     }))
-
+            }
             navigate("/");
         } catch {
             return;
         }
     }
 
-    const handleUpdate = async () => {
-        const info = user?.roleInfo as TutorInfo
-        try {
-            if (user)
-                await dispatch(updateAsTutor(
-                    user.userName,
-                    {
-                        educAttainment: educ.value,
-                        learningMode: mode,
-                        venue: venue.value,
-                        price: parseInt(price.value),
-                        areasOfExpertise: areaExp.value ? areaExp.value.toLowerCase().split(areasOfExpSeparator) : info.areasOfExpertise,
-                        tutoringExperiences: tutorExp.value,
-                        availability: avail.value,
-                        portraitUrl: portrait.value,
-                        status: status === null ? info.status : status
-                    }))
-
-            navigate("/profile");
-        } catch {
-            return;
-        }
-    }
 
     return <div>
-        <h3 data-testid="heading-tutor">Signing up as a tutor...</h3>
-
-        <form onSubmit={handleSubmit} data-testid="form" id="tutor-form">
-
-            <div>
-                <span>Educational Attainment</span>
-                <input {...educ} data-testid="educ" pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters." />
-            </div>
-            <div>
-                <fieldset>
-                    <legend>Select your offered learning mode: </legend>
-                    <div>
-                        <input
-                            data-testid="mode-online"
-                            type="radio"
-                            id="online"
-                            name="mode"
-                            value="0"
-                            checked={mode === 0}
-                            onChange={handleModeRadio} />
-                        <label htmlFor="online">Online</label>
-                    </div>
-
-                    <div>
-                        <input
-                            data-testid="mode-f2f"
-                            type="radio"
-                            id="f2f"
-                            name="mode"
-                            value="1"
-                            checked={mode === 1}
-                            onChange={handleModeRadio} />
-                        <label htmlFor="f2f">F2F</label>
-                    </div>
-
-                    <div>
-                        <input
-                            data-testid="mode-both"
-                            type="radio"
-                            id="both"
-                            name="mode"
-                            value="2"
-                            checked={mode === 2}
-                            onChange={handleModeRadio} />
-                        <label htmlFor="both">Both</label>
-                    </div>
-                </fieldset>
-            </div>
-            <div>
-                <span>Venue</span>
-                <input {...venue} data-testid="venue" pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters." />
-            </div>
-            <div>
-                <span>Price</span>
-                <input {...price} data-testid="price" step=".01" />
-            </div>
-            <div>
-                <span>Area of expertise [optional]:</span>
-                <input {...areaExp} data-testid="areaExp" />
-            </div>
-            <div>
-                <span>Tutoring experience [optional]:</span>
-                <input {...tutorExp} data-testid="tutorExp" />
-            </div>
-            <div>
-                <span>Availability [optional]:</span>
-                <input {...avail} data-testid="avail" />
-            </div>
-            <div>
-                <span>Portrait URL [optional]: </span>
-                <input {...portrait} data-testid="portrait" />
-            </div>
-            <div>
-                <fieldset>
-                    <legend>Select your status:</legend>
-                    <div>
-                        <input
-                            data-testid="status-active"
-                            type="radio"
-                            id="active"
-                            name="status"
-                            value="0"
-                            checked={status === Status.Active}
-                            onChange={handleStatusRadio} />
-                        <label htmlFor="active">Active</label>
-                    </div>
-
-                    <div>
-                        <input
-                            data-testid="status-inactive"
-                            type="radio"
-                            id="inactive"
-                            name="status"
-                            checked={status === Status.Inactive}
-                            onChange={handleStatusRadio} />
-                        <label htmlFor="inactive">Inactive</label>
-                    </div>
-                </fieldset>
-            </div>
-            {user?.userType === UserType.TUTOR
-                ? <button data-testid="update" type="button" onClick={handleUpdate}>Update tutor information</button>
-                : <button data-testid="create" type="submit">Create tutor account</button>}
-            {/* <button type="submit">Create tutor account</button> */}
-
-        </form>
+        <h1>{info ? "Edit" : "Signing up as a tutor"}</h1>
+        <Form {...tutorForm}>
+            <form 
+                onSubmit={tutorForm.handleSubmit(handleSubmit)}
+                id="tutor-form"
+                className="space-y-8">
+              <div className="grid grid-cols-3 gap-5">
+                <FormField
+                  control={tutorForm.control}
+                  name="educAttainment"
+                  render={({ field }) => (
+                    <FormItem>
+                        <div className="flex flex-row justify-between"> 
+                            <FormLabel>Educational Attainment</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                        <Input
+                            placeholder="Educational Attainment"
+                            {...field}
+                            data-test-id="educ-attainment"
+                        />
+                        </FormControl>
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={tutorForm.control}
+                    name="venue"
+                    render={({ field }) => (
+                      <FormItem>
+                          <div className="flex flex-row justify-between"> 
+                              <FormLabel>Venue</FormLabel>
+                              <FormMessage />
+                          </div>
+                          <FormControl>
+                          <Input
+                              placeholder="Venue"
+                              {...field}
+                              data-test-id="venue"
+                          />
+                          </FormControl>
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={tutorForm.control}
+                    name="price"
+                    render={({ field }) => (
+                    <FormItem>
+                        <div className="flex flex-row justify-between"> 
+                            <FormLabel>Price (per hour)</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                        <Input
+                            placeholder="Price"
+                            {...field}
+                            data-test-id="price"
+                            type="number"
+                        />
+                        </FormControl>
+                    </FormItem>
+                    )}
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-5">
+                <FormField
+                  control={tutorForm.control}
+                  name="avail"
+                  render={({ field }) => (
+                    <FormItem>
+                        <div className="flex flex-row justify-between"> 
+                            <FormLabel>Availability</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                        <Input
+                            placeholder="Availability"
+                            {...field}
+                            data-test-id="availability"
+                        />
+                        </FormControl>
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={tutorForm.control}
+                    name="areasExp"
+                    render={({ field }) => (
+                      <FormItem>
+                          <div className="flex flex-row justify-between"> 
+                              <FormLabel>Areas (or subjects) of expertise</FormLabel>
+                              <FormMessage />
+                          </div>
+                          <FormControl>
+                          <Textarea
+                              placeholder="Areas or subjects you would like to teach"
+                              {...field}
+                              data-test-id="areasExp"
+                          />
+                          </FormControl>
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={tutorForm.control}
+                    name="tutorExp"
+                    render={({ field }) => (
+                      <FormItem>
+                          <div className="flex flex-row justify-between"> 
+                              <FormLabel>Tutoring experience</FormLabel>
+                              <FormMessage />
+                          </div>
+                          <FormControl>
+                          <Textarea
+                              placeholder="Tutoring experience"
+                              {...field}
+                              data-test-id="tutorExp"
+                          />
+                          </FormControl>
+                    </FormItem>
+                    )}
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-5">
+                <FormField
+                  control={tutorForm.control}
+                  name="mode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-row justify-between"> 
+                        <FormLabel>Learning Mode</FormLabel>
+                        <FormMessage />
+                      </div>
+                      <Select onValueChange={field.onChange} defaultValue={
+                        info ? info.learningMode.toString() : undefined
+                      }>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your offered mode of learning" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="0">Online</SelectItem>
+                          <SelectItem value="1">F2F</SelectItem>
+                          <SelectItem value="2">Hybrid</SelectItem>
+                        </SelectContent>
+                      </Select>                 
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                  control={tutorForm.control}
+                  name="mode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-row justify-between"> 
+                        <FormLabel>Learning Mode</FormLabel>
+                        <FormMessage />
+                      </div>
+                      <Select onValueChange={field.onChange} defaultValue={
+                        info ? info.learningMode.toString() : undefined
+                      }>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="0">Active</SelectItem>
+                          <SelectItem value="1">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>                 
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={tutorForm.control}
+                    name="portrait"
+                    render={({ field }) => (
+                    <FormItem>
+                        <div className="flex flex-row justify-between"> 
+                            <FormLabel>Profile Picture</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                        <Input
+                            id="picture"
+                            type="file"
+                            {...field}
+                            data-test-id="price"
+                        />
+                        </FormControl>
+                    </FormItem>
+                    )}
+                />
+              </div>
+              <Button type="submit">
+                {info ? "Save" : "Create tutor account"}
+              </Button>
+            </form>
+        </Form>
     </div>
 }
 
