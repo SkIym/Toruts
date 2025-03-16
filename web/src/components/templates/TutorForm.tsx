@@ -21,13 +21,18 @@ import { Textarea } from "../ui/textarea";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+
 
 const TutorSchema = z.object({
     educAttainment: z
@@ -40,6 +45,7 @@ const TutorSchema = z.object({
         .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
     price: z
         .string()
+        .regex(/^[1-9]+[0-9]*$/)
         .transform((n) => Number(n) || 0),
     areasExp: z
         .string()
@@ -52,9 +58,8 @@ const TutorSchema = z.object({
         .string()
         .or(z.literal('')),
     portrait: z
-        .custom<File>((v) => v instanceof File, {
-            message: 'required'
-        }),
+        .custom<File>()
+        .optional(),
     mode: z
         .string()
         .transform((m) => {
@@ -63,7 +68,7 @@ const TutorSchema = z.object({
             else return LearningMode.Hybrid
         }),
     status: z
-    .string()
+        .string()
         .transform((m) => {
             if (m === '0') return Status.Active
             else if (m === '1') return Status.Inactive
@@ -93,15 +98,16 @@ const TutorForm = ({ info }: Props) => {
             tutorExp: info.tutoringExperiences,
             avail: info.availability,
             portrait: info.portraitUrl,
-            mode: info.learningMode,
-            status: info.status
+            mode: info.learningMode.toString(),
+            status: info.status.toString()
         }: undefined,
         resolver: zodResolver(TutorSchema),
     });
 
     const handleSubmit: SubmitHandler<TutorSchemaType> = async (formData) => {
+        console.log("HELLO?")
+        
         try {
-            // edit
             if (info && user) {
                 await dispatch(updateAsTutor(
                     user.userName,
@@ -119,6 +125,7 @@ const TutorForm = ({ info }: Props) => {
             }
             // create
             else if (user) {
+                console.log('WDA')
                 await dispatch(signAsTutor(
                     user.userName,
                     {
@@ -135,20 +142,49 @@ const TutorForm = ({ info }: Props) => {
             }
             navigate("/");
         } catch {
+            console.log("AWEGAKSHDG")
             return;
         }
     }
 
-
+    console.log(tutorForm.formState.errors);
+    console.log(tutorForm.getValues())
     return <div>
-        <h1>{info ? "Edit" : "Signing up as a tutor"}</h1>
+        <Card>
+            <CardHeader>
+            <CardTitle className="text-2xl">{info ? "Edit" : "Signing up as a tutor"}</CardTitle>
+            <CardDescription></CardDescription>
+            </CardHeader>
+            <CardContent>
         <Form {...tutorForm}>
             <form 
                 onSubmit={tutorForm.handleSubmit(handleSubmit)}
                 id="tutor-form"
                 className="space-y-8">
-              <div className="grid grid-cols-3 gap-5">
+                <div className="align-middle flex justify-center">
                 <FormField
+                    control={tutorForm.control}
+                    name="portrait"
+                    render={({ field }) => (
+                    <FormItem>
+                        <div className="flex flex-row justify-between"> 
+                            <FormLabel>Profile Picture (optional)</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                        <Input
+                            id="picture"
+                            type="file"
+                            {...field}
+                            data-test-id="picture"
+                        />
+                        </FormControl>
+                    </FormItem>
+                    )}
+                />
+                </div>
+              <div className="grid md:grid-cols-2 gap-5 w-2xl">
+              <FormField
                   control={tutorForm.control}
                   name="educAttainment"
                   render={({ field }) => (
@@ -167,26 +203,7 @@ const TutorForm = ({ info }: Props) => {
                     </FormItem>
                     )}
                 />
-                <FormField
-                    control={tutorForm.control}
-                    name="venue"
-                    render={({ field }) => (
-                      <FormItem>
-                          <div className="flex flex-row justify-between"> 
-                              <FormLabel>Venue</FormLabel>
-                              <FormMessage />
-                          </div>
-                          <FormControl>
-                          <Input
-                              placeholder="Venue"
-                              {...field}
-                              data-test-id="venue"
-                          />
-                          </FormControl>
-                    </FormItem>
-                    )}
-                />
-                <FormField
+              <FormField
                     control={tutorForm.control}
                     name="price"
                     render={({ field }) => (
@@ -201,13 +218,59 @@ const TutorForm = ({ info }: Props) => {
                             {...field}
                             data-test-id="price"
                             type="number"
+                            defaultValue={info ? info.price.toString() : undefined}
                         />
                         </FormControl>
                     </FormItem>
                     )}
                 />
               </div>
-              <div className="grid grid-cols-3 gap-5">
+              <FormField
+                    control={tutorForm.control}
+                    name="mode"
+                    render={({ field }) => (
+                        <FormItem>
+                        <div className="flex flex-row justify-between"> 
+                            <FormLabel>Learning Mode</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <Select onValueChange={field.onChange} defaultValue={
+                            info ? info.learningMode.toString() : undefined
+                        }>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select your offered mode of learning" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                            <SelectItem value="0">Online</SelectItem>
+                            <SelectItem value="1">F2F</SelectItem>
+                            <SelectItem value="2">Hybrid</SelectItem>
+                            </SelectContent>
+                        </Select>                 
+                        </FormItem>
+                        )}
+                    />
+              <div className="grid grid-cols-2 gap-5 justify-evenly">
+                <FormField
+                        control={tutorForm.control}
+                        name="venue"
+                        render={({ field }) => (
+                        <FormItem>
+                            <div className="flex flex-row justify-between"> 
+                                <FormLabel>Venue</FormLabel>
+                                <FormMessage />
+                            </div>
+                            <FormControl>
+                            <Input
+                                placeholder="Venue"
+                                {...field}
+                                data-test-id="venue"
+                            />
+                            </FormControl>
+                        </FormItem>
+                        )}
+                    />
                 <FormField
                   control={tutorForm.control}
                   name="avail"
@@ -227,6 +290,8 @@ const TutorForm = ({ info }: Props) => {
                     </FormItem>
                     )}
                 />
+              </div>
+              <div className="grid gap-5">
                 <FormField
                     control={tutorForm.control}
                     name="areasExp"
@@ -266,44 +331,17 @@ const TutorForm = ({ info }: Props) => {
                     )}
                 />
               </div>
-              <div className="grid grid-cols-3 gap-5">
                 <FormField
                   control={tutorForm.control}
-                  name="mode"
+                  name="status"
                   render={({ field }) => (
                     <FormItem>
                       <div className="flex flex-row justify-between"> 
-                        <FormLabel>Learning Mode</FormLabel>
+                        <FormLabel>Status</FormLabel>
                         <FormMessage />
                       </div>
                       <Select onValueChange={field.onChange} defaultValue={
-                        info ? info.learningMode.toString() : undefined
-                      }>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your offered mode of learning" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="0">Online</SelectItem>
-                          <SelectItem value="1">F2F</SelectItem>
-                          <SelectItem value="2">Hybrid</SelectItem>
-                        </SelectContent>
-                      </Select>                 
-                    </FormItem>
-                    )}
-                />
-                <FormField
-                  control={tutorForm.control}
-                  name="mode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex flex-row justify-between"> 
-                        <FormLabel>Learning Mode</FormLabel>
-                        <FormMessage />
-                      </div>
-                      <Select onValueChange={field.onChange} defaultValue={
-                        info ? info.learningMode.toString() : undefined
+                        info ? info.status.toString() : undefined
                       }>
                         <FormControl>
                           <SelectTrigger>
@@ -314,36 +352,19 @@ const TutorForm = ({ info }: Props) => {
                           <SelectItem value="0">Active</SelectItem>
                           <SelectItem value="1">Inactive</SelectItem>
                         </SelectContent>
-                      </Select>                 
+                      </Select> 
+                      <FormDescription>If Active, your profile will be public.</FormDescription>                
                     </FormItem>
                     )}
                 />
-                <FormField
-                    control={tutorForm.control}
-                    name="portrait"
-                    render={({ field }) => (
-                    <FormItem>
-                        <div className="flex flex-row justify-between"> 
-                            <FormLabel>Profile Picture</FormLabel>
-                            <FormMessage />
-                        </div>
-                        <FormControl>
-                        <Input
-                            id="picture"
-                            type="file"
-                            {...field}
-                            data-test-id="price"
-                        />
-                        </FormControl>
-                    </FormItem>
-                    )}
-                />
-              </div>
-              <Button type="submit">
-                {info ? "Save" : "Create tutor account"}
-              </Button>
+                {info ? 
+                <Button type="submit" data-testid="update">Save</Button>
+                : 
+                <Button type="submit" date-testid="create">Create tutor account</Button>}
             </form>
         </Form>
+        </CardContent>
+        </Card>
     </div>
 }
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TutorForm from "./TutorForm";
 import StudentForm from "./StudentForm";
+import { Button } from "../ui/button";
 
 const ChooseTypeForm = () => {
     const [type, setType] = useState(true);
@@ -10,23 +11,22 @@ const ChooseTypeForm = () => {
     }
     
     return (
-        <div>
-            <h2 data-testid="heading" >Who are you?</h2>
-            <div>
+        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
                 {type
                     ?
                     <div>
-                        <button data-testid="student-button" type="button" onClick={toggleForm}>I'm a student</button>
-                        <TutorForm info={null}></TutorForm>
+                      <h1 className="page-title font-bold text-gray-900">Who are you?</h1>
+                      <Button type="button" onClick={toggleForm}>I'm a student</Button>
+                        <TutorForm></TutorForm>
                     </div>
 
                     :
                     <div>
-                        <button data-testid="tutor-button" type="button" onClick={toggleForm}>I'm a tutor</button>
+                      <h1 className="page-title font-bold text-gray-900">Who are you?</h1>
+                      <Button type="button" onClick={toggleForm}>I'm a tutor</Button>
                         <StudentForm info={null}></StudentForm>
                     </div>
                 }
-            </div>
         </div>
     )
 }

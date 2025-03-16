@@ -61,7 +61,7 @@ export type TutorInfo = {
     areasOfExpertise: string[],
     tutoringExperiences: string,
     availability: string,
-    portraitUrl: string,
+    portraitUrl?: File,
     status: number
 }
 
