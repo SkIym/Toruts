@@ -44,11 +44,9 @@ const TutorSchema = z.object({
         .nonempty({ message: "required"})
         .regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
     price: z
-        .string()
-        .regex(/^[1-9]+[0-9]*$/)
-        .transform((n) => Number(n) || 0),
+        .coerce.number(),
     areasExp: z
-        .string()
+        .coerce.string()
         .nonempty({ message: "required"})
         .transform((s) => s.toLowerCase().split(areasOfExpSeparator)),
     tutorExp: z
@@ -61,19 +59,9 @@ const TutorSchema = z.object({
         .custom<File>()
         .optional(),
     mode: z
-        .string()
-        .transform((m) => {
-            if (m === '0') return LearningMode.Online
-            else if (m === '1') return LearningMode.F2F
-            else return LearningMode.Hybrid
-        }),
+        .string(),
     status: z
         .string()
-        .transform((m) => {
-            if (m === '0') return Status.Active
-            else if (m === '1') return Status.Inactive
-            else return Status.Pending
-        })
 })
 
 type TutorSchemaType = z.infer<typeof TutorSchema>
@@ -94,7 +82,7 @@ const TutorForm = ({ info }: Props) => {
             educAttainment: info.educAttainment,
             venue: info.venue,
             price: info.price,
-            areasExp: info.areasOfExpertise,
+            areasExp: info.areasOfExpertise.join(' '),
             tutorExp: info.tutoringExperiences,
             avail: info.availability,
             portrait: info.portraitUrl,
@@ -113,14 +101,14 @@ const TutorForm = ({ info }: Props) => {
                     user.userName,
                     {
                         educAttainment: formData.educAttainment,
-                        learningMode: formData.mode,
+                        learningMode: parseInt(formData.mode),
                         venue: formData.venue,
                         price: formData.price,
                         areasOfExpertise: formData.areasExp,
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
                         portraitUrl: formData.portrait,
-                        status: formData.status
+                        status: parseInt(formData.status)
                     }))
             }
             // create
@@ -130,14 +118,14 @@ const TutorForm = ({ info }: Props) => {
                     user.userName,
                     {
                         educAttainment: formData.educAttainment,
-                        learningMode: formData.mode,
+                        learningMode: parseInt(formData.mode),
                         venue: formData.venue,
                         price: formData.price,
                         areasOfExpertise: formData.areasExp,
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
                         portraitUrl: formData.portrait,
-                        status: formData.status
+                        status: parseInt(formData.status)
                     }))
             }
             navigate("/");
