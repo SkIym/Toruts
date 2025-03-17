@@ -287,6 +287,7 @@ const TutorForm = ({ info }: Props) => {
                               <FormLabel>Areas (or subjects) of expertise</FormLabel>
                               <FormMessage />
                           </div>
+                          <FormDescription>Separate terms by spaces, e.g. <i>`programming cs11 data competititve`</i> </FormDescription> 
                           <FormControl>
                           <Textarea
                               placeholder="Areas or subjects you would like to teach"
@@ -326,6 +327,7 @@ const TutorForm = ({ info }: Props) => {
                         <FormLabel>Status</FormLabel>
                         <FormMessage />
                       </div>
+                      <FormDescription>If Active, your profile will be public.</FormDescription>   
                       <Select onValueChange={field.onChange} defaultValue={
                         info ? info.status.toString() : undefined
                       }>
@@ -338,8 +340,7 @@ const TutorForm = ({ info }: Props) => {
                           <SelectItem value="0">Active</SelectItem>
                           <SelectItem value="1">Inactive</SelectItem>
                         </SelectContent>
-                      </Select> 
-                      <FormDescription>If Active, your profile will be public.</FormDescription>                
+                      </Select>         
                     </FormItem>
                     )}
                 />
