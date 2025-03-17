@@ -126,7 +126,6 @@ const TutorForm = ({ info }: Props) => {
                         status: parseInt(formData.status)
                     }))
             }
-            navigate("/");
         } catch {
             console.log("AWEGAKSHDG")
             return;
@@ -138,7 +137,7 @@ const TutorForm = ({ info }: Props) => {
     return <div>
         <Card>
             <CardHeader>
-            <CardTitle className="text-2xl">{info ? "Edit" : "Signing up as a tutor"}</CardTitle>
+            <CardTitle className="text-2xl">{info ? "Role information" : "Signing up as a tutor"}</CardTitle>
             <CardDescription></CardDescription>
             </CardHeader>
             <CardContent>
@@ -344,10 +343,13 @@ const TutorForm = ({ info }: Props) => {
                     </FormItem>
                     )}
                 />
+                <div className="flex flex-row gap-4 justify-end">
                 {info ? 
-                <Button type="submit" data-testid="update">Save</Button>
+                <Button type="submit" data-testid="update">Save role information</Button>
                 : 
                 <Button type="submit" date-testid="create">Create tutor account</Button>}
+                </div>
+                
             </form>
         </Form>
         </CardContent>
