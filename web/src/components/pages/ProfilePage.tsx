@@ -89,7 +89,7 @@ const ProfilePage = () => {
                     ? <StudentProfile info={roleInfo as StudentInfo}></StudentProfile>
                     : null)}
 
-            <button data-testid="edit-button" onClick={() => navigate('/info')}>Edit Profile</button>
+            <button data-testid="edit-button" onClick={() => navigate('/profile/edit')}>Edit Profile</button>
             <button data-testid="delete-button" onClick={handleDelete}>Delete Profile</button>
             <button data-testid="logout-button" onClick={handleLogout}>Logout</button>
 
