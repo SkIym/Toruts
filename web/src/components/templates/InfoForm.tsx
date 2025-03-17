@@ -75,12 +75,7 @@ export const InfoForm = ()  => {
             <button data-testid="update-button" type="submit">Update primary information</button>
 
         </form>
-        <div>
-            <h2 data-testid="role-heading">Updating your role information:</h2>
-            {user?.userType === UserType.TUTOR 
-            ? <TutorForm info={user.roleInfo as TutorInfo}></TutorForm>
-            : <StudentForm info={user?.roleInfo as StudentInfo}></StudentForm>}
-        </div>
+        
     </div>
 
 }
