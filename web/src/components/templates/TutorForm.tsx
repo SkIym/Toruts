@@ -31,6 +31,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 
 const TutorSchema = z.object({
@@ -144,27 +146,51 @@ const TutorForm = ({ info }: Props) => {
                 onSubmit={tutorForm.handleSubmit(handleSubmit)}
                 id="tutor-form"
                 className="space-y-8">
-                <div className="align-middle flex justify-center">
+                <div className="align-middle flex justify-center gap-5">
+                <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" className="" />
+                    <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
                 <FormField
                     control={tutorForm.control}
                     name="portrait"
-                    render={({ field }) => (
-                    <FormItem>
-                        <div className="flex flex-row justify-between"> 
+                    render={({ field }) => {
+                        // Handle file changes
+                        const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+                        const file = event.target.files?.[0];
+                        if (file) {
+                            // Update the form field value
+                            field.onChange(file);
+                        }
+                        };
+
+                        // Display the current image (if it exists)
+                        const currentImage = field.value
+                        ? URL.createObjectURL(field.value) // If it's a File object
+                        : info?.portraitUrl; // If it's a URL from the existing info
+
+                        return (
+                        <FormItem>
+                            <div className="flex flex-row justify-between">
                             <FormLabel>Profile Picture (optional)</FormLabel>
                             <FormMessage />
-                        </div>
-                        <FormControl>
-                        <Input
-                            id="picture"
-                            type="file"
-                            {...field}
-                            data-test-id="picture"
-                        />
-                        </FormControl>
-                    </FormItem>
-                    )}
-                />
+                            </div>
+                            <FormControl>
+                            <div className="flex flex-col items-center gap-4">
+                                <Input
+                                id="picture"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                data-test-id="picture"
+                                className="w-full"
+                                />
+                            </div>
+                            </FormControl>
+                        </FormItem>
+                        );
+                    }}
+                    />
                 </div>
               <div className="grid md:grid-cols-2 gap-5 w-2xl">
               <FormField
