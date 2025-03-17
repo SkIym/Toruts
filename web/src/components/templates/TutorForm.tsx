@@ -2,8 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
 import { signAsTutor, updateAsTutor } from "../../reducers/userReducer";
-import { useNavigate } from "react-router-dom";
-import { LearningMode, Status, TutorInfo } from "../../types";
+import { TutorInfo } from "../../types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -72,7 +71,6 @@ const areasOfExpSeparator = " "
 
 const TutorForm = ({ info }: Props) => {
     const user = useSelector((state: RootState) => state.user);
-    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
     const tutorForm = useForm<TutorSchemaType>({

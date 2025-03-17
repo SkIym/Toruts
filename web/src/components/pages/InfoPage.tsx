@@ -30,7 +30,7 @@ const InfoPage = () => {
                   Done
             </Button>
         </div>
-        <div data-testid="page" id="edit" className="flex flex-col md:flex-row gap-5">
+        <div data-testid="page" id="edit" className="flex flex-col xl:flex-row gap-5">
             {user?.userType === UserType.TUTOR 
             ? <TutorForm info={user.roleInfo as TutorInfo}></TutorForm>
             : <StudentForm info={user?.roleInfo as StudentInfo}></StudentForm>}
