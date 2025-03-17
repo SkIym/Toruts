@@ -46,9 +46,7 @@ const TutorSchema = z.object({
     price: z
         .coerce.number(),
     areasExp: z
-        .coerce.string()
-        .nonempty({ message: "required"})
-        .transform((s) => s.toLowerCase().split(areasOfExpSeparator)),
+        .coerce.string(),
     tutorExp: z
         .string()
         .or(z.literal('')),
@@ -104,7 +102,7 @@ const TutorForm = ({ info }: Props) => {
                         learningMode: parseInt(formData.mode),
                         venue: formData.venue,
                         price: formData.price,
-                        areasOfExpertise: formData.areasExp,
+                        areasOfExpertise: formData.areasExp.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
                         portraitUrl: formData.portrait,
@@ -121,7 +119,7 @@ const TutorForm = ({ info }: Props) => {
                         learningMode: parseInt(formData.mode),
                         venue: formData.venue,
                         price: formData.price,
-                        areasOfExpertise: formData.areasExp,
+                        areasOfExpertise: formData.areasExp.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
                         portraitUrl: formData.portrait,
