@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const useField = (type: string, defValue?: string) => {
   const [value, setValue] = useState(defValue ? defValue : "");
@@ -64,7 +64,7 @@ export const useErrorNotification = (e: unknown) => {
                 toast.error('Page does not exist')
                 break;
             default:
-                toast.success(e.message)
+                toast.error(e.message)
                 break;
         }
     } else {

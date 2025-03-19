@@ -3,9 +3,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store'
 import { useEffect, useState } from 'react'
 import { getLoggedInUser } from './reducers/userReducer'
-import { ToastContainer } from 'react-toastify'
-import './styles/tailwind.css';
-import NavigationBar from "./components/molecules/NavigationBar";
+import { Toaster } from "@/components/ui/sonner"
+import "./index.css"
 
 const App = () => {
 
@@ -27,11 +26,11 @@ const App = () => {
     }
 
     return isReady ? (
-        <>
-            <NavigationBar />
+        <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
             <Outlet />
-            <ToastContainer />
-        </>
+            <Toaster position='top-center'/>
+        </div>
+            
     ) : null
 }
 

@@ -11,18 +11,18 @@ const ChooseTypeForm = () => {
     
     return (
         <div>
-            <h2>Who are you?</h2>
+            <h2 data-testid="heading" >Who are you?</h2>
             <div>
                 {type
                     ?
                     <div>
-                        <button type="button" onClick={toggleForm}>I'm a student</button>
+                        <button data-testid="student-button" type="button" onClick={toggleForm}>I'm a student</button>
                         <TutorForm info={null}></TutorForm>
                     </div>
 
                     :
                     <div>
-                        <button type="button" onClick={toggleForm}>I'm a tutor</button>
+                        <button data-testid="tutor-button" type="button" onClick={toggleForm}>I'm a tutor</button>
                         <StudentForm info={null}></StudentForm>
                     </div>
                 }

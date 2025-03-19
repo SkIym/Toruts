@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { quickDelete, quickSignup, quickLogin, logout, done } from './helper';
+import { quickDelete, quickSignup, quickLogin, logout, done, deleteWith, loadPage, clickButton, loadForm } from './helper';
 
 test.describe.configure({ mode: 'parallel' });
 
@@ -90,25 +90,14 @@ test.describe('Test Case 1: Visibility', () => {
 
     test('Test Case 1.4: Update Profile Page', async ({ page }) => {
         await quickSignup(page, '1-4');
-        await page.waitForLoadState();
-
-        const heading = await page.getByRole('heading', { name: /Update/});
-        const firstName = await page.getByTestId('first-name');
-        const lastName = await page.getByTestId('last-name');
-        const phoneNumber = await page.getByTestId('phone-number');
-        const updateButton = await page.getByRole('button', { name: /Update/ })
         
-        await expect(heading).toBeVisible();
-        await expect(firstName).toBeVisible();
-        await expect(lastName).toBeVisible();
-        await expect(phoneNumber).toBeVisible();
-        await expect(updateButton).toBeVisible();
+        await expect(page.getByTestId('heading')).toHaveText(/Who/);
+        await expect(page.getByTestId('student-button')).toBeVisible();
+        
+        const test2 = await page.getByTestId('heading').innerText();
 
-        const toStudentButton = await page.getByRole('button', { name: /student/ });
-
-        await expect(page.getByRole('heading', { name: /tutor/ })).toBeVisible();
-        await expect(toStudentButton).toBeVisible();
-        await expect(page.getByRole('button', { name: /Create/ })).toBeVisible();
+        await expect(page.getByTestId('heading-tutor')).toBeVisible();
+        await expect(page.getByTestId('create')).toBeVisible();
         await expect(page.getByTestId('educ')).toBeVisible();
         await expect(page.getByTestId('venue')).toBeVisible();
         await expect(page.getByTestId('price')).toBeVisible();
@@ -116,20 +105,25 @@ test.describe('Test Case 1: Visibility', () => {
         await expect(page.getByTestId('tutorExp')).toBeVisible();
         await expect(page.getByTestId('avail')).toBeVisible();
         await expect(page.getByTestId('portrait')).toBeVisible();
-        await expect(page.getByRole('radio', { name: /Online/} )).toBeVisible();
-        await expect(page.getByRole('radio', { name: /F2F/} )).toBeVisible();
-        await expect(page.getByRole('radio', { name: /Both/} )).toBeVisible();
-        await expect(page.getByRole('radio', { name: /Active/} )).toBeVisible();
-        await expect(page.getByRole('radio', { name: /Inactive/} )).toBeVisible();
+        await expect(page.getByTestId('mode-online')).toBeVisible();
+        await expect(page.getByTestId('mode-f2f')).toBeVisible();
+        await expect(page.getByTestId('mode-both')).toBeVisible();
+        await expect(page.getByTestId('status-active')).toBeVisible();
+        await expect(page.getByTestId('status-inactive')).toBeVisible();
 
-        await toStudentButton.click();
+        await clickButton(page, 'student-button');
         await page.waitForLoadState();
-
-        await expect(page.getByRole('heading', { name: /student/ })).toBeVisible();
-        await expect(page.getByRole('button', { name: /tutor/ })).toBeVisible();
-        await expect(page.getByRole('button', { name: /student/ })).toBeVisible();
+        await loadForm(page, 'student-form');
+        
+        await expect(page.getByTestId('tutor-button')).toBeVisible();
+        await expect(page.getByTestId('heading-student')).toBeVisible();
+        await expect(page.getByTestId('create')).toBeVisible();
         await expect(page.getByTestId('areas')).toBeVisible();
         await expect(page.getByTestId('degree')).toBeVisible();
+
+        await clickButton(page, 'create');
+        await page.waitForLoadState();
+        await page.waitForTimeout(1000);
 
         await quickDelete(page);
         
@@ -139,10 +133,9 @@ test.describe('Test Case 1: Visibility', () => {
     test('Test Case 1.5: Profile Page', async ({ page }) => {
         await quickLogin(page, '1-5');
         await page.goto('/profile');
-        await page.waitForLoadState();
-        await page.waitForTimeout(500);
+        await loadPage(page, 'profile')
 
-        await expect(page.getByRole('heading', { name: /HELLO/ })).toHaveText(/test-case-1/);
+        await expect(page.getByTestId('heading')).toHaveText(/Test/);
         await expect(page.getByText(/First/)).toHaveText(/Test/);
         await expect(page.getByText(/Last/)).toHaveText(/Case/);
         await expect(page.getByText(/Phone/)).toHaveText(/1/);
@@ -150,5 +143,31 @@ test.describe('Test Case 1: Visibility', () => {
         await logout(page);
         
         done('1.5');
+    })
+
+    test('Test Case 1.6: Tutor Profile Page', async ({ page }) => {
+        await quickLogin(page, '1-6');
+        await page.goto('/profile');
+        await loadPage(page, 'profile');
+
+        await expect(page.getByTestId('heading')).toHaveText(/Test/);
+        await expect(page.getByTestId('tutor-profile')).toBeVisible();
+
+        await logout(page);
+
+        done('1.6');
+    })
+
+    test('Test Case 1.7: Student Profile Page', async ({ page }) => {
+        await quickLogin(page, '1-7');
+        await page.goto('/profile');
+        await loadPage(page, 'profile');
+
+        await expect(page.getByTestId('heading')).toHaveText(/Test/);
+        await expect(page.getByTestId('student-profile')).toBeVisible();
+
+        await logout(page);
+
+        done('1.7');
     })
 })

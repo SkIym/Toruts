@@ -57,7 +57,7 @@ const SearchForm = () => {
             
             {isReady
             ?   
-                <div>
+                <div data-testid="form" id="search-form">
                      <form onSubmit={handleSearch}>
                         <span>Search</span>
                         <input {...search} data-testid="search" /> <br />

@@ -148,7 +148,7 @@ export const deleteUser = (user: UserData) => {
 }
 
 const hasOtherAccount = (user: UserData): boolean => {
-    if ( user && user.userType) {
+    if ( user && user.userType !== null) {
         return true
     }
     return false
@@ -183,8 +183,9 @@ export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
             const tutorData = await tutorService.update(username, creds);
             const user = getLocalUser();
             if (user) {
-              user.userType = UserType.TUTOR;
               user.roleInfo = tutorData;
+              if (hasOtherAccount(user)) user.dual = true
+              user.userType = UserType.TUTOR;
               updateLocalUser(user);
               dispatch(setUser(user));
             }
@@ -224,6 +225,8 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
             const user = getLocalUser();
             if (user) {
                 user.roleInfo = studentData;
+                if (hasOtherAccount(user)) user.dual = true
+                user.userType = UserType.STUDENT;
                 updateLocalUser(user);
                 dispatch(setUser(user));
             }
