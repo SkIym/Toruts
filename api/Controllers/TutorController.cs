@@ -12,6 +12,8 @@ using api.Mappers;
 using Microsoft.EntityFrameworkCore;
 using api.Enums;
 using api.Service;
+using Supabase.Storage;
+using System.Security.Cryptography.X509Certificates;
 
 namespace api.Controllers
 {
@@ -125,7 +127,7 @@ namespace api.Controllers
         // POST endpoint to create tutors
         [HttpPost]
         [Route("create/{username}")]
-        public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto)
+        public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto, Supabase.Client client)
         {
 
             // Validate the model state
@@ -159,10 +161,25 @@ namespace api.Controllers
                 AreasOfExpertise = tutorDto.AreasOfExpertise,
                 TutoringExperiences = tutorDto.TutoringExperiences,
                 Availability = tutorDto.Availability,
-                PortraitUrl = tutorDto.PortraitUrl,
+                PortraitUrl = null,
                 Status = tutorDto.Status
             };
 
+            // Upload picture 
+            if (tutorDto.Portrait != null) 
+            {
+                using var memoryStream = new MemoryStream();
+                await tutorDto.Portrait.CopyToAsync(memoryStream);
+                var lastIndexOfDot = tutorDto.Portrait.FileName.LastIndexOf('.');
+                string ext = tutorDto.Portrait.FileName.Substring(lastIndexOfDot + 1);
+
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+                
+                tutor.PortraitUrl = client.Storage.From("profile-pictures").GetPublicUrl($"tutor-{tutor.Id}.{ext}");
+            }
+           
             await _context.Tutor.AddAsync(tutor);
             user.Tutor = tutor;
             await _context.SaveChangesAsync();
@@ -191,16 +208,6 @@ namespace api.Controllers
             }
 
             _context.Entry(tutor).CurrentValues.SetValues(updateDto);
-
-            // tutor.EducAttainment = updateDto.EducAttainment;
-            // tutor.LearningMode = updateDto.LearningMode;
-            // tutor.Venue = updateDto.Venue;
-            // tutor.Price = updateDto.Price;
-            // tutor.AreasOfExpertise = updateDto.AreasOfExpertise;
-            // tutor.TutoringExperiences = updateDto.TutoringExperiences;
-            // tutor.Availability = updateDto.Availability;
-            // tutor.PortraitUrl = updateDto.PortraitUrl;
-            // tutor.Status = updateDto.Status;
 
             await _context.SaveChangesAsync();
 
