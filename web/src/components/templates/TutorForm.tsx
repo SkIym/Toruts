@@ -32,6 +32,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { TEST } from "@/constants";
 
 
 
@@ -134,7 +135,7 @@ const TutorForm = ({ info }: Props) => {
 
     console.log(tutorForm.formState.errors);
     console.log(tutorForm.getValues())
-    return <div>
+    return <div data-testid={TEST.form('tutor')}>
         <Card>
             <CardHeader>
             <CardTitle className="text-2xl">{info ? "Role information" : "Signing up as a tutor"}</CardTitle>
@@ -206,7 +207,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                             placeholder="Educational Attainment"
                             {...field}
-                            data-test-id="educ-attainment"
+                            data-test-id={TEST.input('educ-attainment')}
                         />
                         </FormControl>
                     </FormItem>
@@ -225,7 +226,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                             placeholder="Price"
                             {...field}
-                            data-test-id="price"
+                            data-test-id={TEST.input('price')}
                             type="number"
                             defaultValue={info ? info.price.toString() : undefined}
                         />
@@ -243,7 +244,7 @@ const TutorForm = ({ info }: Props) => {
                             <FormLabel>Learning Mode</FormLabel>
                             <FormMessage />
                         </div>
-                        <Select onValueChange={field.onChange} defaultValue={
+                        <Select data-testid={TEST.select('mode')} onValueChange={field.onChange} defaultValue={
                             info ? info.learningMode.toString() : undefined
                         }>
                             <FormControl>
@@ -274,7 +275,7 @@ const TutorForm = ({ info }: Props) => {
                             <Input
                                 placeholder="Venue"
                                 {...field}
-                                data-test-id="venue"
+                                data-test-id={TEST.input('venue')}
                             />
                             </FormControl>
                         </FormItem>
@@ -293,7 +294,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                             placeholder="Availability"
                             {...field}
-                            data-test-id="availability"
+                            data-test-id={TEST.input('availability')}
                         />
                         </FormControl>
                     </FormItem>
@@ -315,7 +316,7 @@ const TutorForm = ({ info }: Props) => {
                           <Textarea
                               placeholder="Areas or subjects you would like to teach"
                               {...field}
-                              data-test-id="areasExp"
+                              data-test-id={TEST.input('areas')}
                           />
                           </FormControl>
                     </FormItem>
@@ -334,7 +335,7 @@ const TutorForm = ({ info }: Props) => {
                           <Textarea
                               placeholder="Tutoring experience"
                               {...field}
-                              data-test-id="tutorExp"
+                              data-test-id={TEST.input('experience')}
                           />
                           </FormControl>
                     </FormItem>
@@ -351,7 +352,7 @@ const TutorForm = ({ info }: Props) => {
                         <FormMessage />
                       </div>
                       <FormDescription>If Active, your profile will be public.</FormDescription>   
-                      <Select onValueChange={field.onChange} defaultValue={
+                      <Select data-testid={TEST.select('status')} onValueChange={field.onChange} defaultValue={
                         info ? info.status.toString() : undefined
                       }>
                         <FormControl>
@@ -369,9 +370,9 @@ const TutorForm = ({ info }: Props) => {
                 />
                 <div className="flex flex-row gap-4 justify-end">
                 {info ? 
-                <Button type="submit" data-testid="update">Save role information</Button>
+                <Button type="submit" data-testid={TEST.button('update')}>Save role information</Button>
                 : 
-                <Button type="submit" date-testid="create">Create tutor account</Button>}
+                <Button type="submit" date-testid={TEST.button('create')}>Create tutor account</Button>}
                 </div>
                 
             </form>

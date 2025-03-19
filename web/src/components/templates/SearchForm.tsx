@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import TutorSearchResult from "./TutorSearchResult"
 
 import tutorService from "../../services/tutor"
+import { TEST } from "@/constants"
 
 const SearchForm = () => {
     const { ...search } = useField("text")
@@ -57,13 +58,13 @@ const SearchForm = () => {
             
             {isReady
             ?   
-                <div data-testid="form" id="search-form">
+                <div data-testid={TEST.form('search')} id="search-form">
                      <form onSubmit={handleSearch}>
                         <span>Search</span>
-                        <input {...search} data-testid="search" /> <br />
+                        <input {...search} data-testid={TEST.input('search')} /> <br />
                         <span>Filter</span><br />
-                        <span>Price: </span> <input {...minPrice} data-testid="minPrice" /> - <input {...maxPrice} data-testid="maxPrice" />
-                        <button data-testid="search-button"> Search </button>
+                        <span>Price: </span> <input {...minPrice} data-testid={TEST.input('min-price')} /> - <input {...maxPrice} data-testid={TEST.input('max-price')} />
+                        <button data-testid={TEST.button('search')}> Search </button>
                     </form>
                     <div>
                         {tutors.length === 0 
