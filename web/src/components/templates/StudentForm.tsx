@@ -5,6 +5,7 @@ import { signAsStudent, updateStudent } from "../../reducers/userReducer"
 import { StudentInfo, UserData } from "../../types"
 import { UserType } from "../../types"
 import { useNavigate } from "react-router-dom"
+import { TEST } from "@/constants"
 
 const StudentForm = ({info}: {info: StudentInfo | null }) => {
 
@@ -53,20 +54,20 @@ const StudentForm = ({info}: {info: StudentInfo | null }) => {
             }
     }
 
-    return <div>
-        <h3 data-testid="heading-student">Signing up as a student</h3>
-        <form onSubmit={handleSubmit} data-testid="form" id="student-form">
+    return <div data-testid={TEST.form('student')}>
+        <h3>Signing up as a student</h3>
+        <form onSubmit={handleSubmit}>
             <div>
                 <span>Areas of Improvement [optional]:</span>
-                <input {...areas} data-testid="areas" />
+                <input {...areas} data-testid={TEST.input('areas')} />
             </div>
             <div>
                 <span>Degree Program [optional]:</span>
-                <input {...degree} data-testid="degree"  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
+                <input {...degree} data-testid={TEST.input('degrees')}  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
             </div>
             {user?.userType === UserType.STUDENT
-                        ? <button data-testid="update" type="button" onClick={handleUpdate}>Update student information</button>
-                        : <button data-testid="create" type="submit">Create student account</button>}
+                        ? <button data-testid={TEST.button('update')} type="button" onClick={handleUpdate}>Update student information</button>
+                        : <button data-testid={TEST.button('create')} type="submit">Create student account</button>}
             {/* <button type="submit">Create student account</button> */}
         </form>
     </div>

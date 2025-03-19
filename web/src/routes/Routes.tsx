@@ -8,9 +8,10 @@ import ProfilePage from "../components/pages/ProfilePage";
 import HomePage from "../components/pages/HomePage";
 import LoginPage from "../components/pages/LoginPage";
 import SignupPage from "../components/pages/SignupPage";
-import InfoPage from "../components/pages/InfoPage";
-import ChoosingPage from "../components/pages/ChoosingPage";
+import InfoPage from "../components/pages/ProfileEditPage";
+import SelectPage from "../components/pages/SelectPage";
 import { UserType } from "../types";
+import { PATH } from "@/constants";
 
 
 export const router = createBrowserRouter([
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
         children: [
             { path: "", element: <HomePage /> },
             {
-                path: "profile",
+                path: PATH.PROFILE.default,
                 element: (
                     <ProtectedRoute>
                         <UserTypeProtectedRoute>
@@ -28,13 +29,13 @@ export const router = createBrowserRouter([
                         </UserTypeProtectedRoute>
                     </ProtectedRoute>)
             },
-            { path: "login", element: <LoginPage /> },
-            { path: "signup", element: <SignupPage type={null}/> },
-            { path: "choose_type", element: <ChoosingPage /> },
-            { path: "signup-tutor" , element: <SignupPage type={UserType.TUTOR}/>},
-            { path: "signup-student" , element: <SignupPage type={UserType.STUDENT}/>},
+            { path: PATH.login, element: <LoginPage /> },
+            { path: PATH.SIGNUP.default, element: <SignupPage type={null}/> },
+            { path: PATH.select, element: <SelectPage /> },
+            { path: PATH.SIGNUP.tutor, element: <SignupPage type={UserType.TUTOR}/>},
+            { path: PATH.SIGNUP.student, element: <SignupPage type={UserType.STUDENT}/>},
             {
-                path: "profile/edit",
+                path: PATH.PROFILE.edit,
                 element: (
                     <ProtectedRoute>
                         <InfoPage />

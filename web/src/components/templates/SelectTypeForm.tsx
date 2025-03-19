@@ -3,7 +3,7 @@ import TutorForm from "./TutorForm";
 import StudentForm from "./StudentForm";
 import { Button } from "../ui/button";
 
-const ChooseTypeForm = () => {
+const SelectTypeForm = () => {
     const [type, setType] = useState(true);
     
         const toggleForm = () => {
@@ -31,4 +31,4 @@ const ChooseTypeForm = () => {
     )
 }
 
-export default ChooseTypeForm
+export default SelectTypeForm
