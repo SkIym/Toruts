@@ -8,7 +8,7 @@ const HomePage = () => {
 			<Link to={"/profile?"}>
 				<h3>Profile</h3>
 			</Link>
-			<div className="pl-50 pr-50">
+			<div className="pl-50 pr-50 size-full">
 				<SearchForm />
 			</div>
 		</div>

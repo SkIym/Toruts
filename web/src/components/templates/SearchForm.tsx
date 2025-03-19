@@ -62,36 +62,43 @@ const SearchForm = () => {
 	};
 
 	return (
-		<div>
-			<span>Search Tutors</span>
-			<form onSubmit={handleSearch}>
-				<span>Search</span>
-				{/*<input {...search} data-testid="search" /> <br />*/}
-				<Input {...search} data-testid="search" />
-				<br />
-				<span>Filter</span>
-				<br />
-				<span>Price: </span> <input {...minPrice} data-testid="minPrice" /> -{" "}
-				<input {...maxPrice} data-testid="maxPrice" />
-				<button data-testid="search-button"> Search </button>
-			</form>
-
-			{isReady ? (
-				<div data-testid="form" id="search-form">
+		<div className="flex h-200">
+			{/* Search Results */}
+			<div className="min-w-1/3">
+				<form onSubmit={handleSearch} className="flex flex-col gap-2">
+					<div className="flex pr-10 gap-4">
+						<Input
+							{...search}
+							data-testid="search"
+							placeholder="John Doe, Ellen Joe, etc."
+						/>
+						<button data-testid="search-button"> Search </button>
+					</div>
+					<div className="flex justify-between">
+						<span>Price: </span>{" "}
+						<Input {...minPrice} data-testid="minPrice" className="w-1/4" />
+						<span> - </span>
+						<Input {...maxPrice} data-testid="maxPrice" className="w-1/4" />
+					</div>
 					<br />
-					<br />
-
-					<div className="grid grid-cols-3 gap-10 ">
+				</form>
+				{isReady ? (
+					<div className="flex flex-col flex-grow gap-2 max-h-160 overflow-y-auto">
 						{tutors.length === 0
 							? "No tutors found :(. The name or subject you're trying to find is non-existent. Try adjusting your filters instead. "
 							: tutors.map((tutor) => {
 									return <TutorSearchResult {...tutor} />;
 								})}
 					</div>
-				</div>
-			) : (
-				<div>Searching...</div>
-			)}
+				) : (
+					<div>Searching...</div>
+				)}
+			</div>
+
+			{/*Tutor Results*/}
+			<div className="min-w-2/3 p-6 bg-white border-black border-2 min-h-160">
+				<div className="">Hello I am a tutor</div>
+			</div>
 		</div>
 	);
 };

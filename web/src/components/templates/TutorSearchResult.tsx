@@ -1,4 +1,5 @@
 import { TutorResult } from "../../types";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
 type TutorSearchResult = {
 	id: number;
@@ -16,16 +17,18 @@ type TutorSearchResult = {
 	phoneNumber: string;
 };
 
-const TutorSearchResult = (props: TutorResult) => {
+const TutorSearchResult = ({ user, price, availability, ...props }) => {
 	return (
-		<div className="border-2 p-5 rounded-md">
-			<span>
-				{props.user.firstName} {props.user.lastName}
-			</span>
-			<br />
-			<span>{props.price} PHP</span>
-			<br />
-			<span>{props.availability}</span>
+		<div>
+			<Card>
+				<CardHeader>
+					{user.firstName} {user.lastName}
+				</CardHeader>
+				<CardContent className="flex-col flex">
+					<span>{price} PHP</span>
+					<span>{availability}</span>
+				</CardContent>
+			</Card>
 		</div>
 	);
 };
