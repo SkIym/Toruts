@@ -17,16 +17,31 @@ type TutorSearchResult = {
 	phoneNumber: string;
 };
 
-const TutorSearchResult = ({ user, price, availability, ...props }) => {
+const TutorSearchResult = ({
+	user,
+	price,
+	availability,
+	callback,
+	...props
+}) => {
 	return (
 		<div>
-			<Card>
+			<Card onClick={callback}>
 				<CardHeader>
-					{user.firstName} {user.lastName}
+					<b>
+						{user.firstName} {user.lastName}
+					</b>
 				</CardHeader>
-				<CardContent className="flex-col flex">
-					<span>{price} PHP</span>
-					<span>{availability}</span>
+				<CardContent className="flex gap-10">
+					<img
+						src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
+						alt=""
+						className="h-20 w-20 rounded-full object-cover"
+					/>
+					<div className="flex flex-col">
+						<span>{price} PHP</span>
+						<span>{availability}</span>
+					</div>
 				</CardContent>
 			</Card>
 		</div>
