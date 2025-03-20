@@ -26,10 +26,10 @@ const TutorSearchResult = ({
 }) => {
 	return (
 		<div>
-			<Card onClick={callback}>
+			<Card onClick={callback} className="hover:bg-gray-50">
 				<CardHeader>
 					<b>
-		¡				{user.firstName} {user.lastName}
+						{user.firstName} {user.lastName}
 					</b>
 				</CardHeader>
 				<CardContent className="flex gap-10">
