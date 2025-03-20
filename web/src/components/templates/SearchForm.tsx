@@ -12,6 +12,7 @@ import tutorService from "../../services/tutor";
 import { LearningMode, TutorResult } from "@/types";
 
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
 
 const SearchForm = () => {
 	const { ...search } = useField("text");
@@ -127,22 +128,30 @@ const SearchForm = () => {
 			<div className="min-w-2/3 bg-white border-2 min-h-165 rounded">
 				{selectedTutor ? (
 					<div className="h-full overflow-y-auto">
-						<div className="p-6 flex gap-5 border-b-2">
-							<img
-								src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
-								alt=""
-								className="h-20 w-20 rounded-full object-cover"
-							/>
-							<div className="flex flex-col">
-								<b>
-									{selectedTutor.user.firstName} {selectedTutor.user.lastName}
-								</b>
-								<span>{selectedTutor.educAttainment}</span>
+						<div className="flex border-b-2 w-full">
+							<div className="p-6 flex gap-5 w-2/3">
+								<img
+									src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
+									alt=""
+									className="h-20 w-20 rounded-full object-cover"
+								/>
+								<div className="flex flex-col">
+									<b>
+										{selectedTutor.user.firstName} {selectedTutor.user.lastName}
+									</b>
+									<span>{selectedTutor.educAttainment}</span>
+								</div>
+
+								<div className="flex flex-col">
+									<span>{selectedTutor.price} PHP</span>
+									<span>{getLearningMode(selectedTutor.learningMode)}</span>
+								</div>
 							</div>
 
-							<div className="flex flex-col">
-								<span>{selectedTutor.price} PHP</span>
-								<span>{getLearningMode(selectedTutor.learningMode)}</span>
+							<div className="flex w-1/3 items-center justify-end mr-20">
+								<button className="bg-green-200 rounded-2xl p-5 drop-shadow-xs hover:bg-green-300">
+									Apply Now
+								</button>
 							</div>
 						</div>
 
@@ -160,7 +169,7 @@ const SearchForm = () => {
 							<b>Prior Experience</b>
 							<p>{selectedTutor.tutoringExperiences}</p>
 						</div>
-						<p className="w-full p-4">
+						<p className="w-full p-4 border-t-2">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
 							laoreet fringilla rhoncus. Aliquam lacinia ullamcorper eros
 							interdum dictum. Nam porta quis dolor sodales sodales. Ut sodales
@@ -207,6 +216,10 @@ const SearchForm = () => {
 							Vestibulum vel lorem arcu. Aenean consectetur quam sit amet ex
 							dignissim tempus.
 						</p>
+						<div className="border-t-2 p-4 flex flex-col">
+							<b>Contacts</b>
+							<span>123456789</span>
+						</div>
 					</div>
 				) : (
 					<div className="flex flex-col justify-center items-center h-full">
