@@ -64,12 +64,22 @@ const SearchForm = () => {
 		}
 	};
 
+	const getLearningMode = (learningMode: LearningMode) => {
+		if (learningMode === 0) {
+			return <div>Online</div>;
+		}
+		if (learningMode === 1) {
+			return <div>F2F</div>;
+		}
+		return <div>Hybrid</div>;
+	};
+
 	console.log(selectedTutor);
 
 	return (
 		<div className="flex h-200 gap-4">
 			{/* Search Results */}
-			<div className="min-w-1/3">
+			<div className="min-w-1/3 bg-gray-50">
 				<Card>
 					<CardContent>
 						<form onSubmit={handleSearch} className="flex flex-col gap-2">
