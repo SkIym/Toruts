@@ -80,7 +80,7 @@ const SearchForm = () => {
 	return (
 		<div className="flex h-200 gap-4">
 			{/* Search Results */}
-			<div className="min-w-1/3 bg-gray-50">
+			<div className="min-w-1/3 bg-white">
 				<Card>
 					<CardContent>
 						<form onSubmit={handleSearch} className="flex flex-col gap-2">
@@ -108,7 +108,7 @@ const SearchForm = () => {
 							? "No tutors found :(. The name or subject you're trying to find is non-existent. Try adjusting your filters instead. "
 							: tutors.map((tutor) => {
 									return (
-										// biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
+										// biome-ignore lint/correctness/useJsxKeyInIterable: wtf is going on
 										<TutorSearchResult
 											{...tutor}
 											callback={() => {
@@ -162,7 +162,17 @@ const SearchForm = () => {
 						</div>
 					</div>
 				) : (
-					<div>Please select a tutor</div>
+					<div className="flex flex-col justify-center items-center h-full">
+						<img
+							src="https://i.pinimg.com/236x/09/e9/88/09e9888ac74fb96cd4ed7a3829730fd9.jpg"
+							alt=""
+						/>
+
+						<div className="mt-6">No Tutor Currently Selected </div>
+						<div>
+							<b>Please select a tutor from the left-hand side</b>
+						</div>
+					</div>
 				)}
 			</div>
 		</div>
