@@ -88,7 +88,7 @@ const SearchForm = () => {
 								<Input
 									{...search}
 									data-testid="search"
-									placeholder="John Doe, Ellen Joe, etc."
+									placeholder="Jane Doe, Ellen Joe, etc."
 								/>
 								<button data-testid="search-button"> Search </button>
 							</div>
@@ -146,7 +146,7 @@ const SearchForm = () => {
 							</div>
 						</div>
 
-						<div className="bg-gray-100 w-full p-4 flex flex-col">
+						<div className="bg-gray-100 w-full p-4 flex flex-col border-b-2">
 							<b>Areas of Expertise</b>
 							{selectedTutor.areasOfExpertise.map((exp) => (
 								<div>{exp}</div>
