@@ -9,6 +9,7 @@ import TutorSearchResult from "./TutorSearchResult";
 import { TutorDetails } from "./TutorDetails";
 
 import tutorService from "../../services/tutor";
+import { LearningMode, TutorResult } from "@/types";
 
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
