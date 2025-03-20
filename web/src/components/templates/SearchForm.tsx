@@ -98,13 +98,12 @@ const SearchForm = () => {
 								<span> - </span>
 								<Input {...maxPrice} data-testid="maxPrice" className="w-1/4" />
 							</div>
-							<br />
 						</form>
 					</CardContent>
 				</Card>
 				<br />
 				{isReady ? (
-					<div className="flex flex-col flex-grow gap-2 max-h-150 overflow-y-auto">
+					<div className="flex flex-col flex-grow gap-2 max-h-160 overflow-y-auto">
 						{tutors.length === 0
 							? "No tutors found :(. The name or subject you're trying to find is non-existent. Try adjusting your filters instead. "
 							: tutors.map((tutor) => {
@@ -125,29 +124,46 @@ const SearchForm = () => {
 			</div>
 
 			{/*Tutor Results*/}
-			<div className="min-w-2/3 p-6 bg-white border-2 min-h-160 rounded">
-				<div className="">
-					{selectedTutor ? (
-						<div>
+			<div className="min-w-2/3 bg-white border-2 min-h-165 rounded">
+				{selectedTutor ? (
+					<div>
+						<div className="p-6 flex gap-5">
 							<img
 								src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
 								alt=""
 								className="h-20 w-20 rounded-full object-cover"
 							/>
-							<b>
-								{selectedTutor.user.firstName} {selectedTutor.user.lastName}
-							</b>
+							<div className="flex flex-col">
+								<b>
+									{selectedTutor.user.firstName} {selectedTutor.user.lastName}
+								</b>
+								<span>{selectedTutor.educAttainment}</span>
+							</div>
 
-							{selectedTutor.price}
-							{selectedTutor.availability}
-							{selectedTutor.areasOfExpertise}
-							{selectedTutor.educAttainment}
-							{selectedTutor.learningMode}
+							<div className="flex flex-col">
+								<span>{selectedTutor.price} PHP</span>
+								<span>{getLearningMode(selectedTutor.learningMode)}</span>
+							</div>
 						</div>
-					) : (
-						<div>Please select a tutor</div>
-					)}
-				</div>
+
+						<div className="bg-gray-100 w-full p-4 flex flex-col">
+							<b>Areas of Expertise</b>
+							{selectedTutor.areasOfExpertise.map((exp) => (
+								<div>{exp}</div>
+							))}
+						</div>
+						<div className="w-full p-4 flex flex-col">
+							<b>Tutor Availability</b>
+							<span>{selectedTutor.availability}</span>
+						</div>
+						<div className="w-full p-4 flex flex-col">
+							<b>Prior Experience</b>
+							<p>{selectedTutor.tutoringExperiences}</p>
+						</div>
+					</div>
+				) : (
+					<div>Please select a tutor</div>
+				)}
 			</div>
 		</div>
 	);

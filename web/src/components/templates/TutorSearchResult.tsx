@@ -29,7 +29,7 @@ const TutorSearchResult = ({
 			<Card onClick={callback}>
 				<CardHeader>
 					<b>
-						{user.firstName} {user.lastName}
+		¡				{user.firstName} {user.lastName}
 					</b>
 				</CardHeader>
 				<CardContent className="flex gap-10">

@@ -1,6 +1,6 @@
-const TutorDetails = (props) => {
+const TutorDetails = ({ className, ...props }) => {
 	return (
-		<div>
+		<div className={className}>
 			Hello!
 			<div>Hi</div>
 		</div>
