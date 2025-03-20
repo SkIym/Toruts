@@ -5,7 +5,22 @@ import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../type
 
 const create = async (username: string, creds: TutorInfoWithoutId) => {
     console.log("Requesting to create tutor account")
-    const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create(username)}`, creds)
+
+    const { portrait, ...primary } = creds;
+
+    const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create(username)}`, primary)
+
+    if (portrait !== null) {
+
+        const formData = new FormData();
+        formData.append("portrait", portrait);
+        const { data: dataWithUrl } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.upload(data.id)}`, formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+        })
+        return dataWithUrl
+    }
     return data
 }
 

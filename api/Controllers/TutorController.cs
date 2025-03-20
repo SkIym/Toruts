@@ -127,7 +127,7 @@ namespace api.Controllers
         // POST endpoint to create tutors
         [HttpPost]
         [Route("create/{username}")]
-        public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto, Supabase.Client client)
+        public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto)
         {
 
             // Validate the model state
@@ -164,23 +164,6 @@ namespace api.Controllers
                 PortraitUrl = null,
                 Status = tutorDto.Status
             };
-            
-            Console.WriteLine(tutorDto.Portrait);
-            // Upload picture 
-            if (tutorDto.Portrait != null) 
-            {
-                using var memoryStream = new MemoryStream();
-                await tutorDto.Portrait.CopyToAsync(memoryStream);
-                var lastIndexOfDot = tutorDto.Portrait.FileName.LastIndexOf('.');
-                string ext = tutorDto.Portrait.FileName.Substring(lastIndexOfDot + 1);
-
-                Console.WriteLine(ext);
-                await client.Storage.From("profile-pictures").Upload(
-                    memoryStream.ToArray(),
-                    $"tutor-{tutor.Id}.{ext}");
-                
-                tutor.PortraitUrl = client.Storage.From("profile-pictures").GetPublicUrl($"tutor-{tutor.Id}.{ext}");
-            }
            
             await _context.Tutor.AddAsync(tutor);
             user.Tutor = tutor;
@@ -188,6 +171,34 @@ namespace api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = tutor.Id }, tutor.ToTutorDto());
 
+        }
+
+        [HttpPost]
+        [Route("upload/portrait/{id}")]
+        public async Task<IActionResult> Upload([FromRoute] int id, [FromForm] IFormFile portrait, Supabase.Client client)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var tutor = await _context.Tutor.FirstAsync(t => t.Id == id);
+
+            using var memoryStream = new MemoryStream();
+            await portrait.CopyToAsync(memoryStream);
+            var lastIndexOfDot = portrait.FileName.LastIndexOf('.');
+            string ext = portrait.FileName.Substring(lastIndexOfDot + 1);
+
+            Console.WriteLine(ext);
+            await client.Storage.From("profile-pictures").Upload(
+                memoryStream.ToArray(),
+                $"tutor-{tutor.Id}.{ext}");
+            
+            tutor.PortraitUrl = client.Storage.From("profile-pictures").GetPublicUrl($"tutor-{tutor.Id}.{ext}");
+
+            Console.WriteLine(tutor.PortraitUrl);
+
+            await _context.SaveChangesAsync();
+            return Ok(tutor.ToTutorDto());
+            
         }
 
         [HttpPut("update/{username}")]

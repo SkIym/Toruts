@@ -75,7 +75,7 @@ const SignupForm = () => {
           password: formData.password,
         })
       );
-      navigate("/choose_type");
+      navigate(PATH.select);
     } catch (err) {
       // Optionally handle errors here.
     }

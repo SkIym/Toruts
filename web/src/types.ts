@@ -52,7 +52,7 @@ export type StudentInfo = {
 
 export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>
 
-export type TutorInfo = {
+export interface TutorInfo {
     id: number,
     educAttainment: string,
     learningMode: number,

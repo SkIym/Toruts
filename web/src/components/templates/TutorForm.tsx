@@ -103,7 +103,6 @@ const TutorForm = ({ info }: Props) => {
 
     const handleSubmit: SubmitHandler<TutorSchemaType> = async (formData) => {
         console.log("HELLO?")
-        
         try {
             if (info && user) {
                 await dispatch(updateAsTutor(
