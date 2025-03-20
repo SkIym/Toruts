@@ -55,8 +55,18 @@ const TutorSchema = z.object({
         .string()
         .or(z.literal('')),
     portrait: z
-        .custom<File>()
-        .optional(),
+        .instanceof(File)
+        .refine(
+            (file) =>
+                [
+                  "image/png",
+                  "image/jpeg",
+                  "image/jpg",
+                  "image/svg+xml",
+                  "image/gif",
+                ].includes(file.type),
+              { message: "Invalid image file type" }
+        ),
     mode: z
         .string(),
     status: z
@@ -83,7 +93,7 @@ const TutorForm = ({ info }: Props) => {
             areasExp: info.areasOfExpertise.join(' '),
             tutorExp: info.tutoringExperiences,
             avail: info.availability,
-            portrait: info.portraitUrl,
+            portrait: undefined,
             mode: info.learningMode.toString(),
             status: info.status.toString()
         }: undefined,
@@ -105,7 +115,7 @@ const TutorForm = ({ info }: Props) => {
                         areasOfExpertise: formData.areasExp.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
-                        portraitUrl: formData.portrait,
+                        portrait: formData.portrait,
                         status: parseInt(formData.status)
                     }))
             }
@@ -122,7 +132,7 @@ const TutorForm = ({ info }: Props) => {
                         areasOfExpertise: formData.areasExp.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
-                        portraitUrl: formData.portrait,
+                        portrait: formData.portrait,
                         status: parseInt(formData.status)
                     }))
             }
@@ -148,8 +158,8 @@ const TutorForm = ({ info }: Props) => {
                 className="space-y-8">
                 <div className="align-middle flex justify-center gap-5">
                 <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" className="" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarImage src={ info ? info.portraitUrl : ''} className="" />
+                    <AvatarFallback>AVTR</AvatarFallback>
                 </Avatar>
                 <FormField
                     control={tutorForm.control}
@@ -164,11 +174,6 @@ const TutorForm = ({ info }: Props) => {
                         }
                         };
 
-                        // Display the current image (if it exists)
-                        const currentImage = field.value
-                        ? URL.createObjectURL(field.value) // If it's a File object
-                        : info?.portraitUrl; // If it's a URL from the existing info
-
                         return (
                         <FormItem>
                             <div className="flex flex-row justify-between">
@@ -180,7 +185,6 @@ const TutorForm = ({ info }: Props) => {
                                 <Input
                                 id="picture"
                                 type="file"
-                                accept="image/*"
                                 onChange={handleFileChange}
                                 data-test-id="picture"
                                 className="w-full"

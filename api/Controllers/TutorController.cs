@@ -164,7 +164,8 @@ namespace api.Controllers
                 PortraitUrl = null,
                 Status = tutorDto.Status
             };
-
+            
+            Console.WriteLine(tutorDto.Portrait);
             // Upload picture 
             if (tutorDto.Portrait != null) 
             {
@@ -173,6 +174,7 @@ namespace api.Controllers
                 var lastIndexOfDot = tutorDto.Portrait.FileName.LastIndexOf('.');
                 string ext = tutorDto.Portrait.FileName.Substring(lastIndexOfDot + 1);
 
+                Console.WriteLine(ext);
                 await client.Storage.From("profile-pictures").Upload(
                     memoryStream.ToArray(),
                     $"tutor-{tutor.Id}.{ext}");

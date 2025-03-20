@@ -61,13 +61,15 @@ export type TutorInfo = {
     areasOfExpertise: string[],
     tutoringExperiences: string,
     availability: string,
-    portraitUrl?: File,
+    portraitUrl?: string,
     status: number
 }
 
+export type TutorInfoUpload = Omit<TutorInfo, 'portraitUrl'> & { portrait: File}
+
 export type TutorResult = TutorInfo & {user: UserInfo}
 
-export type TutorInfoWithoutId = Omit<TutorInfo, 'id'>
+export type TutorInfoWithoutId = Omit<TutorInfoUpload, 'id'>
 
 export interface ToggleObject {
     toggleVisibility: () => void
