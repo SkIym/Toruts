@@ -65,7 +65,11 @@ export interface TutorInfo {
     status: number
 }
 
-export type TutorInfoUpload = Omit<TutorInfo, 'portraitUrl'> & { portrait: File}
+export function isTutorInfo(object: TutorInfo | StudentInfo): object is TutorInfo {
+    return 'price' in object;
+}
+
+export type TutorInfoUpload = Omit<TutorInfo, 'portraitUrl'>
 
 export type TutorResult = TutorInfo & {user: UserInfo}
 

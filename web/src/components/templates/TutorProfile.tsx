@@ -1,10 +1,11 @@
 import { TEST } from "@/constants"
 import { Status, TutorInfo } from "../../types"
+import { useRandomString } from "@/hooks"
 
 const TutorProfile = ({ info }: { info: TutorInfo }) => {
     return (
         <div data-testid={TEST.profile('tutor')}>
-            <img src={info.portraitUrl} alt="" className="size-16"/>
+            <img src={`${info.portraitUrl}?random=${useRandomString()}`} alt="" className="size-16"/>
             <h3>Status: {info.status === Status.Active ? 'ACTIVE' : 'INACTIVE'}</h3>
             <p>Education: {info.educAttainment}</p>
             <p>Venue: {info.venue}</p>

@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
-import { signAsTutor, updateAsTutor } from "../../reducers/userReducer";
+import { signAsTutor, updateAsTutor, uploadPicture } from "../../reducers/userReducer";
 import { TutorInfo } from "../../types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,7 +32,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { TEST } from "@/constants";
+import { PATH, PORTRAIT, TEST } from "@/constants";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRandomString } from "@/hooks";
 
 
 
@@ -55,19 +58,6 @@ const TutorSchema = z.object({
     avail: z
         .string()
         .or(z.literal('')),
-    portrait: z
-        .instanceof(File)
-        .refine(
-            (file) =>
-                [
-                  "image/png",
-                  "image/jpeg",
-                  "image/jpg",
-                  "image/svg+xml",
-                  "image/gif",
-                ].includes(file.type),
-              { message: "Invalid image file type" }
-        ),
     mode: z
         .string(),
     status: z
@@ -85,6 +75,7 @@ const areasOfExpSeparator = " "
 const TutorForm = ({ info }: Props) => {
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const tutorForm = useForm<TutorSchemaType>({
         defaultValues: info ? {
@@ -94,12 +85,28 @@ const TutorForm = ({ info }: Props) => {
             areasExp: info.areasOfExpertise.join(' '),
             tutorExp: info.tutoringExperiences,
             avail: info.availability,
-            portrait: undefined,
             mode: info.learningMode.toString(),
             status: info.status.toString()
         }: undefined,
         resolver: zodResolver(TutorSchema),
     });
+
+    const [portrait, setPortrait] = useState<File | null>(null)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [portraitTempUrl, setPortraitUrl] = useState<string>(info ? `${info.portraitUrl}?random=${useRandomString()}` : PORTRAIT.default)
+    const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setPortrait(file)
+            setPortraitUrl(URL.createObjectURL(file))
+        }
+        };
+
+
+    const handlePictureUpload = async () => {
+        if (portrait) await dispatch(uploadPicture(portrait))
+        return
+    }
 
     const handleSubmit: SubmitHandler<TutorSchemaType> = async (formData) => {
         console.log("HELLO?")
@@ -115,7 +122,6 @@ const TutorForm = ({ info }: Props) => {
                         areasOfExpertise: formData.areasExp.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
-                        portrait: formData.portrait,
                         status: parseInt(formData.status)
                     }))
             }
@@ -132,70 +138,52 @@ const TutorForm = ({ info }: Props) => {
                         areasOfExpertise: formData.areasExp.toLowerCase().split(areasOfExpSeparator),
                         tutoringExperiences: formData.tutorExp,
                         availability: formData.avail,
-                        portrait: formData.portrait,
                         status: parseInt(formData.status)
                     }))
+                await handlePictureUpload()
             }
+            navigate(`${PATH.PROFILE.default}`);
         } catch {
             console.log("AWEGAKSHDG")
             return;
         }
     }
+    console.log({'picfromform': info?.portraitUrl})
 
-    console.log(tutorForm.formState.errors);
-    console.log(tutorForm.getValues())
     return <div data-testid={TEST.form('tutor')}>
         <Card>
             <CardHeader>
             <CardTitle className="text-2xl">{info ? "Role information" : "Signing up as a tutor"}</CardTitle>
             <CardDescription></CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-5">
+            <div className="items-center flex flex-row justify-start gap-5 border-2 p-5 rounded-2xl">
+                    <Avatar className="w-[100px] h-[100px]">
+                        <AvatarImage src={portraitTempUrl} />
+                        <AvatarFallback>AVTR</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                            <h1>Profile Picture (optional)</h1>
+                            <div className="flex flex-col items-center gap-4">
+                                <Input
+                                id="picture"
+                                type="file"
+                                data-test-id="picture"
+                                onChange={handleFileInputChange}
+                                className="w-full"
+                                />
+                            </div>
+                    </div>
+                    { info 
+                    ? <Button type="button" onClick={handlePictureUpload}>Upload picture</Button>
+                    : null}
+                    
+             </div>
         <Form {...tutorForm}>
             <form 
                 onSubmit={tutorForm.handleSubmit(handleSubmit)}
                 id="tutor-form"
                 className="space-y-8">
-                <div className="align-middle flex justify-center gap-5">
-                <Avatar>
-                    <AvatarImage src={ info ? info.portraitUrl : ''} className="" />
-                    <AvatarFallback>AVTR</AvatarFallback>
-                </Avatar>
-                <FormField
-                    control={tutorForm.control}
-                    name="portrait"
-                    render={({ field }) => {
-                        // Handle file changes
-                        const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-                        const file = event.target.files?.[0];
-                        if (file) {
-                            // Update the form field value
-                            field.onChange(file);
-                        }
-                        };
-
-                        return (
-                        <FormItem>
-                            <div className="flex flex-row justify-between">
-                            <FormLabel>Profile Picture (optional)</FormLabel>
-                            <FormMessage />
-                            </div>
-                            <FormControl>
-                            <div className="flex flex-col items-center gap-4">
-                                <Input
-                                id="picture"
-                                type="file"
-                                onChange={handleFileChange}
-                                data-test-id="picture"
-                                className="w-full"
-                                />
-                            </div>
-                            </FormControl>
-                        </FormItem>
-                        );
-                    }}
-                    />
-                </div>
               <div className="grid md:grid-cols-2 gap-5 w-2xl">
               <FormField
                   control={tutorForm.control}

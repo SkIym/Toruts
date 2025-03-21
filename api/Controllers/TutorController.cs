@@ -181,23 +181,33 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             
             var tutor = await _context.Tutor.FirstAsync(t => t.Id == id);
-
             using var memoryStream = new MemoryStream();
             await portrait.CopyToAsync(memoryStream);
             var lastIndexOfDot = portrait.FileName.LastIndexOf('.');
-            string ext = portrait.FileName.Substring(lastIndexOfDot + 1);
+            string ext = portrait.FileName[(lastIndexOfDot + 1)..];
 
-            Console.WriteLine(ext);
-            await client.Storage.From("profile-pictures").Upload(
-                memoryStream.ToArray(),
-                $"tutor-{tutor.Id}.{ext}");
-            
+            if (tutor.PortraitUrl == null)
+            {
+                
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+            } 
+            else 
+            {
+                Console.WriteLine("updating");
+                var dot = tutor.PortraitUrl.LastIndexOf('.');
+                string prevExt = tutor.PortraitUrl[(dot + 1)..];
+                await client.Storage.From("profile-pictures").Remove(
+                    $"tutor-{tutor.Id}.{prevExt}");
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+            }
+                
             tutor.PortraitUrl = client.Storage.From("profile-pictures").GetPublicUrl($"tutor-{tutor.Id}.{ext}");
-
-            Console.WriteLine(tutor.PortraitUrl);
-
             await _context.SaveChangesAsync();
-            return Ok(tutor.ToTutorDto());
+            return Ok(tutor.PortraitUrl);
             
         }
 

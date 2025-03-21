@@ -37,10 +37,14 @@ export const PATH =
     }
     
 export const TEST =
-    { page: (page: string) => {`${page}-page`}
-    , form: (form: string) => {`${form}-form`}
-    , button: (button: string) => {`${button}-button`}
-    , input: (input: string) => {`${input}-input`}
-    , select: (select: string) => {`${select}-select`}
-    , profile: (profile: string) => {`${profile}-profile`}
+    { page: (page: string) => `${page}-page`
+    , form: (form: string) => `${form}-form`
+    , button: (button: string) => `${button}-button`
+    , input: (input: string) => `${input}-input`
+    , select: (select: string) => `${select}-select`
+    , profile: (profile: string) => `${profile}-profile`
+    }
+export const PORTRAIT = 
+    {
+        default: 'https://wzyrtbjdztiuwvspkoge.supabase.co/storage/v1/object/public/profile-pictures//default.jpg'
     }

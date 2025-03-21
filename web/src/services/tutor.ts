@@ -6,22 +6,21 @@ import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../type
 const create = async (username: string, creds: TutorInfoWithoutId) => {
     console.log("Requesting to create tutor account")
 
-    const { portrait, ...primary } = creds;
-
-    const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create(username)}`, primary)
-
-    if (portrait !== null) {
-
-        const formData = new FormData();
-        formData.append("portrait", portrait);
-        const { data: dataWithUrl } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.upload(data.id)}`, formData, {
-            headers: {
-            'Content-Type': 'multipart/form-data'
-            }
-        })
-        return dataWithUrl
-    }
+    const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create(username)}`, creds)
     return data
+}
+
+const upload = async (id: number, file: File) => {
+
+    const formData = new FormData();
+    formData.append("portrait", file);
+    const { data } = await axios.post<string>(`${API_ROUTES.TUTOR.upload(id)}`, formData, {
+        headers: {
+        'Content-Type': 'multipart/form-data'
+        }
+    })
+    return data
+
 }
 
 const search = async (query: TutorSearch) => {
@@ -43,5 +42,5 @@ const get = async (username: string) => {
 }
 
 export default {
-    create, search, update, get
+    create, search, update, get, upload
 }
