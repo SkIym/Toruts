@@ -1,4 +1,4 @@
-import { LearningMode, TutorResult } from "@/types";
+import { LearningMode, TutorResult, UserType, StudentInfo } from "@/types";
 import {
 	Dialog,
 	DialogTrigger,
@@ -6,14 +6,19 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogDescription,
+	DialogFooter,
+	DialogClose,
 } from "../ui/dialog";
+import { Button } from "../ui/button";
 import { Children } from "react";
+import { useSelector } from "react-redux";
+import { userInfo } from "os";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
 
 const Emph = ({ children }) => {
-	return <span className="text-orange-500"> {children} </span>;
+	return <span className="text-orange-500">{children}</span>;
 };
 
 const TutorDetails = ({ selectedTutor, callback, ...props }) => {
@@ -26,7 +31,17 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 		}
 		return <div>Hybrid</div>;
 	};
-	console.log(selectedTutor);
+
+	const user = useSelector((state: RootState) => state.user);
+	let data = null;
+	// console.log(user.userT, UserType.STUDENT);
+	if (user.userType == UserType.STUDENT) {
+		// console.log("I AM A STUDENT");
+		const roleInfo: StudentInfo = user.roleInfo;
+		data = roleInfo.areasOfImprovement;
+		// console.log(roleInfo);
+	}
+
 	return (
 		<div className="h-full overflow-y-auto">
 			<div className="flex border-b-2 w-full">
@@ -68,26 +83,29 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 							<DialogDescription className="flex flex-col">
 								<p className="mb-2">Select which one do you need</p>
 								<div className="flex gap-4 justify-center mb-4">
-									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
-										CS 20
-									</div>
-									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
-										CS 21
-									</div>
-									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
-										CS 140
-									</div>
-									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
-										CS 145
-									</div>
+									{data ? (
+										<>
+											{data.map((area) => {
+												return (
+													<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
+														{area}
+													</div>
+												);
+											})}
+										</>
+									) : (
+										<div>No areas to improve upon</div>
+									)}
 								</div>
 								<div className="border-2 p-4 rounded-lg">
-									Before confirming the service, make sure that you have talked
-									to Mr. {selectedTutor.user.lastName} using the contact details
-									displayed and have agreed on the following:
+									<p>
+										Before confirming the service, make sure that you have
+										talked to Mr. {selectedTutor.user.lastName} using the
+										contact details displayed and have agreed on the following:
+									</p>
 									<ul className="list-disc list-inside">
 										<li>
-											<Emph>Advertised</Emph> or bargained price
+											<Emph>Advertised</Emph> or <Emph>bargained</Emph> price
 										</li>
 										<li>
 											<Emph>Frequency</Emph>, and <Emph>Venue</Emph> of the
@@ -96,7 +114,16 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 									</ul>
 								</div>
 							</DialogDescription>
+							<DialogClose asChild>
+								<div className="flex w-full gap-3 justify-center">
+									<Button className="bg-orange-400 hover:bg-orange-500 w-1/2">
+										Confirm
+									</Button>
+									<Button className="w-1/2">Cancel</Button>
+								</div>
+							</DialogClose>
 						</DialogContent>
+						<DialogFooter></DialogFooter>
 					</Dialog>
 				</div>
 			</div>
