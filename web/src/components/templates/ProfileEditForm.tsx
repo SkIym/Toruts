@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { TEST } from "@/constants";
+import { LoadingButton } from "../ui/loadingButton";
+import { useState } from "react";
 
 // Define the Zod schema for the form
 const ProfileEditFormSchema = z.object({
@@ -58,7 +60,9 @@ export const ProfileEditForm = () => {
     },
   });
 
+  const [submittingForm, setSubmittingForm] = useState(false)
   const handleInformation: SubmitHandler<ProfileEditFormSchemaType> = async (formData) => {
+    setSubmittingForm(true)
     try {
       const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
       if (user == null || loggedInUserJSON == null) {
@@ -73,8 +77,10 @@ export const ProfileEditForm = () => {
         })
       );
     } catch (err) {
-      // Optionally handle errors here.
+      console.log(err)
     }
+
+    setSubmittingForm(false)
   };
 
   return (
@@ -150,9 +156,9 @@ export const ProfileEditForm = () => {
                 )}
               />
               <div className="flex flex-row gap-4 justify-end">
-                <Button type="submit" data-testid={TEST.input('update')}>
-                  Save primary information
-                </Button>
+                <LoadingButton loading={submittingForm} disabled={!infoForm.formState.isDirty} type="submit" data-testid={TEST.input('update')}>
+                { submittingForm ? "Saving primary information": "Save primary information"}
+                </LoadingButton>
               </div>
             </form>
           </Form>
