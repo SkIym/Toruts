@@ -5,7 +5,7 @@ import { signAsTutor, updateAsTutor, uploadPicture } from "../../reducers/userRe
 import { TutorInfo } from "../../types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -36,6 +36,7 @@ import { PATH, PORTRAIT, TEST } from "@/constants";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRandomString } from "@/hooks";
+import { LoadingButton } from "../ui/loadingButton";
 
 
 
@@ -102,18 +103,19 @@ const TutorForm = ({ info }: Props) => {
         }
         };
 
-
+    const [uploadingPicture, setUploadingPicture] = useState(false)
     const handlePictureUpload = async () => {
+        setUploadingPicture(true)
         if (portrait) {
             await dispatch(uploadPicture(portrait))
-            console.log('uplaoding picture')
         } 
-            
+        setUploadingPicture(false)    
         return
     }
 
+    const [submittingForm, setSubmittingForm] = useState(false)
     const handleSubmit: SubmitHandler<TutorSchemaType> = async (formData) => {
-        console.log("HELLO?")
+        setSubmittingForm(true)
         try {
             if (info && user) {
                 await dispatch(updateAsTutor(
@@ -151,8 +153,8 @@ const TutorForm = ({ info }: Props) => {
             console.log("AWEGAKSHDG")
             return;
         }
+        setSubmittingForm(false)
     }
-    console.log({'picfromform': info?.portraitUrl})
 
     return <div data-testid={TEST.form('tutor')}>
         <Card>
@@ -179,7 +181,9 @@ const TutorForm = ({ info }: Props) => {
                             </div>
                     </div>
                     { info 
-                    ? <Button type="button" onClick={handlePictureUpload}>Upload picture</Button>
+                    ? <LoadingButton disabled={!portrait} type="button" loading={uploadingPicture} onClick={handlePictureUpload}>
+                        {uploadingPicture ? "Uploading picture" : "Upload picture"}
+                    </LoadingButton>
                     : null}
                     
              </div>
@@ -365,9 +369,13 @@ const TutorForm = ({ info }: Props) => {
                 />
                 <div className="flex flex-row gap-4 justify-end">
                 {info ? 
-                <Button type="submit" data-testid={TEST.button('update')}>Save role information</Button>
+                <LoadingButton loading={submittingForm} disabled={!tutorForm.formState.isDirty} type="submit" data-testid={TEST.button('update')}>
+                    { submittingForm ? "Saving role information": "Save role information"}
+                </LoadingButton>
                 : 
-                <Button type="submit" date-testid={TEST.button('create')}>Create tutor account</Button>}
+                <LoadingButton type="submit" loading={submittingForm} date-testid={TEST.button('create')}>
+                    { submittingForm ? "Creating tutor account": "Create tutor account"}
+                </LoadingButton>}
                 </div>
                 
             </form>
