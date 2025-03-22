@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { TEST } from "@/constants";
+import { PATH, TEST } from "@/constants";
 import { LoadingButton } from "../ui/loadingButton";
 import { useState } from "react";
 
@@ -76,6 +76,7 @@ export const ProfileEditForm = () => {
           phoneNumber: formData.phoneNumber,
         })
       );
+      navigate(PATH.PROFILE.default)
     } catch (err) {
       console.log(err)
     }
