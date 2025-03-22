@@ -1,6 +1,9 @@
 import { TutorResult } from "../../types";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
+const defaultPicture =
+	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
+
 type TutorSearchResult = {
 	id: number;
 	educAttainment: string;
@@ -34,7 +37,10 @@ const TutorSearchResult = ({
 				</CardHeader>
 				<CardContent className="flex gap-10">
 					<img
-						src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
+						// src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
+						src={
+							props.portraitUrl !== "None" ? props.portraitUrl : defaultPicture
+						}
 						alt=""
 						className="h-20 w-20 rounded-full object-cover"
 					/>

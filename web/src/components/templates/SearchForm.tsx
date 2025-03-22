@@ -14,6 +14,9 @@ import { LearningMode, TutorResult } from "@/types";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 
+const defaultPicture =
+	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
+
 const SearchForm = () => {
 	const { ...search } = useField("text");
 	const { ...minPrice } = useField("number");
@@ -142,7 +145,11 @@ const SearchForm = () => {
 						<div className="flex border-b-2 w-full">
 							<div className="p-6 flex gap-5 w-2/3">
 								<img
-									src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
+									src={
+										selectedTutor.portraitUrl !== "None"
+											? selectedTutor.portraitUrl
+											: defaultPicture
+									}
 									alt=""
 									className="h-20 w-20 rounded-full object-cover"
 								/>
