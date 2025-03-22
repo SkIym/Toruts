@@ -75,3 +75,7 @@ export const useErrorNotification = (e: unknown) => {
 export const useSuccessNotification = (message: string) => {
     toast.success(message)
 }
+
+export const useRandomString = () => {
+    return Math.floor(Math.random() * 100).toString();
+}

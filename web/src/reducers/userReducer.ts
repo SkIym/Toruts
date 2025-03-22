@@ -1,5 +1,5 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfoWithoutId, StudentInfoWithoutId, TutorResult, TutorSearch, UserType } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfoWithoutId, StudentInfoWithoutId, TutorResult, TutorSearch, UserType, TutorInfo, isTutorInfo } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student"
@@ -152,6 +152,27 @@ const hasOtherAccount = (user: UserData): boolean => {
         return true
     }
     return false
+}
+
+export const uploadPicture = (file: File) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const user = getLocalUser()
+            if (user && user.roleInfo && isTutorInfo(user.roleInfo)) {
+
+                const tutorId = user.roleInfo.id
+                const url = await tutorService.upload(tutorId, file)
+                user.roleInfo.portraitUrl = url
+                console.log({'pic' : url})
+                updateLocalUser(user);
+                dispatch(setUser(user));
+            }  
+            useSuccessNotification(`You have uploaded your picture!`)
+        } catch (e) {
+            useErrorNotification(e);
+            return Promise.reject();
+        }
+    }
 }
 
 // Sign up as a tutor

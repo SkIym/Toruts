@@ -31,7 +31,7 @@ const setUserInfo = async (username: string, info: UserInfo) => {
 
 const deleteUser = async (username: string) => {
     console.log("delete user reached")
-    const { data } = await axios.delete(`${API_ROUTES.RECORD.delete(username)}${username}`)
+    const { data } = await axios.delete(`${API_ROUTES.RECORD.delete(username)}`)
     return data
 }
 
