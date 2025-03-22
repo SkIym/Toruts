@@ -83,8 +83,6 @@ const SearchForm = () => {
 		return <div>Hybrid</div>;
 	};
 
-	console.log(selectedTutor);
-
 	return (
 		<div className="flex h-200 gap-4">
 			{/* Search Results */}
