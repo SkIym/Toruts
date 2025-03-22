@@ -7,7 +7,7 @@ const HomePage = () => {
 	return (
 		<div data-testid={TEST.page("home")}>
 			<Navbar />
-			<div className="pl-50">
+			<div className="pl-50 pr-50">
 				<SearchForm />
 			</div>
 		</div>
