@@ -12,6 +12,8 @@ using api.Mappers;
 using Microsoft.EntityFrameworkCore;
 using api.Enums;
 using api.Service;
+using Supabase.Storage;
+using System.Security.Cryptography.X509Certificates;
 
 namespace api.Controllers
 {
@@ -159,16 +161,54 @@ namespace api.Controllers
                 AreasOfExpertise = tutorDto.AreasOfExpertise,
                 TutoringExperiences = tutorDto.TutoringExperiences,
                 Availability = tutorDto.Availability,
-                PortraitUrl = tutorDto.PortraitUrl,
+                PortraitUrl = null,
                 Status = tutorDto.Status
             };
-
+           
             await _context.Tutor.AddAsync(tutor);
             user.Tutor = tutor;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = tutor.Id }, tutor.ToTutorDto());
 
+        }
+
+        [HttpPost]
+        [Route("upload/portrait/{id}")]
+        public async Task<IActionResult> Upload([FromRoute] int id, [FromForm] IFormFile portrait, Supabase.Client client)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var tutor = await _context.Tutor.FirstAsync(t => t.Id == id);
+            using var memoryStream = new MemoryStream();
+            await portrait.CopyToAsync(memoryStream);
+            var lastIndexOfDot = portrait.FileName.LastIndexOf('.');
+            string ext = portrait.FileName[(lastIndexOfDot + 1)..];
+
+            if (tutor.PortraitUrl == null)
+            {
+                
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+            } 
+            else 
+            {
+                Console.WriteLine("updating");
+                var dot = tutor.PortraitUrl.LastIndexOf('.');
+                string prevExt = tutor.PortraitUrl[(dot + 1)..];
+                await client.Storage.From("profile-pictures").Remove(
+                    $"tutor-{tutor.Id}.{prevExt}");
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+            }
+                
+            tutor.PortraitUrl = client.Storage.From("profile-pictures").GetPublicUrl($"tutor-{tutor.Id}.{ext}");
+            await _context.SaveChangesAsync();
+            return Ok(tutor.PortraitUrl);
+            
         }
 
         [HttpPut("update/{username}")]
@@ -191,16 +231,8 @@ namespace api.Controllers
             }
 
             _context.Entry(tutor).CurrentValues.SetValues(updateDto);
-
-            // tutor.EducAttainment = updateDto.EducAttainment;
-            // tutor.LearningMode = updateDto.LearningMode;
-            // tutor.Venue = updateDto.Venue;
-            // tutor.Price = updateDto.Price;
-            // tutor.AreasOfExpertise = updateDto.AreasOfExpertise;
-            // tutor.TutoringExperiences = updateDto.TutoringExperiences;
-            // tutor.Availability = updateDto.Availability;
-            // tutor.PortraitUrl = updateDto.PortraitUrl;
-            // tutor.Status = updateDto.Status;
+            _context.Entry(tutor).State = EntityState.Modified;
+            _context.Entry(tutor).Property(x => x.PortraitUrl).IsModified = false;
 
             await _context.SaveChangesAsync();
 

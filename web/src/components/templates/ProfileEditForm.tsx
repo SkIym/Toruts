@@ -21,9 +21,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PATH, TEST } from "@/constants";
+import { LoadingButton } from "../ui/loadingButton";
+import { useState } from "react";
 
 // Define the Zod schema for the form
-const InfoFormSchema = z.object({
+const ProfileEditFormSchema = z.object({
   firstName: z
     .string()
     .nonempty({ message: "required" })
@@ -38,9 +41,9 @@ const InfoFormSchema = z.object({
     .regex(/^[0-9]+$/, "Please enter only numeric characters."),
 });
 
-type InfoFormSchemaType = z.infer<typeof InfoFormSchema>;
+type ProfileEditFormSchemaType = z.infer<typeof ProfileEditFormSchema>;
 
-export const InfoForm = () => {
+export const ProfileEditForm = () => {
   const user = useSelector((state: RootState) => state.user);
   const primaryInfo = user?.primaryInfo;
 
@@ -48,8 +51,8 @@ export const InfoForm = () => {
   const navigate = useNavigate();
 
   // Set up the form using react-hook-form and zod for validation.
-  const infoForm = useForm<InfoFormSchemaType>({
-    resolver: zodResolver(InfoFormSchema),
+  const infoForm = useForm<ProfileEditFormSchemaType>({
+    resolver: zodResolver(ProfileEditFormSchema),
     defaultValues: {
       firstName: primaryInfo?.firstName || "",
       lastName: primaryInfo?.lastName || "",
@@ -57,7 +60,9 @@ export const InfoForm = () => {
     },
   });
 
-  const handleInformation: SubmitHandler<InfoFormSchemaType> = async (formData) => {
+  const [submittingForm, setSubmittingForm] = useState(false)
+  const handleInformation: SubmitHandler<ProfileEditFormSchemaType> = async (formData) => {
+    setSubmittingForm(true)
     try {
       const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
       if (user == null || loggedInUserJSON == null) {
@@ -71,13 +76,16 @@ export const InfoForm = () => {
           phoneNumber: formData.phoneNumber,
         })
       );
+      navigate(PATH.PROFILE.default)
     } catch (err) {
-      // Optionally handle errors here.
+      console.log(err)
     }
+
+    setSubmittingForm(false)
   };
 
   return (
-    <div id="information">
+    <div data-testid={TEST.form('profile-edit')}>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Primary information</CardTitle>
@@ -87,7 +95,6 @@ export const InfoForm = () => {
             <form
               onSubmit={infoForm.handleSubmit(handleInformation)}
               id="user-information-form"
-              data-testid="form"
               className="space-y-8"
             >
               <div className="grid grid-cols-2 gap-5">
@@ -104,7 +111,7 @@ export const InfoForm = () => {
                         <Input
                           placeholder="First Name"
                           {...field}
-                          data-testid="first-name"
+                          data-testid={TEST.input('first-name')}
                         />
                       </FormControl>
                     </FormItem>
@@ -123,7 +130,7 @@ export const InfoForm = () => {
                         <Input
                           placeholder="Last Name"
                           {...field}
-                          data-testid="last-name"
+                          data-testid={TEST.input('last-name')}
                         />
                       </FormControl>
                     </FormItem>
@@ -143,16 +150,16 @@ export const InfoForm = () => {
                       <Input
                         placeholder="Phone Number"
                         {...field}
-                        data-testid="phone-number"
+                        data-testid={TEST.input('phone-number')}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
               <div className="flex flex-row gap-4 justify-end">
-                <Button type="submit" data-testid="update-button">
-                  Save primary information
-                </Button>
+                <LoadingButton loading={submittingForm} disabled={!infoForm.formState.isDirty} type="submit" data-testid={TEST.input('update')}>
+                { submittingForm ? "Saving primary information": "Save primary information"}
+                </LoadingButton>
               </div>
             </form>
           </Form>
