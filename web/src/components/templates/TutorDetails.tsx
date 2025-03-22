@@ -1,7 +1,20 @@
 import { LearningMode, TutorResult } from "@/types";
+import {
+	Dialog,
+	DialogTrigger,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription,
+} from "../ui/dialog";
+import { Children } from "react";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
+
+const Emph = ({ children }) => {
+	return <span className="text-orange-500"> {children} </span>;
+};
 
 const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 	const getLearningMode = (learningMode: LearningMode) => {
@@ -41,12 +54,50 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 				</div>
 
 				<div className="flex w-1/3 items-center justify-end mr-20">
-					<button
-						className="bg-green-200 rounded-2xl p-5 drop-shadow-xs hover:bg-green-300"
-						onClick={callback}
-					>
-						Apply
-					</button>
+					<Dialog className="relative z-10">
+						<DialogTrigger className="bg-green-100 p-2 w-40 rounded-lg hover:bg-green-200">
+							Apply
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle className="text-center">
+									{selectedTutor.user.firstName} {selectedTutor.user.lastName}'s
+									Tutoring Service
+								</DialogTitle>
+							</DialogHeader>
+							<DialogDescription className="flex flex-col">
+								<p className="mb-2">Select which one do you need</p>
+								<div className="flex gap-4 justify-center mb-4">
+									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
+										CS 20
+									</div>
+									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
+										CS 21
+									</div>
+									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
+										CS 140
+									</div>
+									<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
+										CS 145
+									</div>
+								</div>
+								<div className="border-2 p-4 rounded-lg">
+									Before confirming the service, make sure that you have talked
+									to Mr. {selectedTutor.user.lastName} using the contact details
+									displayed and have agreed on the following:
+									<ul className="list-disc list-inside">
+										<li>
+											<Emph>Advertised</Emph> or bargained price
+										</li>
+										<li>
+											<Emph>Frequency</Emph>, and <Emph>Venue</Emph> of the
+											tutoring session
+										</li>
+									</ul>
+								</div>
+							</DialogDescription>
+						</DialogContent>
+					</Dialog>
 				</div>
 			</div>
 

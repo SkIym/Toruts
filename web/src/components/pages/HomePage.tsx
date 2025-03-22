@@ -2,6 +2,14 @@ import { Link } from "react-router-dom";
 import SearchForm from "../templates/SearchForm";
 import { PATH, TEST } from "@/constants";
 import Navbar from "../ui/navbar";
+import {
+	Dialog,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+	DialogContent,
+} from "@/components/ui/dialog";
 
 const HomePage = () => {
 	return (

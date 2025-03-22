@@ -12,7 +12,9 @@ import tutorService from "../../services/tutor";
 import { LearningMode, TutorResult } from "@/types";
 
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+
+import { DialogContent } from "@radix-ui/react-dialog";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
