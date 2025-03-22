@@ -90,14 +90,25 @@ const SearchForm = () => {
 									{...search}
 									data-testid="search"
 									placeholder="Jane Doe, Ellen Joe, etc."
+									className="placeholder:italic"
 								/>
 								<button data-testid="search-button"> Search </button>
 							</div>
 							<div className="flex justify-between">
 								<span>Price: </span>{" "}
-								<Input {...minPrice} data-testid="minPrice" className="w-1/4" />
+								<Input
+									{...minPrice}
+									data-testid="minPrice"
+									className="w-1/4"
+									min={0}
+								/>
 								<span> - </span>
-								<Input {...maxPrice} data-testid="maxPrice" className="w-1/4" />
+								<Input
+									{...maxPrice}
+									data-testid="maxPrice"
+									className="w-1/4"
+									min={0}
+								/>
 							</div>
 						</form>
 					</CardContent>
