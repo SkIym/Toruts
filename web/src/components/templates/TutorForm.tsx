@@ -104,7 +104,11 @@ const TutorForm = ({ info }: Props) => {
 
 
     const handlePictureUpload = async () => {
-        if (portrait) await dispatch(uploadPicture(portrait))
+        if (portrait) {
+            await dispatch(uploadPicture(portrait))
+            console.log('uplaoding picture')
+        } 
+            
         return
     }
 

@@ -231,6 +231,8 @@ namespace api.Controllers
             }
 
             _context.Entry(tutor).CurrentValues.SetValues(updateDto);
+            _context.Entry(tutor).State = EntityState.Modified;
+            _context.Entry(tutor).Property(x => x.PortraitUrl).IsModified = false;
 
             await _context.SaveChangesAsync();
 
