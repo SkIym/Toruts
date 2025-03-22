@@ -27,6 +27,8 @@ const SearchForm = () => {
 	const [tutors, setTutors] = useState<TutorResult[]>([]);
 	const [isReady, setIsReady] = useState(false);
 
+	const [isApplying, setApplying] = useState(false);
+
 	const [selectedTutor, setSelectedTutor] = useState<TutorResult | null>(null);
 
 	useEffect(() => {
@@ -141,7 +143,12 @@ const SearchForm = () => {
 			{/*Tutor Results*/}
 			<div className="min-w-2/3 bg-white border-2 min-h-165 rounded">
 				{selectedTutor ? (
-					<TutorDetails selectedTutor={selectedTutor} />
+					<TutorDetails
+						selectedTutor={selectedTutor}
+						callback={() => {
+							setApplying(!isApplying);
+						}}
+					/>
 				) : (
 					<div className="flex flex-col justify-center items-center h-full">
 						<img

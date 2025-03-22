@@ -3,7 +3,7 @@ import { LearningMode, TutorResult } from "@/types";
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
 
-const TutorDetails = ({ selectedTutor, ...props }) => {
+const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 	const getLearningMode = (learningMode: LearningMode) => {
 		if (learningMode === 0) {
 			return <div>Online</div>;
@@ -41,8 +41,11 @@ const TutorDetails = ({ selectedTutor, ...props }) => {
 				</div>
 
 				<div className="flex w-1/3 items-center justify-end mr-20">
-					<button className="bg-green-200 rounded-2xl p-5 drop-shadow-xs hover:bg-green-300">
-						Apply Now
+					<button
+						className="bg-green-200 rounded-2xl p-5 drop-shadow-xs hover:bg-green-300"
+						onClick={callback}
+					>
+						Apply
 					</button>
 				</div>
 			</div>
