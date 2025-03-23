@@ -81,13 +81,19 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 								</DialogTitle>
 							</DialogHeader>
 							<DialogDescription className="flex flex-col">
-								<p className="mb-2">Select which one do you need</p>
+								<p className="mb-2 text-center w-full mb-4 border-t-2 pt-2">
+									Select which one do you need
+								</p>
 								<div className="flex gap-4 justify-center mb-4">
 									{data ? (
 										<>
 											{data.map((area) => {
 												return (
-													<div className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 text-orange-400 rounded-full">
+													// biome-ignore lint/correctness/useJsxKeyInIterable: i just want a cleaner classname for this div :(
+													<div
+														className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 
+													text-orange-400 rounded-full hover:bg-orange-400 hover:text-white"
+													>
 														{area}
 													</div>
 												);
@@ -119,7 +125,9 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 									<Button className="bg-orange-400 hover:bg-orange-500 w-1/2">
 										Confirm
 									</Button>
-									<Button className="w-1/2">Cancel</Button>
+									<Button className="w-1/2 bg-gray-200 text-black hover:bg-gray-300">
+										Cancel
+									</Button>
 								</div>
 							</DialogClose>
 						</DialogContent>
