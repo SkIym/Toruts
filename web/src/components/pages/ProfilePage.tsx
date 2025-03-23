@@ -158,6 +158,32 @@ const ProfilePage = () => {
 							<AlertDialog>
 								<AlertDialogTrigger>Delete Profile</AlertDialogTrigger>
 
-}
+								<AlertDialogContent>
+									<AlertDialogHeader>Are you sure?</AlertDialogHeader>
+									<AlertDialogDescription>
+										This action cannot be undone. This will permanently delete
+										your account and remove your data from our servers.
+									</AlertDialogDescription>
+									<AlertDialogFooter>
+										<AlertDialogCancel>Cancel</AlertDialogCancel>
+										<AlertDialogAction onClick={handleDelete}>
+											Delete
+										</AlertDialogAction>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+							<Button
+								data-testid={TEST.button("logout")}
+								onClick={handleLogout}
+							>
+								Logout
+							</Button>{" "}
+						</div>
+					</CardContent>
+				</Card>
+			</div>
+		</div>
+	);
+};
 
 export default ProfilePage;
