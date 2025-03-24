@@ -19,8 +19,7 @@ export const router = createBrowserRouter([
         element: <App />,
         children: [
             { path: "", element: <HomePage /> },
-            {
-                path: "profile",
+            { path: "profile",
                 element: (
                     <ProtectedRoute>
                         <UserTypeProtectedRoute>
@@ -33,8 +32,7 @@ export const router = createBrowserRouter([
             { path: "choose_type", element: <ChoosingPage /> },
             { path: "signup-tutor" , element: <SignupPage type={UserType.TUTOR}/>},
             { path: "signup-student" , element: <SignupPage type={UserType.STUDENT}/>},
-            {
-                path: "info",
+            { path: "info",
                 element: (
                     <ProtectedRoute>
                         <InfoPage />
