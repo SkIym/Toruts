@@ -1,37 +1,57 @@
 import { TutorResult } from "../../types";
+import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+
+const defaultPicture =
+	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
 
 type TutorSearchResult = {
-    id: number,
-    educAttainment: string,
-    learningMode: number,
-    venue: string,
-    price: number,
-    areasOfExpertise: string[],
-    tutoringExperiences: string,
-    availability: string,
-    portraitUrl: string,
-    status: number
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-}
+	id: number;
+	educAttainment: string;
+	learningMode: number;
+	venue: string;
+	price: number;
+	areasOfExpertise: string[];
+	tutoringExperiences: string;
+	availability: string;
+	portraitUrl: string;
+	status: number;
+	firstName: string;
+	lastName: string;
+	phoneNumber: string;
+};
 
-const TutorSearchResult = (props: TutorResult) => {
-    return (
-        <div>
-            <span>
-                {props.user.firstName} {props.user.lastName}
-            </span>
-            <br/>
-            <span>
-                {props.price} PHP
-            </span>
-            <br/>
-            <span>
-                {props.availability}
-            </span>
-        </div>
-    )
-}
+const TutorSearchResult = ({
+	user,
+	price,
+	availability,
+	callback,
+	...props
+}) => {
+	return (
+		<div>
+			<Card onClick={callback} className="hover:bg-gray-50">
+				<CardHeader>
+					<b>
+						{user.firstName} {user.lastName}
+					</b>
+				</CardHeader>
+				<CardContent className="flex gap-10">
+					<img
+						// src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
+						src={
+							props.portraitUrl !== "None" ? props.portraitUrl : defaultPicture
+						}
+						alt=""
+						className="h-20 w-20 rounded-full object-cover"
+					/>
+					<div className="flex flex-col">
+						<span>{price} PHP</span>
+						<span>{availability}</span>
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	);
+};
 
-export default TutorSearchResult
+export default TutorSearchResult;

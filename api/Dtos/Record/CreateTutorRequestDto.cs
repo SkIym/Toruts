@@ -24,7 +24,6 @@ namespace api.Dtos.Record
         public List<string>? AreasOfExpertise { get; set; }
         public string? TutoringExperiences { get; set; }
         public string? Availability { get; set; }
-        public string? PortraitUrl { get; set; }
         
         [Required(ErrorMessage = "Status is required.")]
         public Status Status { get; set; }

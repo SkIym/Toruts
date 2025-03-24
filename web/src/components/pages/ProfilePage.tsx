@@ -4,6 +4,7 @@ import { logoutUser, deleteUser, switchMode } from "../../reducers/userReducer";
 import { useNavigate, Link } from "react-router-dom";
 import { StudentInfo, TutorInfo, UserType } from "../../types";
 import TutorProfile from "../templates/TutorProfile";
+import { PATH, TEST } from "@/constants";
 
 import StudentProfile from "../templates/StudentProfile";
 
@@ -16,7 +17,7 @@ const ProfilePage = () => {
         console.log("Handling logout..")
         try {
             await dispatch(logoutUser())
-            navigate("/login")
+            navigate(`${PATH.login}`)
         } catch {
             //
         }
@@ -56,9 +57,9 @@ const ProfilePage = () => {
         if (user) {
             console.log(user)
             if (user.userType == UserType.TUTOR) {
-                navigate("/signup-student")
+                navigate(PATH.SIGNUP.student)
             } else {
-                navigate("/signup-tutor")
+                navigate(PATH.SIGNUP.tutor)
             }
         }
     }
@@ -69,9 +70,9 @@ const ProfilePage = () => {
     const roleInfo = user?.roleInfo
 
     return (
-        <div data-testid="page" id="profile">
-            <h1 data-testid="heading">OMG HELLO {user?.primaryInfo?.firstName}</h1>
-            <Link to={"/"}>
+        <div data-testid={TEST.page('profile')}>
+            <h1>OMG HELLO {user?.primaryInfo?.firstName}</h1>
+            <Link to={`${PATH.home}`}>
                 <h3>Home</h3>
             </Link>
             <div>
@@ -89,15 +90,15 @@ const ProfilePage = () => {
                     ? <StudentProfile info={roleInfo as StudentInfo}></StudentProfile>
                     : null)}
 
-            <button data-testid="edit-button" onClick={() => navigate('/info')}>Edit Profile</button>
-            <button data-testid="delete-button" onClick={handleDelete}>Delete Profile</button>
-            <button data-testid="logout-button" onClick={handleLogout}>Logout</button>
+            <button data-testid={TEST.button('edit')} onClick={() => navigate(`${PATH.PROFILE.edit}`)}>Edit Profile</button>
+            <button data-testid={TEST.button('button')} onClick={handleDelete}>Delete Profile</button>
+            <button data-testid={TEST.button('logout')} onClick={handleLogout}>Logout</button>
 
             {
                 user?.dual 
                 ? 
                 (
-                    <button data-testid="switch-button" onClick={handleSwitch}>
+                    <button data-testid={TEST.button('switch')} onClick={handleSwitch}>
                         {user?.userType === UserType.TUTOR
                         ? "Switch to Student Mode"
                         : "Switch to Tutor Mode"}
@@ -105,7 +106,7 @@ const ProfilePage = () => {
                 )
                 :
                 (
-                    <button data-testid="signup-button" onClick={handleSignup}>
+                    <button data-testid={TEST.button('signup')} onClick={handleSignup}>
                         {user?.userType === UserType.TUTOR
                         ? "Sign up as a student"
                         : "Sign up as a tutor"}

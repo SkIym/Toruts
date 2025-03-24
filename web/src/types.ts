@@ -22,6 +22,12 @@ export enum Status {
     Pending = 2
 }
 
+export enum LearningMode {
+    Online = 0,
+    F2F = 1,
+    Hybrid = 2
+}
+
 export type UserData = {
     userName: string;
     email: string;
@@ -46,7 +52,7 @@ export type StudentInfo = {
 
 export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>
 
-export type TutorInfo = {
+export interface TutorInfo {
     id: number,
     educAttainment: string,
     learningMode: number,
@@ -55,13 +61,19 @@ export type TutorInfo = {
     areasOfExpertise: string[],
     tutoringExperiences: string,
     availability: string,
-    portraitUrl: string,
+    portraitUrl?: string,
     status: number
 }
 
+export function isTutorInfo(object: TutorInfo | StudentInfo): object is TutorInfo {
+    return 'price' in object;
+}
+
+export type TutorInfoUpload = Omit<TutorInfo, 'portraitUrl'>
+
 export type TutorResult = TutorInfo & {user: UserInfo}
 
-export type TutorInfoWithoutId = Omit<TutorInfo, 'id'>
+export type TutorInfoWithoutId = Omit<TutorInfoUpload, 'id'>
 
 export interface ToggleObject {
     toggleVisibility: () => void
