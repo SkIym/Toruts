@@ -1,27 +1,13 @@
-import { LearningMode, TutorResult, UserType, StudentInfo } from "@/types";
-import {
-	Dialog,
-	DialogTrigger,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogDescription,
-	DialogFooter,
-	DialogClose,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
-import { Children } from "react";
+import { LearningMode, StudentMatchInfo, TutorInfo, TutorResult, UserType } from "@/types";
+import { RootState } from "store";
 import { useSelector } from "react-redux";
-import { userInfo } from "os";
+import TutorConfirmationForm from "./TutorConfirmationForm";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
 
-const Emph = ({ children }) => {
-	return <span className="text-orange-500">{children}</span>;
-};
 
-const TutorDetails = ({ selectedTutor, callback, ...props }) => {
+const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult}) => {
 	const getLearningMode = (learningMode: LearningMode) => {
 		if (learningMode === 0) {
 			return <div>Online</div>;
@@ -33,15 +19,7 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 	};
 
 	const user = useSelector((state: RootState) => state.user);
-	let data = null;
-	// console.log(user.userT, UserType.STUDENT);
-	if (user.userType == UserType.STUDENT) {
-		// console.log("I AM A STUDENT");
-		const roleInfo: StudentInfo = user.roleInfo;
-		data = roleInfo.areasOfImprovement;
-		// console.log(roleInfo);
-	}
-
+    console.log(selectedTutor)
 	return (
 		<div className="h-full overflow-y-auto">
 			<div className="flex border-b-2 w-full">
@@ -57,7 +35,7 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 					/>
 					<div className="flex flex-col">
 						<b>
-							{selectedTutor.user.firstName} {selectedTutor.user.lastName}
+							{selectedTutor.firstName} {selectedTutor.lastName}
 						</b>
 						<span>{selectedTutor.educAttainment}</span>
 					</div>
@@ -67,73 +45,10 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 						<span>{getLearningMode(selectedTutor.learningMode)}</span>
 					</div>
 				</div>
-
-				<div className="flex w-1/3 items-center justify-end mr-20">
-					<Dialog className="relative z-10">
-						<DialogTrigger className="bg-green-100 p-2 w-40 rounded-lg hover:bg-green-200">
-							Apply
-						</DialogTrigger>
-						<DialogContent>
-							<DialogHeader>
-								<DialogTitle className="text-center">
-									{selectedTutor.user.firstName} {selectedTutor.user.lastName}'s
-									Tutoring Service
-								</DialogTitle>
-							</DialogHeader>
-							<DialogDescription className="flex flex-col">
-								<p className="mb-2 text-center w-full mb-4 border-t-2 pt-2">
-									Select which one do you need
-								</p>
-								<div className="flex gap-4 justify-center mb-4">
-									{data ? (
-										<>
-											{data.map((area) => {
-												return (
-													// biome-ignore lint/correctness/useJsxKeyInIterable: i just want a cleaner classname for this div :(
-													<div
-														className="border-2 border-orange-400 pl-2 pr-2 pt-1 pb-1 
-													text-orange-400 rounded-full hover:bg-orange-400 hover:text-white"
-													>
-														{area}
-													</div>
-												);
-											})}
-										</>
-									) : (
-										<div>No areas to improve upon</div>
-									)}
-								</div>
-								<div className="border-2 p-4 rounded-lg">
-									<p>
-										Before confirming the service, make sure that you have
-										talked to Mr. {selectedTutor.user.lastName} using the
-										contact details displayed and have agreed on the following:
-									</p>
-									<ul className="list-disc list-inside">
-										<li>
-											<Emph>Advertised</Emph> or <Emph>bargained</Emph> price
-										</li>
-										<li>
-											<Emph>Frequency</Emph>, and <Emph>Venue</Emph> of the
-											tutoring session
-										</li>
-									</ul>
-								</div>
-							</DialogDescription>
-							<DialogClose asChild>
-								<div className="flex w-full gap-3 justify-center">
-									<Button className="bg-orange-400 hover:bg-orange-500 w-1/2">
-										Confirm
-									</Button>
-									<Button className="w-1/2 bg-gray-200 text-black hover:bg-gray-300">
-										Cancel
-									</Button>
-								</div>
-							</DialogClose>
-						</DialogContent>
-						<DialogFooter></DialogFooter>
-					</Dialog>
-				</div>
+                { user?.userType === UserType.STUDENT 
+                ? <TutorConfirmationForm tutor={selectedTutor}/>
+                : null
+                }  
 			</div>
 
 			<div className="bg-gray-100 w-full p-4 flex flex-col border-b-2">
@@ -149,6 +64,14 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 			<div className="w-full p-4 flex flex-col border-t-2">
 				<b>Prior Experience</b>
 				<p>{selectedTutor.tutoringExperiences}</p>
+			</div>
+            <div className="w-full p-4 flex flex-col border-t-2">
+				<b>Current Tutees</b>
+				{selectedTutor.matchedStudents?.map((s: StudentMatchInfo) => 
+                    {
+                        return <p>{s.firstName} {s.lastName}</p>
+                    }
+                )}
 			</div>
 			<p className="w-full p-4 border-t-2">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet

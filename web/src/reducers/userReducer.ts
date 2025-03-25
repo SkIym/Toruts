@@ -1,8 +1,9 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfoWithoutId, StudentInfoWithoutId, TutorResult, TutorSearch, UserType, TutorInfo, isTutorInfo } from "../types";
+import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfoWithoutId, StudentInfoWithoutId, TutorResult, TutorSearch, UserType, isTutorInfo, CreateMatchInfo } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student"
+import matchService from "../services/match";
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 
@@ -294,6 +295,26 @@ export const switchMode = (toUserType: UserType, username: string) => {
         } catch (e) {
             useErrorNotification(e)
             return Promise.reject()
+        }
+    }
+}
+
+export const matchWithTutor = (username: string, creds: CreateMatchInfo) => {
+    return async (dispatch: Dispatch) => {
+        try {
+            
+            const studentData = await matchService.create(username, creds);
+            const user = getLocalUser();
+            if (user) {
+                
+                user.roleInfo = studentData
+                updateLocalUser(user);
+                dispatch(setUser(user));
+            }
+            useSuccessNotification(`Storing`)
+        } catch (e) {
+            useErrorNotification(e);
+            return Promise.reject();
         }
     }
 }

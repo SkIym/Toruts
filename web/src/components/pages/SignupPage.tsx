@@ -12,7 +12,7 @@ const SignupPage = ({ type }: { type: UserType | null }) => {
       child = <TutorForm />;
       break;
     case UserType.STUDENT:
-      child = <StudentForm info={null}/>;
+      child = <StudentForm/>;
       break;
     default:
       child =  <SignUpForm />;

@@ -44,7 +44,9 @@ namespace api.Controllers
                 return NotFound(username);
             }
 
-            var student = await _context.Student.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var student = await _context.Student
+                .Include(s => s.Matches)
+                .FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             if (student == null)
             {
@@ -57,9 +59,11 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] string id)
         {
-            var student = await _context.Student.FindAsync(id);
+            var student = await _context.Student
+                .Include(s => s.Matches)
+                .FirstOrDefaultAsync(t => t.UserId == id);
 
             if (student == null)
             {
@@ -119,7 +123,9 @@ namespace api.Controllers
                 return NotFound($"User '{username}' does not exist");
             }
 
-            var student = await _context.Student.FirstOrDefaultAsync(s => s.UserId == user.Id);
+            var student = await _context.Student
+                .Include(s => s.Matches)
+                .FirstOrDefaultAsync(s => s.UserId == user.Id);
             if (student == null)
             {
                 return NotFound($"User '{username}' does not have a student profile");

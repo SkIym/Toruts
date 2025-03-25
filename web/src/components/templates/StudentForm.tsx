@@ -1,75 +1,155 @@
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../store"
-import { useField } from "../../hooks"
 import { signAsStudent, updateStudent } from "../../reducers/userReducer"
-import { StudentInfo, UserData } from "../../types"
-import { UserType } from "../../types"
+import { StudentInfo, } from "../../types"
 import { useNavigate } from "react-router-dom"
-import { TEST } from "@/constants"
+import { PATH, TEST } from "@/constants"
+import { z } from "zod"
+import { useForm, SubmitHandler } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+      Card,
+      CardContent,
+      CardDescription,
+      CardHeader,
+      CardTitle,
+} from "@/components/ui/card"
+import { LoadingButton } from "../ui/loadingButton";
 
-const StudentForm = ({info}: {info: StudentInfo | null }) => {
+const StudentSchema = z.object({
+    areasImp: z
+        .string(),
+    degree: z
+        .string()
+        .optional()
+})
 
-    const { reset: areasReset, ...areas } = useField("text", info?.areasOfImprovement[0])
-    const { reset: degreeReset, ...degree } = useField("text", info?.degreeProgram)
+type StudentSchemaType = z.infer<typeof StudentSchema>
+
+type Props = {
+    info?: StudentInfo
+}
+
+const areasImpSeparator = " "
+
+const StudentForm = ({ info }: Props) => {
+
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        try {
-            const loggedInUserJson = window.localStorage.getItem("loggedInUser")
-            if (loggedInUserJson == null) {
-                throw "not logged in"
-            }
+    console.log(info)
+    const studentForm = useForm<StudentSchemaType>({
+        defaultValues: info ? {
+            areasImp: info.areasOfImprovement.join(" "),
+            degree: info.degreeProgram || undefined
+        }: undefined,
+        resolver: zodResolver(StudentSchema)
+    })
 
-            const user: UserData = JSON.parse(loggedInUserJson)
-
-            await dispatch(signAsStudent(user.userName, {
-                areasOfImprovement: areas.value.split(","),
-                degreeProgram: degree.value
-            }))
-            areasReset()
-            degreeReset()
-            navigate('/profile')
-        } catch (e) {
-            console.log(e)
-            return
-        }
-    }
-
-    const handleUpdate = async () => {
-        const info = user?.roleInfo as StudentInfo
-            try {
-                if (user)
+    const [submittingForm, setSubmittingForm] = useState(false)
+    const handleSubmit: SubmitHandler<StudentSchemaType> = async (formData) => {
+        setSubmittingForm(true)
+       try {
+            if (info && user) {
                     await dispatch(updateStudent(
                         user.userName,
+                           {
+                               areasOfImprovement: formData.areasImp.toLowerCase().split(areasImpSeparator),
+                               degreeProgram: formData.degree
+                           }))
+                   }
+                   // create
+            else if (user) {
+                await dispatch(signAsStudent(
+                    user.userName,
                         {
-                            areasOfImprovement: areas.value ? [areas.value] : info.areasOfImprovement,
-                            degreeProgram: degree.value
+                            areasOfImprovement: formData.areasImp.toLowerCase().split(areasImpSeparator),
+                            degreeProgram: formData.degree
                         }))
-                navigate("/profile");
-            } catch {
-                return;
-            }
+
+                   }
+                   navigate(`${PATH.PROFILE.default}`);
+               } catch {
+                   return;
+               }
+               setSubmittingForm(false)
     }
 
     return <div data-testid={TEST.form('student')}>
-        <h3>Signing up as a student</h3>
-        <form onSubmit={handleSubmit}>
-            <div>
-                <span>Areas of Improvement [optional]:</span>
-                <input {...areas} data-testid={TEST.input('areas')} />
-            </div>
-            <div>
-                <span>Degree Program [optional]:</span>
-                <input {...degree} data-testid={TEST.input('degrees')}  pattern="[A-Za-z\s]+" title="Please enter only alphabetical characters."/>
-            </div>
-            {user?.userType === UserType.STUDENT
-                        ? <button data-testid={TEST.button('update')} type="button" onClick={handleUpdate}>Update student information</button>
-                        : <button data-testid={TEST.button('create')} type="submit">Create student account</button>}
-            {/* <button type="submit">Create student account</button> */}
-        </form>
+        <Card>
+            <CardHeader>
+            <CardTitle className="text-2xl"> {info ? "Role information" : "Signing up as a student"}
+            </CardTitle>
+            <CardDescription></CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...studentForm}>
+                    <form 
+                        onSubmit={studentForm.handleSubmit(handleSubmit)}
+                        id="student-form"
+                        className="space-y-8"
+                    >
+                    <FormField
+                    control={studentForm.control}
+                    name="areasImp"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Subject areas you would like to improve in</FormLabel>
+                            <FormMessage />
+                            <FormControl>
+                            <Input
+                                placeholder="Areas of Improvement"
+                                {...field}
+                                data-test-id={TEST.input('areas')}
+                            />
+                            </FormControl>
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                    control={studentForm.control}
+                    name="degree"
+                    render={({ field }) => (
+                        <FormItem>
+                            <div className="flex flex-row justify-between"> 
+                                <FormLabel>Degree Program (optional)</FormLabel>
+                                <FormMessage />
+                            </div>
+                            <FormControl>
+                            <Input
+                                placeholder="Degree Program"
+                                {...field}
+                                data-test-id={TEST.input('areas')}
+                            />
+                            </FormControl>
+                        </FormItem>
+                        )}
+                    />
+                    <div className="flex flex-row gap-4 justify-end">
+                        {info ? 
+                        <LoadingButton loading={submittingForm} disabled={!studentForm.formState.isDirty} type="submit" data-testid={TEST.button('update')}>
+                            { submittingForm ? "Saving role information": "Save role information"}
+                        </LoadingButton>
+                        : 
+                        <LoadingButton type="submit" loading={submittingForm} date-testid={TEST.button('create')}>
+                            { submittingForm ? "Creating student account": "Create student account"}
+                        </LoadingButton>}
+                    </div>
+                    </form>
+                </Form>
+            </CardContent>
+        </Card>
     </div>
 }
 

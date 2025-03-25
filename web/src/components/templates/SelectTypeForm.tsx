@@ -24,7 +24,7 @@ const SelectTypeForm = () => {
                     <div>
                       <h1 className="page-title font-bold text-gray-900">Who are you?</h1>
                       <Button type="button" onClick={toggleForm}>I'm a tutor</Button>
-                        <StudentForm info={null}></StudentForm>
+                        <StudentForm></StudentForm>
                     </div>
                 }
         </div>
