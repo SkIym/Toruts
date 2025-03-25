@@ -5,7 +5,6 @@ import { signAsTutor, updateAsTutor, uploadPicture } from "../../reducers/userRe
 import { TutorInfo } from "../../types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,

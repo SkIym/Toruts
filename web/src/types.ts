@@ -47,7 +47,7 @@ export type UserInfo = {
 export type StudentInfo = {
     id: number,
     areasOfImprovement: string[],
-    degreeProgram: string
+    degreeProgram?: string
 }
 
 export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>
