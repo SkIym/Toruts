@@ -20,6 +20,9 @@ export const API_ROUTES =
         , upload: (id: number) => `${SERVER_URL}tutors/upload/portrait/${id}`
         , search: `${SERVER_URL}tutors/search/`
         }
+    , MATCH:
+        { create: (username: string) => `${SERVER_URL}matches/create/${username}`
+        }
     }
 export const PATH = 
     { home: '/'

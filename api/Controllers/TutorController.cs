@@ -38,7 +38,12 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var tutorList = await _context.Tutor.ToListAsync();
+            var tutorList = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .ToListAsync();
             var tutors = tutorList.Select(t => t.ToTutorDto());
 
             return Ok(tutors);
@@ -61,7 +66,12 @@ namespace api.Controllers
                 return NotFound(username);
             }
 
-            var tutor = await _context.Tutor.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             // If user not found, return 404 Not Found
             if (tutor == null)
@@ -78,6 +88,9 @@ namespace api.Controllers
         {
             // build query first
             var tutorsQuery = _context.Tutor
+                                .Include(t => t.Matches)
+                                    .ThenInclude(m => m.Student)
+                                        .ThenInclude(s => s.User)
                                 .Include(t => t.User)
                                 .AsQueryable();
 
@@ -105,15 +118,23 @@ namespace api.Controllers
             }
 
             // then execute
-            var tutors = await tutorsQuery.ToListAsync();
+            var tutors = await tutorsQuery
+                    .Select(t => t.ToTutorResultDto())
+                    .ToListAsync();
+                   
             return Ok(tutors);
         }
 
         // GET endpoint to get tutor by id
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] string id)
         {
-            var tutor = await _context.Tutor.FindAsync(id);
+            var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.UserId == id);
 
             // If user not found, return 404 Not Found
             if (tutor == null)
@@ -224,7 +245,12 @@ namespace api.Controllers
                 return NotFound($"User '{username}' does not exist");
             }
 
-            var tutor = await _context.Tutor.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.UserId == user.Id);
             if (tutor == null)
             {
                 return NotFound($"User '{username}' does not have a tutor profile");

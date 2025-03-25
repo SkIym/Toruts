@@ -1,28 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Enums;
 
-namespace api.Models
+
+namespace api.Dtos.Record
 {
-    public class Tutor
+    public class TutorResultDto : RoleDto
     {
         public int Id { get; set; }
-        public string EducAttainment { get; set; } = string.Empty;
+        [Required]
+        public string EducAttainment { get; set; } 
+        [Required]
         public LearningModal LearningMode { get; set; } 
-        public string Venue { get; set; } = string.Empty;
+        [Required]
+        public string Venue { get; set; }
+        [Required]
         public double Price { get; set; }
         public List<string>? AreasOfExpertise { get; set; }
         public string? TutoringExperiences { get; set; } 
         public string? Availability { get; set; }
-        public ICollection<Match> Matches { get; set; } = new List<Match>();
         public string? PortraitUrl { get; set; } 
         public Status Status { get; set; } 
-        // Foreign key to  User (Identity User uses ids of type string)
-        public required string UserId { get; set; }
 
-        // Navigation property
-        public required User User { get; set; } 
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber {get; set; }
+
+        public List<StudentMatchDto>? MatchedStudents { get; set; }
     }
+
 }

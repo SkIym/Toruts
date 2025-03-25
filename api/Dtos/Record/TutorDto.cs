@@ -24,6 +24,15 @@ namespace api.Dtos.Record
         public string? Availability { get; set; }
         public string? PortraitUrl { get; set; } 
         public Status Status { get; set; } 
+
+        public List<StudentMatchDto>? MatchedStudents { get; set; }
+    }
+
+    public class StudentMatchDto
+    {
+        public int Id { get; set; }
+        public required string FirstName { get; set; } 
+        public required string LastName { get; set; } 
     }
 
     public class UpdateTutorDto
