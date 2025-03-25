@@ -9,9 +9,17 @@ namespace api.Dtos.Record
         public List<string>? AreasOfImprovement { get; set; }
         public string? DegreeProgram { get; set; }
 
-        public required string UserId { get; set; }
+        public List<TutorMatchDto>? MatchedTutors { get; set; }
 
+    }
 
+    public class TutorMatchDto
+    {
+        public int Id { get; set; }
+        public required string FirstName { get; set; } 
+        public required string LastName { get; set; } 
+
+        public string? PortraitUrl { get; set; }
     }
     
     public class UpdateStudentDto

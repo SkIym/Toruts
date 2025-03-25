@@ -91,7 +91,7 @@ namespace api.Controllers
             return Ok(tutorList);
         }
 
-         [HttpGet]
+            [HttpGet]
         [Route("tutor/{id}")]
         public async Task<IActionResult> GetTutees([FromRoute] int id)
         {

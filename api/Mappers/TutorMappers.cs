@@ -21,7 +21,15 @@ namespace api.Mappers
                 TutoringExperiences = tutorModel.TutoringExperiences,
                 Availability = tutorModel.Availability,
                 PortraitUrl = tutorModel.PortraitUrl,
-                Status = tutorModel.Status
+                Status = tutorModel.Status,
+                MatchedStudents = tutorModel.Matches?
+                    .Select(m => new StudentMatchDto
+                    {
+                        Id = m.StudentId,
+                        FirstName = m.Student.User.FirstName,
+                        LastName = m.Student.User.LastName
+                    })
+                    .ToList()
             };
         }
 
