@@ -28,7 +28,13 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var studentList = await _context.Student.ToListAsync();
+
+            var studentList = await _context.Student
+                .Include(s => s.Matches)
+                    .ThenInclude(m => m.Tutor)
+                        .ThenInclude(t => t.User)
+                .Include(s => s.User)
+                .ToListAsync();
             var student = studentList.Select(t => t.ToStudentDto());
             return Ok(student);
         }
@@ -46,6 +52,9 @@ namespace api.Controllers
 
             var student = await _context.Student
                 .Include(s => s.Matches)
+                    .ThenInclude(m => m.Tutor)
+                        .ThenInclude(t => t.User)
+                .Include(s => s.User)
                 .FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             if (student == null)
@@ -63,6 +72,9 @@ namespace api.Controllers
         {
             var student = await _context.Student
                 .Include(s => s.Matches)
+                    .ThenInclude(m => m.Tutor)
+                        .ThenInclude(t => t.User)
+                .Include(s => s.User)
                 .FirstOrDefaultAsync(t => t.UserId == id);
 
             if (student == null)
@@ -125,6 +137,9 @@ namespace api.Controllers
 
             var student = await _context.Student
                 .Include(s => s.Matches)
+                    .ThenInclude(m => m.Tutor)
+                        .ThenInclude(t => t.User)
+                .Include(s => s.User)
                 .FirstOrDefaultAsync(s => s.UserId == user.Id);
             if (student == null)
             {
