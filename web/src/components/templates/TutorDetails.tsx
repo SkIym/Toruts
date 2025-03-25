@@ -139,13 +139,12 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 
 			<div className="bg-gray-100 w-full p-4 flex flex-col border-b-2">
 				<b>Areas of Expertise</b>
-				{selectedTutor.areasOfExpertise.map((exp: string) => (
-					// biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
-
-					<div>
-						<Badge>He</Badge>
-					</div>
-				))}
+				<div className="flex flex-col gap-2">
+					{selectedTutor.areasOfExpertise.map((exp: string) => (
+						// biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
+						<Badge>{exp}</Badge>
+					))}
+				</div>
 			</div>
 			<div className="w-full p-4 flex flex-col">
 				<b>Tutor Availability</b>
