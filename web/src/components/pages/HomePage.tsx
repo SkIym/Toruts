@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import SearchForm from "../templates/SearchForm";
 import { PATH, TEST } from "@/constants";
-import Navbar from "../ui/navbar";
 import {
 	Dialog,
 	DialogDescription,
@@ -18,8 +17,7 @@ const HomePage = () => {
 	
 	return (
 		<div data-testid={TEST.page("home")}>
-			<Navbar />
-			<div className="pl-50 pr-50">
+			<div className="pl-50 pr-50 pt-10">
 				<SearchForm initialQuery={searchQuery} />
 			</div>
 		</div>

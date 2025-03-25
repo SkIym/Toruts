@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { getLoggedInUser } from './reducers/userReducer'
 import { Toaster } from "@/components/ui/sonner"
 import "./index.css"
-import NavBar from "./components/molecules/NavigationBar"
+import NavBar from "./components/ui/navigationBar"
 
 const App = () => {
 
