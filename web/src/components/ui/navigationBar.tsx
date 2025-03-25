@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logoutUser } from "@/reducers/userReducer";
 import { useState } from "react";
 import { Input } from "./input";
