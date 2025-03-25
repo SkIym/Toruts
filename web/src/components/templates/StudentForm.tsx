@@ -6,14 +6,34 @@ import { StudentInfo, UserData } from "../../types"
 import { UserType } from "../../types"
 import { useNavigate } from "react-router-dom"
 import { TEST } from "@/constants"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
 
-const StudentForm = ({info}: {info: StudentInfo | null }) => {
+const StudentSchema = z.object({
+    areasImp: z
+        .coerce.string(),
+    degree: z
+        .string()
+        .optional(),
+})
 
-    const { reset: areasReset, ...areas } = useField("text", info?.areasOfImprovement[0])
-    const { reset: degreeReset, ...degree } = useField("text", info?.degreeProgram)
+type StudentSchemaType = z.infer<typeof StudentSchema>
+
+type Props = {
+    info?: StudentInfo
+}
+
+const StudentForm = ({ info }: Props) => {
+
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate();
+
+    const StudentForm = useForm<StudentSchemaType>({
+        defaultValues: info ? {
+            areasImp:
+        }
+    })
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
