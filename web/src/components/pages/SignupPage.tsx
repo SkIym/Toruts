@@ -19,7 +19,7 @@ const SignupPage = ({ type }: { type: UserType | null }) => {
   }
 
   return (
-    <div data-testid={TEST.page('signup')} className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 flex-col">
+    <div data-testid={TEST.page('signup')} className="flex flex-auto h-10/11 w-full items-center justify-center p-6 md:p-10 flex-col">
       <div className="w-full max-w-4xl">
         {child}
       </div>
