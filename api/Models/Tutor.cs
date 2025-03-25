@@ -16,7 +16,7 @@ namespace api.Models
         public List<string>? AreasOfExpertise { get; set; }
         public string? TutoringExperiences { get; set; } 
         public string? Availability { get; set; }
-        public List<Match>? Matches { get; set; } 
+        public ICollection<Match> Matches { get; set; } = new List<Match>();
         public string? PortraitUrl { get; set; } 
         public Status Status { get; set; } 
         // Foreign key to  User (Identity User uses ids of type string)
