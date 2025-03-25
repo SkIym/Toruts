@@ -29,7 +29,6 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("create/{username}")]
-
         public async Task<IActionResult> CreateMatch([FromRoute] string username, [FromBody] CreateMatchRequestDto matchDto)
         {
             var user = await _userManager.FindByNameAsync(username);
@@ -60,6 +59,14 @@ namespace api.Controllers
                 Price = matchDto.Price
             };
 
+            
+
+            tutor.Matches ??= new List<Match>();
+            tutor.Matches.Add(match);
+            
+            student.Matches ??= new List<Match>();
+            student.Matches.Add(match);
+            
             await _context.Match.AddAsync(match);
             await _context.SaveChangesAsync();
 
