@@ -11,6 +11,8 @@ namespace api.Models
         public List<string>? AreasOfImprovemnt { get; set; } = [];
         public string? DegreeProgram { get; set; } = string.Empty;
 
+        public List<Match>? Matches { get; set; } 
+
         // Foreign key to  User (Identity User uses ids of type string)
         public required string UserId { get; set; }
 
