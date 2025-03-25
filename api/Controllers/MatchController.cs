@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Match;
+using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +63,13 @@ namespace api.Controllers
             await _context.Match.AddAsync(match);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            var studentWithMatches = await _context.Student
+                    .Include(s => s.Matches)
+                        .ThenInclude(m => m.Tutor)
+                            .ThenInclude(t => t.User)
+                    .FirstOrDefaultAsync(s => s.Id == student.Id);
+
+            return Ok(studentWithMatches.ToStudentDto());
 
         }
 

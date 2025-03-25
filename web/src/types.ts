@@ -48,6 +48,7 @@ export type StudentInfo = {
     id: number,
     areasOfImprovement: string[],
     degreeProgram?: string
+    matchedTutors?: TutorMatchInfo[]
 }
 
 export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>
@@ -62,7 +63,8 @@ export interface TutorInfo {
     tutoringExperiences: string,
     availability: string,
     portraitUrl?: string,
-    status: number
+    status: number,
+    matchedStudents?: StudentMatchInfo[]
 }
 
 export function isTutorInfo(object: TutorInfo | StudentInfo): object is TutorInfo {
@@ -71,7 +73,7 @@ export function isTutorInfo(object: TutorInfo | StudentInfo): object is TutorInf
 
 export type TutorInfoUpload = Omit<TutorInfo, 'portraitUrl'>
 
-export type TutorResult = TutorInfo & {user: UserInfo}
+export type TutorResult = TutorInfo & {firstName: string, lastName: string, phoneNumber: string}
 
 export type TutorInfoWithoutId = Omit<TutorInfoUpload, 'id'>
 
@@ -84,4 +86,23 @@ export type TutorSearch = {
     query: string,
     minPrice: number | null,
     maxPrice: number | null
+}
+
+export interface CreateMatchInfo {
+    tutorId: number,
+    subject: string,
+    price: number,
+}
+
+export interface StudentMatchInfo {
+    id: number,
+    firstName: string,
+    lastName: string
+}
+
+export interface TutorMatchInfo {
+    id: number,
+    firstName: string,
+    lastName: string,
+    portraitUrl?: string
 }

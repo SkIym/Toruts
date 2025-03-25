@@ -11,13 +11,7 @@ import TutorDetails from "./TutorDetails";
 import tutorService from "../../services/tutor";
 import { LearningMode, TutorResult } from "@/types";
 
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Button } from "@/components/ui/button";
-
-import { DialogContent } from "@radix-ui/react-dialog";
-
-const defaultPicture =
-  "https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
+import { Card, CardContent } from "../ui/card";
 
 const SearchForm = ({ initialQuery = "" }) => {
   const { ...search } = useField("text");
@@ -127,7 +121,7 @@ const SearchForm = ({ initialQuery = "" }) => {
                   return (
                     // biome-ignore lint/correctness/useJsxKeyInIterable: wtf is going on
                     <TutorSearchResult
-                      {...tutor}
+                      tutor={tutor}
                       callback={() => {
                         setSelectedTutor(tutor);
                       }}
@@ -145,9 +139,6 @@ const SearchForm = ({ initialQuery = "" }) => {
         {selectedTutor ? (
           <TutorDetails
             selectedTutor={selectedTutor}
-            callback={() => {
-              setApplying(!isApplying);
-            }}
           />
         ) : (
           <div className="flex flex-col justify-center items-center h-full">

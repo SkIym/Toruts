@@ -105,7 +105,10 @@ namespace api.Controllers
             }
 
             // then execute
-            var tutors = await tutorsQuery.ToListAsync();
+            var tutors = await tutorsQuery
+                    .Select(t => t.ToTutorResultDto())
+                    .ToListAsync();
+                   
             return Ok(tutors);
         }
 
