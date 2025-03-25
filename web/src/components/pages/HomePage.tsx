@@ -12,9 +12,9 @@ import {
 
 const HomePage = () => {
 	const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const searchQuery = queryParams.get("query") || "";
-	
+	const queryParams = new URLSearchParams(location.search);
+	const searchQuery = queryParams.get("query") || "";
+
 	return (
 		<div data-testid={TEST.page("home")}>
 			<div className="pl-50 pr-50 pt-10">

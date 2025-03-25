@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import { Children } from "react";
 import { useSelector } from "react-redux";
 import { userInfo } from "os";
+import { Badge } from "../ui/badge";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
@@ -138,8 +139,12 @@ const TutorDetails = ({ selectedTutor, callback, ...props }) => {
 
 			<div className="bg-gray-100 w-full p-4 flex flex-col border-b-2">
 				<b>Areas of Expertise</b>
-				{selectedTutor.areasOfExpertise.map((exp) => (
-					<div>{exp}</div>
+				{selectedTutor.areasOfExpertise.map((exp: string) => (
+					// biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
+
+					<div>
+						<Badge>He</Badge>
+					</div>
 				))}
 			</div>
 			<div className="w-full p-4 flex flex-col">

@@ -7,7 +7,7 @@ import TutorProfile from "../templates/TutorProfile";
 import { PATH, TEST } from "@/constants";
 
 import StudentProfile from "../templates/StudentProfile";
-import Navbar from "../ui/navbar";
+import Navbar from "../ui/navigationBar";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
 
@@ -89,33 +89,31 @@ const ProfilePage = () => {
 
 	return (
 		<div data-testid={TEST.page("profile")} className="w-full">
-			<Navbar />
-
 			<div className="p-10 pl-30 pr-30 flex w-full justify-center gap-5">
-				<Card className="w-2/3">
+				<Card className="w-3/4">
 					<CardHeader>
-						<b>
-							{user?.primaryInfo?.firstName} {user?.primaryInfo?.lastName}
+						<b className="text-2xl">
+							Welcome Back {user?.primaryInfo?.firstName}!
 						</b>
-						<Avatar>
-							{user?.userType == UserType.TUTOR ? (
-								<AvatarImage src={user?.roleInfo.portraitUrl} />
-							) : (
-								<AvatarImage />
-							)}
-						</Avatar>
 					</CardHeader>
 					<CardContent>
-						<div className="flex w-full gap-5">
-							<div>
+						<div className="flex w-full gap-5 items-center">
+							<Avatar className="w-25 h-25">
+								{user?.userType == UserType.TUTOR ? (
+									<AvatarImage src={user?.roleInfo.portraitUrl} width={100} />
+								) : (
+									<AvatarImage />
+								)}
+							</Avatar>
+							<div className="ml-16 w-1/4">
 								<Label>First Name</Label>
 								<Input disabled value={primaryInfo?.firstName} />
 							</div>
-							<div>
+							<div className="w-1/4">
 								<Label>Last Name</Label>
 								<Input disabled value={primaryInfo?.lastName} />
 							</div>
-							<div>
+							<div className="w-1/4">
 								<Label>Phone Number</Label>
 								<Input disabled value={primaryInfo?.phoneNumber} />
 							</div>
@@ -152,7 +150,7 @@ const ProfilePage = () => {
 					</CardContent>
 				</Card>
 
-				<Card className="w-1/3">
+				<Card className="w-1/4">
 					<CardHeader>Lmao</CardHeader>
 					<CardContent>
 						<div className="flex flex-col gap-3">
