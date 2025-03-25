@@ -22,6 +22,8 @@ import {
 	AlertDialogTrigger,
 	AlertDialogCancel,
 } from "../ui/alert-dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 const ProfilePage = () => {
 	const user = useSelector((state: RootState) => state.user);
@@ -104,14 +106,19 @@ const ProfilePage = () => {
 						</Avatar>
 					</CardHeader>
 					<CardContent>
-						<div>
-							<span>First Name: {primaryInfo?.firstName}</span>
-						</div>
-						<div>
-							<span>Last Name: {primaryInfo?.lastName}</span>
-						</div>
-						<div>
-							<span>Phone Number: {primaryInfo?.phoneNumber}</span>
+						<div className="flex w-full gap-5">
+							<div>
+								<Label>First Name</Label>
+								<Input disabled value={primaryInfo?.firstName} />
+							</div>
+							<div>
+								<Label>Last Name</Label>
+								<Input disabled value={primaryInfo?.lastName} />
+							</div>
+							<div>
+								<Label>Phone Number</Label>
+								<Input disabled value={primaryInfo?.phoneNumber} />
+							</div>
 						</div>
 						<div>
 							{" "}
