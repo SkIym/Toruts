@@ -177,7 +177,7 @@ const ProfilePage = () => {
 										your account and remove your data from our servers.
 									</AlertDialogDescription>
 									<AlertDialogFooter>
-										<AlertDialogCancel>Cancel</AlertDialogCancel>
+										<AlertDialogCancel data-testid={TEST.button("cancel")}>Cancel</AlertDialogCancel>
 										<AlertDialogAction onClick={handleDelete} data-testid={TEST.button("delete")}>
 											Delete
 										</AlertDialogAction>
