@@ -64,6 +64,11 @@ const TutorProfile = ({ info }: { info: TutorInfo }) => {
 				<b>Availability</b>
 				<div>{info.availability}</div>
 			</div>
+			<div>
+				<b>Contacts</b>
+				<p>Facebook</p>
+				<p>Twitter</p>
+			</div>
 		</div>
 	);
 };
