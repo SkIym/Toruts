@@ -108,7 +108,7 @@ const SignupForm = () => {
                             <Input
                                 placeholder="First Name"
                                 {...field}
-                                data-test-id={TEST.input('first-name')}
+                                data-testid={TEST.input('first-name')}
                             />
                             </FormControl>
                         </FormItem>
@@ -127,7 +127,7 @@ const SignupForm = () => {
                             <Input
                                 placeholder="Last Name"
                                 {...field}
-                                data-test-id={TEST.input('last-name')}
+                                data-testid={TEST.input('last-name')}
                             />
                             </FormControl>
                         </FormItem>
@@ -146,7 +146,7 @@ const SignupForm = () => {
                             <Input
                                 placeholder="Phone Number"
                                 {...field}
-                                data-test-id={TEST.input('phone-number')}
+                                data-testid={TEST.input('phone-number')}
                             />
                             </FormControl>
                         </FormItem>
@@ -167,7 +167,7 @@ const SignupForm = () => {
                                 <Input
                                     placeholder="Username"
                                     {...field}
-                                    data-test-id={TEST.input('username')}
+                                    data-testid={TEST.input('username')}
                                 />
                                 </FormControl>
                             </FormItem>
@@ -183,7 +183,7 @@ const SignupForm = () => {
                                 <FormMessage />
                             </div>
                                 <FormControl>
-                                <Input placeholder="Email" {...field} data-test-id={TEST.input('email')} />
+                                <Input placeholder="Email" {...field} data-testid={TEST.input('email')} />
                                 </FormControl>
                             </FormItem>
                             )}
@@ -203,7 +203,7 @@ const SignupForm = () => {
                             <Input
                                 placeholder="Password"
                                 {...field}
-                                data-test-id={TEST.input('password')}
+                                data-testid={TEST.input('password')}
                                 type="password"
                             />
                             </FormControl>
@@ -223,7 +223,7 @@ const SignupForm = () => {
                             <Input
                                 placeholder="Confirm Password"
                                 {...field}
-                                data-test-id={TEST.input('confirm-password')}
+                                data-testid={TEST.input('confirm-password')}
                                 type="password"
                             />
                             </FormControl>

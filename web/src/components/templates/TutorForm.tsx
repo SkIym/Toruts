@@ -180,7 +180,7 @@ const TutorForm = ({ info }: Props) => {
                 <Input
                   id="picture"
                   type="file"
-                  data-test-id={TEST.input("portrait")}
+                  data-testid={TEST.input("portrait")}
                   onChange={handleFileInputChange}
                   className="w-full"
                 />
@@ -192,7 +192,7 @@ const TutorForm = ({ info }: Props) => {
                 type="button"
                 loading={uploadingPicture}
                 onClick={handlePictureUpload}
-                data-test-id={TEST.button("upload-portrait")}
+                data-testid={TEST.button("upload-portrait")}
               >
                 {uploadingPicture ? "Uploading picture" : "Upload picture"}
               </LoadingButton>
@@ -218,7 +218,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                           placeholder="Educational Attainment"
                           {...field}
-                          data-test-id={TEST.input("educ-attainment")}
+                          data-testid={TEST.input("educ-attainment")}
                         />
                       </FormControl>
                     </FormItem>
@@ -237,7 +237,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                           placeholder="Price"
                           {...field}
-                          data-test-id={TEST.input("price")}
+                          data-testid={TEST.input("price")}
                           type="number"
                           defaultValue={
                             info ? info.price.toString() : undefined
@@ -292,7 +292,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                           placeholder="Venue"
                           {...field}
-                          data-test-id={TEST.input("venue")}
+                          data-testid={TEST.input("venue")}
                         />
                       </FormControl>
                     </FormItem>
@@ -311,7 +311,7 @@ const TutorForm = ({ info }: Props) => {
                         <Input
                           placeholder="Availability"
                           {...field}
-                          data-test-id={TEST.input("availability")}
+                          data-testid={TEST.input("availability")}
                         />
                       </FormControl>
                     </FormItem>
@@ -336,7 +336,7 @@ const TutorForm = ({ info }: Props) => {
                         <Textarea
                           placeholder="Areas or subjects you would like to teach"
                           {...field}
-                          data-test-id={TEST.input("areas")}
+                          data-testid={TEST.input("areas")}
                         />
                       </FormControl>
                     </FormItem>
@@ -355,7 +355,7 @@ const TutorForm = ({ info }: Props) => {
                         <Textarea
                           placeholder="Tutoring experience"
                           {...field}
-                          data-test-id={TEST.input("experience")}
+                          data-testid={TEST.input("experience")}
                         />
                       </FormControl>
                     </FormItem>

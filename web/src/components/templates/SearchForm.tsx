@@ -12,6 +12,7 @@ import tutorService from "../../services/tutor";
 import { LearningMode, TutorResult } from "@/types";
 
 import { Card, CardContent } from "../ui/card";
+import { TEST } from "@/constants";
 
 const SearchForm = ({ initialQuery = "" }) => {
   const { ...search } = useField("text");
@@ -78,7 +79,7 @@ const SearchForm = ({ initialQuery = "" }) => {
   };
 
   return (
-    <div className="flex h-200 gap-4">
+    <div className="flex h-200 gap-4"  data-testid={TEST.form("search")}>
       {/* Search Results */}
       <div className="min-w-1/3 bg-white">
         <Card>
@@ -87,24 +88,24 @@ const SearchForm = ({ initialQuery = "" }) => {
               <div className="flex pr-10 gap-4">
                 <Input
                   {...search}
-                  data-testid="search"
+                  data-testid={TEST.input("search")}
                   placeholder="Jane Doe, Ellen Joe, etc."
                   className="placeholder:italic"
                 />
-                <button data-testid="search-button"> Search </button>
+                <button data-testid={TEST.button("search")}> Search </button>
               </div>
               <div className="flex justify-between">
                 <span>Price: </span>{" "}
                 <Input
                   {...minPrice}
-                  data-testid="minPrice"
+                  data-testid={TEST.input("min-price")}
                   className="w-1/4"
                   min={0}
                 />
                 <span> - </span>
                 <Input
                   {...maxPrice}
-                  data-testid="maxPrice"
+                  data-testid={TEST.input("max-price")}
                   className="w-1/4"
                   min={0}
                 />
