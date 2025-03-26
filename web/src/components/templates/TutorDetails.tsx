@@ -1,13 +1,19 @@
-import { LearningMode, StudentMatchInfo, TutorInfo, TutorResult, UserType } from "@/types";
+import {
+	LearningMode,
+	StudentMatchInfo,
+	TutorInfo,
+	TutorResult,
+	UserType,
+} from "@/types";
 import { RootState } from "store";
 import { useSelector } from "react-redux";
 import TutorConfirmationForm from "./TutorConfirmationForm";
+import { Badge } from "../ui/badge";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
 
-
-const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult}) => {
+const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 	const getLearningMode = (learningMode: LearningMode) => {
 		if (learningMode === 0) {
 			return <div>Online</div>;
@@ -19,7 +25,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult}) => {
 	};
 
 	const user = useSelector((state: RootState) => state.user);
-    console.log(selectedTutor)
+	console.log(selectedTutor);
 	return (
 		<div className="h-full overflow-y-auto">
 			<div className="flex border-b-2 w-full">
@@ -45,17 +51,19 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult}) => {
 						<span>{getLearningMode(selectedTutor.learningMode)}</span>
 					</div>
 				</div>
-                { user?.userType === UserType.STUDENT 
-                ? <TutorConfirmationForm tutor={selectedTutor}/>
-                : null
-                }  
+				{user?.userType === UserType.STUDENT ? (
+					<TutorConfirmationForm tutor={selectedTutor} />
+				) : null}
 			</div>
 
 			<div className="bg-gray-100 w-full p-4 flex flex-col border-b-2">
 				<b>Areas of Expertise</b>
-				{selectedTutor.areasOfExpertise.map((exp) => (
-					<div>{exp}</div>
-				))}
+				<div className="flex flex-col gap-2">
+					{selectedTutor.areasOfExpertise.map((exp: string) => (
+						// biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
+						<Badge>{exp}</Badge>
+					))}
+				</div>
 			</div>
 			<div className="w-full p-4 flex flex-col">
 				<b>Tutor Availability</b>
@@ -65,13 +73,15 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult}) => {
 				<b>Prior Experience</b>
 				<p>{selectedTutor.tutoringExperiences}</p>
 			</div>
-            <div className="w-full p-4 flex flex-col border-t-2">
+			<div className="w-full p-4 flex flex-col border-t-2">
 				<b>Current Tutees</b>
-				{selectedTutor.matchedStudents?.map((s: StudentMatchInfo) => 
-                    {
-                        return <p>{s.firstName} {s.lastName}</p>
-                    }
-                )}
+				{selectedTutor.matchedStudents?.map((s: StudentMatchInfo) => {
+					return (
+						<p>
+							{s.firstName} {s.lastName}
+						</p>
+					);
+				})}
 			</div>
 			<p className="w-full p-4 border-t-2">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet
