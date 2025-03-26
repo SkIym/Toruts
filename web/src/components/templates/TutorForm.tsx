@@ -180,7 +180,7 @@ const TutorForm = ({ info }: Props) => {
                 <Input
                   id="picture"
                   type="file"
-                  data-test-id="picture"
+                  data-test-id={TEST.input("portrait")}
                   onChange={handleFileInputChange}
                   className="w-full"
                 />
@@ -192,6 +192,7 @@ const TutorForm = ({ info }: Props) => {
                 type="button"
                 loading={uploadingPicture}
                 onClick={handlePictureUpload}
+                data-test-id={TEST.button("upload-portrait")}
               >
                 {uploadingPicture ? "Uploading picture" : "Upload picture"}
               </LoadingButton>

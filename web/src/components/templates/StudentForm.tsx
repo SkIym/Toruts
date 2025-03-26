@@ -130,7 +130,7 @@ const StudentForm = ({ info }: Props) => {
                             <Input
                                 placeholder="Degree Program"
                                 {...field}
-                                data-test-id={TEST.input('areas')}
+                                data-test-id={TEST.input('degree-program')}
                             />
                             </FormControl>
                         </FormItem>
