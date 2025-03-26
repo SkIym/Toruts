@@ -47,7 +47,8 @@ export const TEST =
     , select: (select: string) => `${select}-select`
     , profile: (profile: string) => `${profile}-profile`
     , card: (card: string) => `${card}-card`
-    , radio: (radio: string) => `${radio}-card`
+    , radio: (radio: string) => `${radio}-radio`
+    , link: (link: string) => `${link}-link`
     }
 export const PORTRAIT = 
     {
