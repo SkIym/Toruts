@@ -180,7 +180,7 @@ const TutorForm = ({ info }: Props) => {
                 <Input
                   id="picture"
                   type="file"
-                  data-testid={TEST.input("portrait")}
+                  data-testid={TEST.input('picture')}
                   onChange={handleFileInputChange}
                   className="w-full"
                 />
@@ -258,11 +258,11 @@ const TutorForm = ({ info }: Props) => {
                       <FormMessage />
                     </div>
                     <Select
-                      data-testid={TEST.select("mode")}
                       onValueChange={field.onChange}
                       defaultValue={
                         info ? info.learningMode.toString() : undefined
                       }
+                      data-testid={TEST.select("mode")}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -375,7 +375,6 @@ const TutorForm = ({ info }: Props) => {
                       If Active, your profile will be public.
                     </FormDescription>
                     <Select
-                      data-testid={TEST.select("status")}
                       onValueChange={field.onChange}
                       defaultValue={info ? info.status.toString() : undefined}
                     >
@@ -384,7 +383,7 @@ const TutorForm = ({ info }: Props) => {
                           <SelectValue placeholder="Select your status" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent data-testid={TEST.select("status")}>
                         <SelectItem value="0">Active</SelectItem>
                         <SelectItem value="1">Inactive</SelectItem>
                       </SelectContent>

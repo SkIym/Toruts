@@ -1,14 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import SearchForm from "../templates/SearchForm";
-import { PATH, TEST } from "@/constants";
-import {
-	Dialog,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-	DialogContent,
-} from "@/components/ui/dialog";
+import { TEST } from "@/constants";
 
 const HomePage = () => {
 	const location = useLocation();

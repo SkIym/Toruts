@@ -88,7 +88,7 @@ const SearchForm = ({ initialQuery = "" }) => {
               <div className="flex pr-10 gap-4">
                 <Input
                   {...search}
-                  data-testid={TEST.input("search")}
+                  data-testid={TEST.input('search')}
                   placeholder="Jane Doe, Ellen Joe, etc."
                   className="placeholder:italic"
                 />
@@ -98,14 +98,14 @@ const SearchForm = ({ initialQuery = "" }) => {
                 <span>Price: </span>{" "}
                 <Input
                   {...minPrice}
-                  data-testid={TEST.input("min-price")}
+                  data-testid={TEST.input('min-price')}
                   className="w-1/4"
                   min={0}
                 />
                 <span> - </span>
                 <Input
                   {...maxPrice}
-                  data-testid={TEST.input("max-price")}
+                  data-testid={TEST.input('max-price')}
                   className="w-1/4"
                   min={0}
                 />
@@ -131,7 +131,7 @@ const SearchForm = ({ initialQuery = "" }) => {
                 })}
           </div>
         ) : (
-          <div>Searching...</div>
+          <div data-testid={TEST.form('tutor-result')}>Searching...</div>
         )}
       </div>
 

@@ -1,15 +1,18 @@
-export const loadPage = async (page: any, toLoad: string | RegExp) => {
+import { PATH, TEST } from "../web/src/constants";
+
+export const loadPage = async (page: any, toLoad: string) => {
     let time = 0;
-    let currentPage: string | null = await page.getByTestId('page').getAttribute('id');
-    if (!currentPage) {
-        console.log(`[${currentPage}] Not Found`)
-        return 'Error'
+    let locator = page.getByTestId(TEST.page(toLoad))
+    if(locator){
+        console.log(`${locator}`)
     }
-    while (currentPage?.match(toLoad) == null && time < 200) {
-        currentPage = await page.getByTestId('page').getAttribute('id');
+    let currentPage = await locator.getAttribute('data-testid', {timeout: 200})
+    
+    while (currentPage?.match(TEST.page(toLoad)) == null && time < 200 && currentPage != null) {
+        currentPage = await page.getByTestId(TEST.page(toLoad)).getAttribute('data-testid');
         time += 1;
     }
-    if (time < 200) {
+    if (time < 200 && currentPage != null) {
         console.log(`[${currentPage}] Successful loading page`);
         return null
     } else {
@@ -18,15 +21,11 @@ export const loadPage = async (page: any, toLoad: string | RegExp) => {
     }
 }
 
-export const loadForm = async (page: any, toLoad: string | RegExp) => {
+export const loadForm = async (page: any, toLoad: string) => {
     let time = 0;
-    let form: string | null = await page.getByTestId('form').getAttribute('id');
-    if (!form) {
-        console.log(`[${form}] Not Found`)
-        return 'Error'
-    }
+    let form: string | null = await page.getByTestId(TEST.form(toLoad)).getAttribute('data-testid');
     while(form?.match(toLoad) == null && time < 200) {
-        form = await page.getByTestId('form').getAttribute('id');
+        form = await page.getByTestId(TEST.form(toLoad)).getAttribute('data-testid');
         time += 1;
     }
     if (time < 200) {
@@ -39,149 +38,87 @@ export const loadForm = async (page: any, toLoad: string | RegExp) => {
 }
 
 export const clickButton = async(page: any, name: string) => {
-    const button = page.getByTestId(name);
+    const button = page.getByTestId(TEST.button(name));
     if (await button.isVisible()) {
         await button.click();
-        console.log(`[${name}] Clicked`);
+        console.log(`[${TEST.button(name)}] Clicked`);
     } else {
-        console.log(`[${name}] Button not found`);
+        console.log(`[${TEST.button(name)}] Button not found`);
     }
 }
 
 export const fillInput = async(page: any, name: string, value: string) => {
-    const input = page.getByTestId(name);
+    const input = page.getByTestId(TEST.input(name));
     if (await input.isVisible()) {
         await input.fill(value);
-        console.log(`[${name}] Filled with '${value}'`);
+        console.log(`[${TEST.input(name)}] Filled with '${value}'`);
     } else {
-        console.log(`[${name}] Input not found`);
+        console.log(`[${TEST.input(name)}] Input not found`);
     }
 }
 
 export const loginWith = async (page: any, username: string, password: string) => {
     console.log(`[${username}] Logging in`);
-    await page.goto('/login');
-    await loadPage(page, 'login');
-    const retries = 3
+    await page.goto(PATH.login);
+    await page.waitForURL(`**${PATH.login}`)
 
-    let time = 0;
-    while (await loadPage(page, 'home') != null && time < retries) {
-        await page.getByTestId('username').fill(username);
-        await page.getByTestId('password').fill(password);
-    
-        await clickButton(page, 'login-button');
-        console.log(`Logging in with ${username}...`)
-        time += 1;
-    }
-    if (time < retries) {
-        console.log(`[${username}] Logged in successful`);
-    } else {
-        console.log(`[${username}] Log in failed`);
-    }
+    await fillInput(page, 'username', username);
+    await fillInput(page, 'password', password);
+
+    await clickButton(page, 'login');
+    console.log(`Logging in with ${username}...`)
 }
 
 export const signupWith = async (page: any, firstName: string, lastName: string, phoneNumber: string, username: string, email: string, password: string) => {
     console.log(`[${username}] Signing up`);
-    await page.goto('/signup');
-    await loadPage(page, 'signup');
-    const retries = 3;
+    await page.goto(PATH.SIGNUP.default);
+    await page.waitForURL(`**${PATH.SIGNUP.default}`)
 
-    let attempt = 0;
-    while (await loadPage(page, 'choose') != null && attempt < retries) {
-        await fillInput(page, 'first-name', firstName);
-        await fillInput(page, 'last-name', lastName);
-        await fillInput(page, 'phone-number', phoneNumber);
-        await fillInput(page, 'username', username);
-        await fillInput(page, 'email', email);
-        await fillInput(page, 'password', password);
+    await fillInput(page, 'first-name', firstName);
+    await fillInput(page, 'last-name', lastName);
+    await fillInput(page, 'phone-number', phoneNumber);
+    await fillInput(page, 'username', username);
+    await fillInput(page, 'email', email);
+    await fillInput(page, 'password', password);
+    await fillInput(page, 'confirm-password', password);
 
-        await clickButton(page, 'signup-button');
-        console.log(`Signing up ${firstName} ${lastName} with ${username}...`);
-        
-        attempt += 1;
-    }
-    if (attempt < retries) {
-        console.log(`[${username}] Signing up successful`);
-    } else {
-        console.log(`[${username}] Signing up failed`);
-    }
+    await clickButton(page, 'signup');
+    console.log(`Signing up ${firstName} ${lastName} with ${username}...`);
 }
 
 export const deleteWith = async (page: any, username: string, password: string) => {
-    console.log(`[${username}] Deleting Account`);
-    await loginWith(page, username, password);
-    await page.goto('/profile');
-
-    await createStudent(page, username);
-
-    const retries = 3
-    let t0 = 0;
-    while (await loadPage(page, 'login') && t0 < retries) {
-        await clickButton(page, 'delete-button');
-        console.log(`Deleting ${username}...`)
-        t0 += 1
-    }
-    if (!(await loadPage(page, 'login')) && t0 < retries) {
-        console.log(`[${username}] Account deleted successfully`);
-    } else {
-        console.log(`[${username}] Account deletion failed`);
-    }
+    
 }
 
-export const addInfo = async (page: any, firstName: string, lastName: string, phoneNumber: string) => {
-    await page.goto('/info');
-    await loadPage(page, 'edit');
+export const updateInfo = async (page: any, firstName: string, lastName: string, phoneNumber: string) => {
+    await page.goto(PATH.PROFILE.edit);
+    await page.waitForURL(`**${PATH.PROFILE.edit}`)
 
     await fillInput(page, 'first-name', firstName);
     await fillInput(page, 'last-name', lastName);
     await fillInput(page, 'phone-number', phoneNumber);
 
-    await page.getByTestId('update-button').click();
-    await loadPage(page, 'profile');
+    await clickButton(page, 'update-profile');
 }
 
-export const createStudent = async(page: any, username: string) => {
-    const retries = 3
-    let t0 = 0;
-    let choose = false
-    while (await loadPage(page, 'profile') != null && t0 < retries) {
-        let t1 = 0;
-        choose = true
-        while (await loadForm(page, 'student-form') != null && t1 < retries) {
-            await clickButton(page, 'student-button');
-            t1 += 1;
-        }
-        if (t1 < retries) {
-            await clickButton(page, 'create');
-            t0 += 1;
-        } else {
-            console.log(`[${username}] Failed to load student-form`)
-            t0 += 1;
-        }
-    }
-    if (t0 < retries && choose) {
-        console.log(`[${username}] Sucessful creating student account`);
-    } else if (choose) {
-        console.log(`[${username}] Failed to create student account`);
-    }
+export const studentForm = async(page: any, type: 'create' | 'update') => {
+    await fillInput(page, 'areas', 'test');
+
+    await clickButton(page, type);
+    await page.waitForURL(`**${PATH.PROFILE.default}`)
 }
 
-export const tutorProfile = async (page: any, type: 'create' | 'update', educ: string, venue: string, price: string) => {
-    const retries = 3;
-    let t0 = 0;
-    while (t0 < retries) {
-        await fillInput(page, 'educ', educ);
-        await fillInput(page, 'venue', venue);
-        await fillInput(page, 'price', price);
+export const tutorForm = async (page: any, type: 'create' | 'update') => {
+    await fillInput(page, 'educ-attainment', 'Educ');
+    await fillInput(page, 'price', '123');
+    await fillInput(page, 'venue', 'Venue');
+    await fillInput(page, 'availability', 'Availability');
+    await fillInput(page, 'experience', 'Experience');
+    await page.getByRole('option', { name: 'Online', selected: false }).click()
+    await page.getByRole('option', { name: 'Active' }).click()
 
-        await clickButton(page, type);
-
-        if (type == 'create' && await loadPage(page, 'home') == null) {
-            break;
-        } else if (type == 'update' && await loadPage(page, 'profile') == null) {
-            break;
-        }
-    }
+    await clickButton(page, type);
+    await page.waitForURL(`**${PATH.PROFILE.default}`)
 }
 
 export const quickLogin = async (page: any, testCase: string) => {
@@ -193,25 +130,19 @@ export const quickSignup = async (page: any, testCase: string) => {
     const username = `test-case-${testCase}`;
     const email = `test@case${testCase}.test`;
     await signupWith(page, 'Test', 'Case', '0', username, email, 'Abc123!?');
-    if (await loadPage(page, 'choose')) {
-        await deleteWith(page, username, 'Abc123!?');
-        await page.waitForLoadState();
-        await signupWith(page, 'Test', 'Case', '0', username, email, 'Abc123!?')
-    }
 }
 
 export const quickDelete = async (page: any) => {
-    await page.goto('/profile');
-    while (await loadPage(page, 'login')) {
-        await clickButton(page, 'delete-button');
-    }
+    await clickButton(page, 'delete-trigger');
+    await clickButton(page, 'delete');
+    await page.waitForURL(`**${PATH.login}`)
 }
 
 export const logout = async(page: any) => {
-    await page.goto('/profile')
-    await page.waitForLoadState();
-    await page.getByRole('button', { name: /Logout/})
-    await page.waitForLoadState();
+    await page.goto(PATH.PROFILE.default)
+    await page.waitForURL(`**${PATH.PROFILE.default}`)
+    await clickButton(page, 'logout');
+    await page.waitForURL(`**${PATH.login}`)
 }
 
 export const done = (testCase: string) => {

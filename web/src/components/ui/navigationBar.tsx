@@ -56,7 +56,7 @@ const NavBar = () => {
                             className="text-black bg-white w-full"
                             onKeyDown={handleKeyDown}
                         />
-                        <button type="submit" className="text-white">Search</button>
+                        <button type="submit" className="text-white" data-testid={TEST.button('search')}>Search</button>
                     </form>
                 )}
                 {shouldHide !== 0 && shouldHide !== 1 && (
