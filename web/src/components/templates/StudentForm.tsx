@@ -142,7 +142,7 @@ const StudentForm = ({ info }: Props) => {
                             { submittingForm ? "Saving role information": "Save role information"}
                         </LoadingButton>
                         : 
-                        <LoadingButton type="submit" loading={submittingForm} date-testid={TEST.button('create')}>
+                        <LoadingButton type="submit" loading={submittingForm} data-testid={TEST.button('create')}>
                             { submittingForm ? "Creating student account": "Create student account"}
                         </LoadingButton>}
                     </div>

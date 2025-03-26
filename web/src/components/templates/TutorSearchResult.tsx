@@ -1,5 +1,6 @@
 import { TutorResult } from "@/types";
 import { Card, CardHeader, CardContent } from "../ui/card";
+import { TEST } from "@/constants";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
@@ -12,7 +13,7 @@ const TutorSearchResult = ({
 }: {tutor: TutorResult}) => {
 	return (
 		<div>
-			<Card onClick={callback} className="hover:bg-gray-50">
+			<Card onClick={callback} className="hover:bg-gray-50" data-testid={TEST.card('tutor')}>
 				<CardHeader>
 					<b>
 						{tutor.firstName} {tutor.lastName}

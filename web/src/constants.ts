@@ -46,6 +46,8 @@ export const TEST =
     , input: (input: string) => `${input}-input`
     , select: (select: string) => `${select}-select`
     , profile: (profile: string) => `${profile}-profile`
+    , card: (card: string) => `${card}-card`
+    , radio: (radio: string) => `${radio}-card`
     }
 export const PORTRAIT = 
     {

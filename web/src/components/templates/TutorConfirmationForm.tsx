@@ -17,6 +17,7 @@ import { matchWithTutor } from "@/reducers/userReducer";
 import { useState } from "react";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { TEST } from "@/constants";
 
 interface Props {
     tutor: TutorResult
@@ -55,7 +56,7 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
 
     return <div className="flex w-1/3 items-center justify-end mr-20">
         <Dialog className="relative z-10">
-            <DialogTrigger className="bg-green-100 p-2 w-40 rounded-lg hover:bg-green-200">
+            <DialogTrigger className="bg-green-100 p-2 w-40 rounded-lg hover:bg-green-200" data-testid={TEST.button('apply')}>
                 { currentTutorIds?.includes(tutor.id) 
                 ? "End"
                 : "Apply"}
@@ -81,7 +82,7 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
                                 {data.map((area) => {
                                     return (
                                         <div key={area} className="flex items-center space-x-2">
-                                            <RadioGroupItem value={area} id={area} />
+                                            <RadioGroupItem value={area} id={area} data-testid={TEST.radio("area")}/>
                                             <Label 
                                                 htmlFor={area}
                                                 className="border-2 border-orange-400 px-3 py-1 
@@ -117,10 +118,10 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
                 </DialogDescription>
                 <DialogClose asChild>
                     <div className="flex w-full gap-3 justify-center">
-                        <Button className="bg-orange-400 hover:bg-orange-500 w-1/2" onClick={handleApply}>
+                        <Button className="bg-orange-400 hover:bg-orange-500 w-1/2" onClick={handleApply} data-testid={TEST.button('confirm')}>
                             Confirm
                         </Button>
-                        <Button className="w-1/2 bg-gray-200 text-black hover:bg-gray-300">
+                        <Button className="w-1/2 bg-gray-200 text-black hover:bg-gray-300" data-testid={TEST.button('cancel')}>
                             Cancel
                         </Button>
                     </div>
