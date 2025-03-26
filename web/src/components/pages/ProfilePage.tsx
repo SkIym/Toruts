@@ -102,7 +102,10 @@ const ProfilePage = () => {
 								{user?.userType == UserType.TUTOR ? (
 									<AvatarImage src={user?.roleInfo.portraitUrl} width={100} />
 								) : (
-									<AvatarImage />
+									<AvatarImage
+										src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+										width={100}
+									/>
 								)}
 							</Avatar>
 							<div className="ml-16 w-1/4">
@@ -151,7 +154,9 @@ const ProfilePage = () => {
 				</Card>
 
 				<Card className="w-1/4">
-					<CardHeader>Lmao</CardHeader>
+					<CardHeader>
+						<b>Profile</b>
+					</CardHeader>
 					<CardContent>
 						<div className="flex flex-col gap-3">
 							<Button
@@ -161,7 +166,9 @@ const ProfilePage = () => {
 								Edit Profile
 							</Button>
 							<AlertDialog>
-								<AlertDialogTrigger>Delete Profile</AlertDialogTrigger>
+								<AlertDialogTrigger>
+									<Button className="w-full">Delete Profile</Button>
+								</AlertDialogTrigger>
 
 								<AlertDialogContent>
 									<AlertDialogHeader>Are you sure?</AlertDialogHeader>

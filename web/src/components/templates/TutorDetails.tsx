@@ -1,11 +1,17 @@
-import { LearningMode, StudentMatchInfo, TutorInfo, TutorResult, UserType } from "@/types";
+import {
+	LearningMode,
+	StudentMatchInfo,
+	TutorInfo,
+	TutorResult,
+	UserType,
+} from "@/types";
 import { RootState } from "store";
 import { useSelector } from "react-redux";
 import TutorConfirmationForm from "./TutorConfirmationForm";
+import { Badge } from "../ui/badge";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
-
 
 const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 	const getLearningMode = (learningMode: LearningMode) => {
@@ -19,7 +25,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 	};
 
 	const user = useSelector((state: RootState) => state.user);
-	console.log(selectedTutor)
+	console.log(selectedTutor);
 	return (
 		<div className="h-full overflow-y-auto">
 			<div className="flex border-b-2 w-full">
@@ -45,10 +51,9 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 						<span>{getLearningMode(selectedTutor.learningMode)}</span>
 					</div>
 				</div>
-				{user?.userType === UserType.STUDENT
-					? <TutorConfirmationForm tutor={selectedTutor} />
-					: null
-				}
+				{user?.userType === UserType.STUDENT ? (
+					<TutorConfirmationForm tutor={selectedTutor} />
+				) : null}
 			</div>
 
 			<div className="bg-gray-100 w-full p-4 flex flex-col border-b-2">
@@ -71,9 +76,12 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 			<div className="w-full p-4 flex flex-col border-t-2">
 				<b>Current Tutees</b>
 				{selectedTutor.matchedStudents?.map((s: StudentMatchInfo) => {
-					return <p>{s.firstName} {s.lastName}</p>
-				}
-				)}
+					return (
+						<p>
+							{s.firstName} {s.lastName}
+						</p>
+					);
+				})}
 			</div>
 			<p className="w-full p-4 border-t-2">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet
