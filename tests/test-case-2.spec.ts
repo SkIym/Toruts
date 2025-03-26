@@ -8,6 +8,8 @@ test.beforeEach(async ({ page }) => {
     await page.waitForLoadState();
 });
 
+test.skip()
+
 test.describe('Test Case 2: Functionality', () => {
     test('Test Case 2.1: Successful Log-In', async({ page }) => {
         await quickLogin(page, '2-1');

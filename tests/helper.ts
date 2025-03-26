@@ -1,12 +1,10 @@
-export const loadPage = async (page: any, toLoad: string | RegExp) => {
+import { TEST } from "../web/src/constants";
+
+export const loadPage = async (page: any, toLoad: string) => {
     let time = 0;
-    let currentPage: string | null = await page.getByTestId('page').getAttribute('id');
-    if (!currentPage) {
-        console.log(`[${currentPage}] Not Found`)
-        return 'Error'
-    }
-    while (currentPage?.match(toLoad) == null && time < 200) {
-        currentPage = await page.getByTestId('page').getAttribute('id');
+    let currentPage: string | null = await page.getByTestId(TEST.page(toLoad)).getAttribute('data-testid');
+    while (currentPage?.match(TEST.page(toLoad)) == null && time < 200) {
+        currentPage = await page.getByTestId(TEST.page(toLoad)).getAttribute('data-testid');
         time += 1;
     }
     if (time < 200) {
@@ -18,15 +16,11 @@ export const loadPage = async (page: any, toLoad: string | RegExp) => {
     }
 }
 
-export const loadForm = async (page: any, toLoad: string | RegExp) => {
+export const loadForm = async (page: any, toLoad: string) => {
     let time = 0;
-    let form: string | null = await page.getByTestId('form').getAttribute('id');
-    if (!form) {
-        console.log(`[${form}] Not Found`)
-        return 'Error'
-    }
+    let form: string | null = await page.getByTestId(TEST.form(toLoad)).getAttribute('data-testid');
     while(form?.match(toLoad) == null && time < 200) {
-        form = await page.getByTestId('form').getAttribute('id');
+        form = await page.getByTestId(TEST.form(toLoad)).getAttribute('data-testid');
         time += 1;
     }
     if (time < 200) {
@@ -39,22 +33,22 @@ export const loadForm = async (page: any, toLoad: string | RegExp) => {
 }
 
 export const clickButton = async(page: any, name: string) => {
-    const button = page.getByTestId(name);
+    const button = page.getByTestId(TEST.button(name));
     if (await button.isVisible()) {
         await button.click();
-        console.log(`[${name}] Clicked`);
+        console.log(`[${TEST.button(name)}] Clicked`);
     } else {
-        console.log(`[${name}] Button not found`);
+        console.log(`[${TEST.button(name)}] Button not found`);
     }
 }
 
 export const fillInput = async(page: any, name: string, value: string) => {
-    const input = page.getByTestId(name);
+    const input = page.getByTestId(TEST.input(name));
     if (await input.isVisible()) {
         await input.fill(value);
-        console.log(`[${name}] Filled with '${value}'`);
+        console.log(`[${TEST.input(name)}] Filled with '${value}'`);
     } else {
-        console.log(`[${name}] Input not found`);
+        console.log(`[${TEST.input(name)}] Input not found`);
     }
 }
 
@@ -66,10 +60,10 @@ export const loginWith = async (page: any, username: string, password: string) =
 
     let time = 0;
     while (await loadPage(page, 'home') != null && time < retries) {
-        await page.getByTestId('username').fill(username);
-        await page.getByTestId('password').fill(password);
+        await page.getByTestId(TEST.input('username')).fill(username);
+        await page.getByTestId(TEST.input('password')).fill(password);
     
-        await clickButton(page, 'login-button');
+        await clickButton(page, 'login');
         console.log(`Logging in with ${username}...`)
         time += 1;
     }
@@ -87,7 +81,7 @@ export const signupWith = async (page: any, firstName: string, lastName: string,
     const retries = 3;
 
     let attempt = 0;
-    while (await loadPage(page, 'choose') != null && attempt < retries) {
+    while (await loadPage(page, 'select') != null && attempt < retries) {
         await fillInput(page, 'first-name', firstName);
         await fillInput(page, 'last-name', lastName);
         await fillInput(page, 'phone-number', phoneNumber);
@@ -95,7 +89,7 @@ export const signupWith = async (page: any, firstName: string, lastName: string,
         await fillInput(page, 'email', email);
         await fillInput(page, 'password', password);
 
-        await clickButton(page, 'signup-button');
+        await clickButton(page, 'signup');
         console.log(`Signing up ${firstName} ${lastName} with ${username}...`);
         
         attempt += 1;
@@ -117,7 +111,7 @@ export const deleteWith = async (page: any, username: string, password: string) 
     const retries = 3
     let t0 = 0;
     while (await loadPage(page, 'login') && t0 < retries) {
-        await clickButton(page, 'delete-button');
+        await clickButton(page, 'delete');
         console.log(`Deleting ${username}...`)
         t0 += 1
     }
@@ -130,13 +124,13 @@ export const deleteWith = async (page: any, username: string, password: string) 
 
 export const addInfo = async (page: any, firstName: string, lastName: string, phoneNumber: string) => {
     await page.goto('/info');
-    await loadPage(page, 'edit');
+    await loadPage(page, 'profile-edit');
 
     await fillInput(page, 'first-name', firstName);
     await fillInput(page, 'last-name', lastName);
     await fillInput(page, 'phone-number', phoneNumber);
 
-    await page.getByTestId('update-button').click();
+    await clickButton(page, 'update');
     await loadPage(page, 'profile');
 }
 
@@ -147,8 +141,8 @@ export const createStudent = async(page: any, username: string) => {
     while (await loadPage(page, 'profile') != null && t0 < retries) {
         let t1 = 0;
         choose = true
-        while (await loadForm(page, 'student-form') != null && t1 < retries) {
-            await clickButton(page, 'student-button');
+        while (await loadForm(page, 'student') != null && t1 < retries) {
+            await clickButton(page, 'switch');
             t1 += 1;
         }
         if (t1 < retries) {
@@ -170,7 +164,7 @@ export const tutorProfile = async (page: any, type: 'create' | 'update', educ: s
     const retries = 3;
     let t0 = 0;
     while (t0 < retries) {
-        await fillInput(page, 'educ', educ);
+        await fillInput(page, 'educ-attainment', educ);
         await fillInput(page, 'venue', venue);
         await fillInput(page, 'price', price);
 
@@ -193,7 +187,7 @@ export const quickSignup = async (page: any, testCase: string) => {
     const username = `test-case-${testCase}`;
     const email = `test@case${testCase}.test`;
     await signupWith(page, 'Test', 'Case', '0', username, email, 'Abc123!?');
-    if (await loadPage(page, 'choose')) {
+    if (await loadPage(page, 'select')) {
         await deleteWith(page, username, 'Abc123!?');
         await page.waitForLoadState();
         await signupWith(page, 'Test', 'Case', '0', username, email, 'Abc123!?')

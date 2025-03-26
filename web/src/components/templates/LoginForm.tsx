@@ -67,6 +67,7 @@ const LoginForm = () => {
 					<Form {...loginForm}>
 						<form
 							onSubmit={loginForm.handleSubmit(handleLogin)}
+							data-testid={TEST.form('login')}
 							id="login-form"
 							className="space-y-8"
 						>
@@ -83,7 +84,7 @@ const LoginForm = () => {
 											<Input
 												placeholder="Username"
 												{...field}
-												data-testid={TEST.input("username")}
+												data-testid={TEST.input('username')}
 											/>
 										</FormControl>
 									</FormItem>
@@ -102,7 +103,7 @@ const LoginForm = () => {
 											<Input
 												placeholder="Password"
 												{...field}
-												data-testid={TEST.input("password")}
+												data-testid={TEST.input('password')}
 												type="password"
 											/>
 										</FormControl>
@@ -110,14 +111,14 @@ const LoginForm = () => {
 								)}
 							/>
 							<div className="flex flex-row gap-4 justify-between">
-								<Button type="submit" data-testid={TEST.button("login")}>
+								<Button type="submit" data-testid={TEST.button('login')}>
 									Login
 								</Button>
 								<Button
 									type="button"
 									variant="outline"
 									onClick={() => navigate("/signup")}
-									data-testid={TEST.button("signup")}
+									data-testid={TEST.button('signup')}
 								>
 									Sign up instead
 									<svg

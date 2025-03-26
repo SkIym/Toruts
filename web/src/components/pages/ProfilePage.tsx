@@ -110,15 +110,15 @@ const ProfilePage = () => {
 							</Avatar>
 							<div className="ml-16 w-1/4">
 								<Label>First Name</Label>
-								<Input disabled value={primaryInfo?.firstName} />
+								<Input disabled value={primaryInfo?.firstName} data-testid={TEST.input('first-name')} />
 							</div>
 							<div className="w-1/4">
 								<Label>Last Name</Label>
-								<Input disabled value={primaryInfo?.lastName} />
+								<Input disabled value={primaryInfo?.lastName} data-testid={TEST.input('last-name')} />
 							</div>
 							<div className="w-1/4">
 								<Label>Phone Number</Label>
-								<Input disabled value={primaryInfo?.phoneNumber} />
+								<Input disabled value={primaryInfo?.phoneNumber} data-testid={TEST.input('phone-number')} />
 							</div>
 						</div>
 						<div>

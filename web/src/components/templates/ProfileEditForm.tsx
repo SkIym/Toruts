@@ -157,7 +157,7 @@ export const ProfileEditForm = () => {
                 )}
               />
               <div className="flex flex-row gap-4 justify-end">
-                <LoadingButton loading={submittingForm} disabled={!infoForm.formState.isDirty} type="submit" data-testid={TEST.input('update')}>
+                <LoadingButton loading={submittingForm} disabled={!infoForm.formState.isDirty} type="submit" data-testid={TEST.button('update-profile')}>
                 { submittingForm ? "Saving primary information": "Save primary information"}
                 </LoadingButton>
               </div>
