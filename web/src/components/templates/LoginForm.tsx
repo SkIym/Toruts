@@ -55,7 +55,7 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div id="login">
+		<div id="login" data-test-id={TEST.form("login")}>
 			<Card>
 				<CardHeader>
 					<CardTitle className="text-2xl">Login</CardTitle>
@@ -67,7 +67,6 @@ const LoginForm = () => {
 					<Form {...loginForm}>
 						<form
 							onSubmit={loginForm.handleSubmit(handleLogin)}
-							data-testid="form"
 							id="login-form"
 							className="space-y-8"
 						>
@@ -84,7 +83,7 @@ const LoginForm = () => {
 											<Input
 												placeholder="Username"
 												{...field}
-												data-test-id="username"
+												data-test-id={TEST.input("username")}
 											/>
 										</FormControl>
 									</FormItem>
@@ -103,7 +102,7 @@ const LoginForm = () => {
 											<Input
 												placeholder="Password"
 												{...field}
-												data-test-id="password"
+												data-test-id={TEST.input("password")}
 												type="password"
 											/>
 										</FormControl>
@@ -111,14 +110,14 @@ const LoginForm = () => {
 								)}
 							/>
 							<div className="flex flex-row gap-4 justify-between">
-								<Button type="submit" data-testid="login-button">
+								<Button type="submit" data-test-id={TEST.button("login")}>
 									Login
 								</Button>
 								<Button
 									type="button"
 									variant="outline"
 									onClick={() => navigate("/signup")}
-									data-testid="signup-button"
+									data-test-id={TEST.button("signup")}
 								>
 									Sign up instead
 									<svg
