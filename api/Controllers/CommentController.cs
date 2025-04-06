@@ -89,6 +89,11 @@ namespace api.Controllers
 
             if (tutor == null) return NotFound("Tutor not found");
 
+            var isTutee = tutor.Matches
+                .Any(m => m.StudentId == student.Id);
+
+            if (!isTutee) return Unauthorized("Student is or has not been a tutee of the tutor");
+
             var comment = new Comment 
             {
                 TutorId = commentDto.TutorId,
