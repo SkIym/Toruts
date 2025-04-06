@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -29,7 +31,20 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var tutor = await _context.Tutor.
+            var tutor = await _context.Tutor
+                .Include(t => t.Comments)
+                    .ThenInclude(c => c.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tutor == null) return NotFound("Tutor not found");
+
+            var comments = tutor.Comments
+                .Select(c => c.ToCommentDto());
+
+            return Ok(comments);
+
         }
     }
 }
