@@ -133,6 +133,8 @@ export const quickSignup = async (page: any, testCase: string) => {
 }
 
 export const quickDelete = async (page: any) => {
+    await page.goto(PATH.PROFILE.default)
+    await page.waitForURL(`**${PATH.PROFILE.default}`)
     await clickButton(page, 'delete-trigger');
     await clickButton(page, 'delete');
     await page.waitForURL(`**${PATH.login}`)

@@ -39,8 +39,7 @@ test.describe('Test Case 2: Functionality', () => {
         await studentForm(page, 'create');
         await expect(page.getByTestId(TEST.page('profile'))).toBeVisible();
 
-        await logout(page);
-        await expect(page.getByTestId(TEST.page('login'))).toBeVisible();
+        await quickDelete(page);
         
         done('2.3');
     })
@@ -67,6 +66,7 @@ test.describe('Test Case 2: Functionality', () => {
         await expect(page.getByTestId(TEST.input('last-name'))).toHaveValue(/Account/);
         await expect(page.getByTestId(TEST.input('phone-number'))).toHaveValue(/1/);
     
+        await quickDelete(page);
             
         done('2.4');
     })
@@ -110,7 +110,7 @@ test.describe('Test Case 2: Functionality', () => {
         await studentForm(page, 'create');
         await expect(page.getByTestId(TEST.page('profile'))).toBeVisible();
 
-        await logout(page);
+        await quickDelete(page);
 
         done('2.7')
     })
