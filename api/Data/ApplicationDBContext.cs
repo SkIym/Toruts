@@ -22,6 +22,7 @@ namespace api.Data
         public DbSet<Tutor> Tutor { get; set; }
 
         public DbSet<Match> Match { get; set; }
+        public DbSet<Comment> Comment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -69,6 +70,18 @@ namespace api.Data
                 .HasOne(m => m.Tutor)
                 .WithMany(t => t.Matches)
                 .HasForeignKey(m => m.TutorId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Comment>()
+                .HasOne(c => c.Student)
+                .WithMany(s => s.Comments)
+                .HasForeignKey(c => c.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.Tutor)
+                .WithMany(t => t.Comments)
+                .HasForeignKey(c => c.TutorId)
                 .OnDelete(DeleteBehavior.Cascade);
         }   
     }

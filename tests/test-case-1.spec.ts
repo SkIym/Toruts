@@ -71,7 +71,9 @@ test.describe('Test Case 1: Visibility', () => {
         await page.getByTestId(TEST.input('areas')).fill('test');
 
         await clickButton(page, 'create');
-        await page.waitForURL(`**${PATH.PROFILE.default}`)
+        await page.waitForURL(`**${PATH.PROFILE.default}`);
+
+        await quickDelete(page);
 
         done('1.4');
     })
@@ -128,6 +130,8 @@ test.describe('Test Case 1: Visibility', () => {
         await page.getByTestId(TEST.input('areas')).fill('test');
         await clickButton(page, 'create');
         await page.waitForURL(`**${PATH.PROFILE.default}`)
+
+        await quickDelete(page);
 
         done('1.8')
     })

@@ -12,6 +12,8 @@ namespace api.Models
         public string? DegreeProgram { get; set; } = string.Empty;
 
         public ICollection<Match> Matches { get; set; } = new List<Match>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
 
         // Foreign key to  User (Identity User uses ids of type string)
         public required string UserId { get; set; }

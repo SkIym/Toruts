@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export interface SignupInfo {
     username: string;
     email: string;
@@ -105,4 +107,22 @@ export interface TutorMatchInfo {
     firstName: string,
     lastName: string,
     portraitUrl?: string
+}
+
+export interface CreateComment { // when POSTing
+    tutorId: number,
+    text: string,
+    helpfulness: number,
+    pedagogy: number,
+    easiness: number
+}
+
+export interface Comment { // when GETting
+    commenterFirstName: string,
+    commenterLastName: string,
+    commenterId: number,
+    text: string,
+    helpfulness: number,
+    pedagogy: number,
+    easiness: number
 }
