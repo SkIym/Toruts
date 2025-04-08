@@ -14,9 +14,9 @@ const CommentForm = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     const CommentSchema = z.object({
-        pedagogy: z.number(),
-        helpfulness: z.number(),
-        easiness: z.number(),
+        pedagogy: z.number().min(1).max(5),
+        helpfulness: z.number().min(1).max(5),
+        easiness: z.number().min(1).max(5),
         comment: z.string().nonempty({ message: "required" })
     })
 
