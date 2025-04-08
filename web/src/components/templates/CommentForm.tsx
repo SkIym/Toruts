@@ -13,7 +13,7 @@ import { uploadComment } from "@/reducers/userReducer";
 import tutor from "@/services/tutor";
 import { isTutorInfo } from "@/types";
 
-const CommentForm = ({ tutorId, ...props }) => {
+const CommentForm = ({ tutorId, callback, ...props }) => {
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
 
@@ -53,7 +53,12 @@ const CommentForm = ({ tutorId, ...props }) => {
                 helpfulness: formData.helpfulness,
                 pedagogy: formData.pedagogy,
                 easiness: formData.easiness,
-            }, user))
+            }, user)).then(() => {
+                if (callback == undefined || callback == null) {
+                    return
+                }
+                callback()
+            })
 
         } catch {
 
