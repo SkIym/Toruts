@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import CommentForm from "./CommentForm";
+import Comment from "./Comment";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
@@ -99,22 +100,9 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 				{/* Post here */}
 				<CommentForm />
 
-				<div className="flex flex-col">
-					<div className="border-2 p-6 rounded-2xl">
-
-						<b className="text-2xl">Roman Romulo</b>
-						<div className="flex justify-between w-4/5">
-							<b>Pedagogy</b>
-							<div>☆★★☆★</div>
-							<b>Helpfulness</b>
-							<div>☆★★☆★</div>
-							<b>Easiness</b>
-							<div>☆★★☆★</div>
-						</div>
-						<div className="mt-10">
-							Hello world!, Hi World, I love you
-						</div>
-					</div>
+				<div className="flex flex-col gap-5">
+					<Comment />
+					<Comment />
 				</div>
 
 			</div>
