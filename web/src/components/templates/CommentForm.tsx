@@ -71,7 +71,7 @@ const CommentForm = ({ tutorId }) => {
                 helpfulness: formData.helpfulness,
                 pedagogy: formData.pedagogy,
                 easiness: formData.easiness,
-            }, user.roleInfo))
+            }, user))
 
         } catch {
 
