@@ -44,7 +44,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 
 	useEffect(() => {
 		getComments()
-	}, [])
+	}, [selectedTutor])
 	console.log(comments)
 
 	const user = useSelector((state: RootState) => state.user);
