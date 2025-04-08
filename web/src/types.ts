@@ -50,7 +50,8 @@ export type StudentInfo = {
     id: number,
     areasOfImprovement: string[],
     degreeProgram?: string
-    matchedTutors?: TutorMatchInfo[]
+    matchedTutors?: TutorMatchInfo[],
+    displayConsent: boolean
 }
 
 export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>

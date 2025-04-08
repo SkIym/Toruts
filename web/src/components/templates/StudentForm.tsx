@@ -24,6 +24,7 @@ import {
       CardHeader,
       CardTitle,
 } from "@/components/ui/card"
+import { Checkbox } from "../ui/checkbox"
 import { LoadingButton } from "../ui/loadingButton";
 
 const StudentSchema = z.object({
@@ -31,7 +32,9 @@ const StudentSchema = z.object({
         .string(),
     degree: z
         .string()
-        .optional()
+        .optional(),
+    displayConsent: z
+        .boolean()
 })
 
 type StudentSchemaType = z.infer<typeof StudentSchema>
@@ -52,7 +55,8 @@ const StudentForm = ({ info }: Props) => {
     const studentForm = useForm<StudentSchemaType>({
         defaultValues: info ? {
             areasImp: info.areasOfImprovement.join(" "),
-            degree: info.degreeProgram || undefined
+            degree: info.degreeProgram || undefined,
+            displayConsent: info.displayConsent,
         }: undefined,
         resolver: zodResolver(StudentSchema)
     })
@@ -66,7 +70,8 @@ const StudentForm = ({ info }: Props) => {
                         user.userName,
                            {
                                areasOfImprovement: formData.areasImp.toLowerCase().split(areasImpSeparator),
-                               degreeProgram: formData.degree
+                               degreeProgram: formData.degree,
+                               displayConsent: formData.displayConsent
                            }))
                    }
                    // create
@@ -75,7 +80,8 @@ const StudentForm = ({ info }: Props) => {
                     user.userName,
                         {
                             areasOfImprovement: formData.areasImp.toLowerCase().split(areasImpSeparator),
-                            degreeProgram: formData.degree
+                            degreeProgram: formData.degree,
+                            displayConsent: formData.displayConsent
                         }))
 
                    }
@@ -133,6 +139,25 @@ const StudentForm = ({ info }: Props) => {
                                 data-testid={TEST.input('degree')}
                             />
                             </FormControl>
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                    control={studentForm.control}
+                    name="displayConsent"
+                    render={({ field }) => (
+                        <FormItem>
+                            <div className="flex gap-2">
+                            <FormControl>
+                            <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                data-testid={TEST.input('consent')}
+                            />
+                            </FormControl>
+                            <FormLabel>Allow other users to view my profile</FormLabel>
+                            </div>
+                            
                         </FormItem>
                         )}
                     />
