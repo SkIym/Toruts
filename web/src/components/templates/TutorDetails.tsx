@@ -1,4 +1,5 @@
 import {
+	TutorComment,
 	LearningMode,
 	StudentMatchInfo,
 	TutorInfo,
@@ -14,6 +15,8 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import CommentForm from "./CommentForm";
+import { useEffect, useState } from "react";
+import commentService from "@/services/comments"
 import Comment from "./Comment";
 
 const defaultPicture =
@@ -29,6 +32,18 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 		}
 		return <div>Hybrid</div>;
 	};
+
+	const [comments, setComments] = useState<TutorComment[]>([])
+
+	useEffect(() => {
+		const getComments = async () => {
+			console.log("getting tutor comments")
+			const tutorComments = await commentService.get(selectedTutor.id)
+			setComments(tutorComments)
+		}
+		getComments()
+	}, [])
+	console.log(comments)
 
 	const user = useSelector((state: RootState) => state.user);
 	console.log(selectedTutor);
@@ -100,9 +115,13 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 				{/* Post here */}
 				<CommentForm tutorId={selectedTutor.id} />
 
+				{/* view here */}
 				<div className="flex flex-col gap-5">
-					<Comment />
-					<Comment />
+					{comments.map((d: TutorComment) => {
+						return (
+							<Comment commentData={d} />
+						)
+					})}
 				</div>
 
 			</div>

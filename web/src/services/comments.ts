@@ -1,4 +1,4 @@
-import { CreateComment, StudentInfo, UserData } from "@/types";
+import { TutorComment, CreateComment, StudentInfo, TutorInfo, UserData } from "@/types";
 import axios from "axios";
 import { API_ROUTES } from "@/constants"
 
@@ -9,4 +9,10 @@ const post = async (comment: CreateComment, user: UserData) => {
     return data
 }
 
-export default { post }
+const get = async (tutorId: number) => {
+    const { data } = await axios.get<TutorComment[]>(`${API_ROUTES.COMMENT.get(tutorId)}`)
+    return data
+
+}
+
+export default { post, get }

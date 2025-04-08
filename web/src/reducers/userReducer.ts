@@ -11,7 +11,7 @@ import {
 	UserType,
 	isTutorInfo,
 	CreateMatchInfo,
-	Comment,
+	TutorComment,
 	CreateComment,
 	StudentInfo,
 } from "../types";
