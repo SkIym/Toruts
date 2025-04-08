@@ -112,6 +112,7 @@ namespace api.Controllers
                 User = user,
                 DegreeProgram = request.DegreeProgram,
                 AreasOfImprovemnt = request.AreasOfImprovement,
+                DisplayConsent = request.DisplayConsent,
             };
 
             await _context.Student.AddAsync(student);
@@ -148,6 +149,7 @@ namespace api.Controllers
 
             student.AreasOfImprovemnt = updateDto.AreasOfImprovement;
             student.DegreeProgram = updateDto.DegreeProgram;
+            student.DisplayConsent = updateDto.DisplayConsent;
 
             await _context.SaveChangesAsync();
 

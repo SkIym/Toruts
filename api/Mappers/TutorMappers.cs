@@ -23,6 +23,7 @@ namespace api.Mappers
                 PortraitUrl = tutorModel.PortraitUrl,
                 Status = tutorModel.Status,
                 MatchedStudents = tutorModel.Matches?
+                    .Where(m => m.Student.DisplayConsent == true)
                     .Select(m => new StudentMatchDto
                     {
                         Id = m.StudentId,
@@ -51,6 +52,7 @@ namespace api.Mappers
                 LastName = tutorModel.User.LastName,
                 PhoneNumber = tutorModel.User.PhoneNumber,
                 MatchedStudents = tutorModel.Matches?
+                    .Where(m => m.Student.DisplayConsent == true)
                     .Select(m => new StudentMatchDto
                     {
                         Id = m.StudentId,
