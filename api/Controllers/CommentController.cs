@@ -58,6 +58,7 @@ namespace api.Controllers
             if (tutor == null) return NotFound("Tutor not found");
 
             var comments = tutor.Comments
+                .OrderByDescending(c => c.CreatedAt)
                 .Select(c => c.ToCommentDto());
 
             return Ok(comments);
