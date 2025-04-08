@@ -5,18 +5,31 @@ import { Input } from "../ui/input";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
 import { useField } from "@/hooks";
-import { z } from "zod";
+import { number, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+
+const clamp = (value: number, a: number, b: number) => {
+    if (value > a && value < b) {
+        return value
+    }
+
+    if (value < a) {
+        return a
+    } else {
+        return b
+    }
+
+}
 
 const CommentForm = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     const CommentSchema = z.object({
-        pedagogy: z.number().min(1).max(5),
-        helpfulness: z.number().min(1).max(5),
-        easiness: z.number().min(1).max(5),
+        pedagogy: z.number(),
+        helpfulness: z.number(),
+        easiness: z.number(),
         comment: z.string().nonempty({ message: "required" })
     })
 
