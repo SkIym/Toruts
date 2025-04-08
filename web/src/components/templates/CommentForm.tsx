@@ -23,7 +23,12 @@ const CommentForm = () => {
     type CommentSchemaType = z.infer<typeof CommentSchema>
 
     const commentForm = useForm<CommentSchemaType>({
-        resolver: zodResolver(CommentSchema)
+        resolver: zodResolver(CommentSchema),
+        defaultValues: {
+            pedagogy: 1,
+            helpfulness: 1,
+            easiness: 1,
+        }
     })
 
     const handleCommentSubmit: SubmitHandler<CommentSchemaType> = async (formData) => {
@@ -64,7 +69,6 @@ const CommentForm = () => {
                                         {...field}
                                     />
                                 </FormControl>
-
                             </FormItem>
                         )} />
 
@@ -79,7 +83,6 @@ const CommentForm = () => {
                                         {...field}
                                     />
                                 </FormControl>
-
                             </FormItem>
                         )} />
                 </div>
