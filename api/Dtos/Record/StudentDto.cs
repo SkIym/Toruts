@@ -10,6 +10,7 @@ namespace api.Dtos.Record
         public string? DegreeProgram { get; set; }
 
         public List<TutorMatchDto>? MatchedTutors { get; set; }
+        public bool DisplayConsent { get; set; }
 
     }
 
