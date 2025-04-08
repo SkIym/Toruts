@@ -13,29 +13,17 @@ import { uploadComment } from "@/reducers/userReducer";
 import tutor from "@/services/tutor";
 import { isTutorInfo } from "@/types";
 
-const clamp = (value: number, a: number, b: number) => {
-    if (value > a && value < b) {
-        return value
-    }
-
-    if (value < a) {
-        return a
-    } else {
-        return b
-    }
-
-}
-
-const CommentForm = ({ tutorId }) => {
+const CommentForm = ({ tutorId, callback, ...props }) => {
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
 
     const CommentSchema = z.object({
-        pedagogy: z.number(),
-        helpfulness: z.number(),
-        easiness: z.number(),
+        pedagogy: z.coerce.number().min(1).max(5),
+        helpfulness: z.coerce.number().min(1).max(5),
+        easiness: z.coerce.number().min(1).max(5),
         comment: z.string().nonempty({ message: "required" })
     })
+
 
     type CommentSchemaType = z.infer<typeof CommentSchema>
 
@@ -49,18 +37,12 @@ const CommentForm = ({ tutorId }) => {
     })
 
     const handleCommentSubmit: SubmitHandler<CommentSchemaType> = async (formData) => {
-        // TODO: force this at the schema instead
-        // clamp the numbers because zod does not like the min/max things
-
-        formData.easiness = clamp(formData.easiness, 1, 5)
-        formData.helpfulness = clamp(formData.helpfulness, 1, 5)
-        formData.pedagogy = clamp(formData.pedagogy, 1, 5)
-
         try {
             if (user?.roleInfo == undefined || user?.roleInfo == null) {
                 return
             }
 
+            console.log("Helo")
             if (isTutorInfo(user.roleInfo)) {
                 return
             }
@@ -71,7 +53,12 @@ const CommentForm = ({ tutorId }) => {
                 helpfulness: formData.helpfulness,
                 pedagogy: formData.pedagogy,
                 easiness: formData.easiness,
-            }, user.roleInfo))
+            }, user)).then(() => {
+                if (callback == undefined || callback == null) {
+                    return
+                }
+                callback()
+            })
 
         } catch {
 
@@ -97,8 +84,10 @@ const CommentForm = ({ tutorId }) => {
                                 <FormControl>
                                     <Input
                                         {...field}
+                                        type="number"
                                     />
                                 </FormControl>
+                                <FormMessage />
 
                             </FormItem>
                         )} />
@@ -111,6 +100,7 @@ const CommentForm = ({ tutorId }) => {
                                 <FormLabel>Helpfulness</FormLabel>
                                 <FormControl>
                                     <Input
+                                        type="number"
                                         {...field}
                                     />
                                 </FormControl>
@@ -125,6 +115,7 @@ const CommentForm = ({ tutorId }) => {
                                 <FormLabel>Easiness</FormLabel>
                                 <FormControl>
                                     <Input
+                                        type="number"
                                         {...field}
                                     />
                                 </FormControl>
