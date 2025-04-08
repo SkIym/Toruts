@@ -11,6 +11,9 @@ import TutorConfirmationForm from "./TutorConfirmationForm";
 import { Badge } from "../ui/badge";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import CommentForm from "./CommentForm";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
@@ -94,10 +97,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 				<b>Comments</b>
 
 				{/* Post here */}
-				<form className="items-end mb-10">
-					<Textarea placeholder="Type your comment here" className="mb-5" />
-					<Button> Post Comment</Button>
-				</form>
+				<CommentForm />
 
 				<div className="flex flex-col">
 					<div className="border-2 p-6 rounded-2xl">
