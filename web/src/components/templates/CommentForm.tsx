@@ -2,13 +2,16 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "store";
 import { useField } from "@/hooks";
 import { number, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { uploadComment } from "@/reducers/userReducer";
+import tutor from "@/services/tutor";
+import { isTutorInfo } from "@/types";
 
 const clamp = (value: number, a: number, b: number) => {
     if (value > a && value < b) {
@@ -25,6 +28,7 @@ const clamp = (value: number, a: number, b: number) => {
 
 const CommentForm = ({ tutorId }) => {
     const dispatch = useDispatch<AppDispatch>()
+    const user = useSelector((state: RootState) => state.user)
 
     const CommentSchema = z.object({
         pedagogy: z.number(),
@@ -53,7 +57,21 @@ const CommentForm = ({ tutorId }) => {
         formData.pedagogy = clamp(formData.pedagogy, 1, 5)
 
         try {
-            await dispatch()
+            if (user?.roleInfo == undefined || user?.roleInfo == null) {
+                return
+            }
+
+            if (isTutorInfo(user.roleInfo)) {
+                return
+            }
+
+            await dispatch(uploadComment({
+                tutorId: tutorId,
+                text: formData.comment,
+                helpfulness: formData.helpfulness,
+                pedagogy: formData.pedagogy,
+                easiness: formData.easiness,
+            }, user.roleInfo))
 
         } catch {
 

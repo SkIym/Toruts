@@ -11,6 +11,9 @@ import {
 	UserType,
 	isTutorInfo,
 	CreateMatchInfo,
+	Comment,
+	CreateComment,
+	StudentInfo,
 } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
@@ -224,6 +227,17 @@ export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
 		}
 	};
 };
+
+export const uploadComment = (commentData: CreateComment, student: StudentInfo) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			useSuccessNotification("uploaded comment")
+		} catch (e) {
+			useErrorNotification(e)
+			return Promise.reject()
+		}
+	}
+}
 
 // Signup as a student
 export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
