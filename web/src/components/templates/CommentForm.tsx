@@ -23,7 +23,7 @@ const clamp = (value: number, a: number, b: number) => {
 
 }
 
-const CommentForm = () => {
+const CommentForm = ({ tutorId }) => {
     const dispatch = useDispatch<AppDispatch>()
 
     const CommentSchema = z.object({
@@ -45,6 +45,20 @@ const CommentForm = () => {
     })
 
     const handleCommentSubmit: SubmitHandler<CommentSchemaType> = async (formData) => {
+        // TODO: force this at the schema instead
+        // clamp the numbers because zod does not like the min/max things
+
+        formData.easiness = clamp(formData.easiness, 1, 5)
+        formData.helpfulness = clamp(formData.helpfulness, 1, 5)
+        formData.pedagogy = clamp(formData.pedagogy, 1, 5)
+
+        try {
+            await dispatch()
+
+        } catch {
+
+        }
+
         console.log(formData)
     }
 

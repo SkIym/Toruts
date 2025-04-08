@@ -98,7 +98,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 				<b>Comments</b>
 
 				{/* Post here */}
-				<CommentForm />
+				<CommentForm tutorId={selectedTutor.id} />
 
 				<div className="flex flex-col gap-5">
 					<Comment />
