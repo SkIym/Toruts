@@ -85,6 +85,9 @@ namespace api.Controllers
             }
 
             var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                .ThenInclude(m => m.Student)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(t => t.Id == commentDto.TutorId);
 
             if (tutor == null) return NotFound("Tutor not found");
@@ -94,7 +97,7 @@ namespace api.Controllers
 
             if (!isTutee) return Unauthorized("Student is or has not been a tutee of the tutor");
 
-            var comment = new Comment 
+            var comment = new Comment
             {
                 TutorId = commentDto.TutorId,
                 Tutor = tutor,
@@ -103,7 +106,7 @@ namespace api.Controllers
                 Text = commentDto.Text,
                 Helpfulness = commentDto.Helpfulness,
                 Pedagogy = commentDto.Pedagogy,
-                Easiness = commentDto.Easiness, 
+                Easiness = commentDto.Easiness,
             };
 
             tutor.Comments.Add(comment);
@@ -112,8 +115,10 @@ namespace api.Controllers
             await _context.Comment.AddAsync(comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new {
-                id = comment.Id }, comment.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new
+            {
+                id = comment.Id
+            }, comment.ToCommentDto());
         }
     }
 }
