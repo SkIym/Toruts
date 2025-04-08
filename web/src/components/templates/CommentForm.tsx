@@ -26,7 +26,7 @@ const clamp = (value: number, a: number, b: number) => {
 
 }
 
-const CommentForm = ({ tutorId }) => {
+const CommentForm = ({ tutorId, ...props }) => {
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
 
