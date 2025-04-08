@@ -32,6 +32,7 @@ export const API_ROUTES =
     , COMMENT:
     {
         create: (username: string) => `${SERVER_URL}comments/create/${username}`
+        , get: (id: number) => `${SERVER_URL}comments/tutor/${id}`
     }
 }
 export const PATH =
