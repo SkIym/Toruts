@@ -118,6 +118,7 @@ export interface CreateComment { // when POSTing
 }
 
 export interface TutorComment { // when GETting
+    id: number,
     commenterFirstName: string,
     commenterLastName: string,
     commenterId: number,
