@@ -1,21 +1,22 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
+import { CommentError } from "@/types"
 
 export const useField = (type: string, defValue?: string) => {
-  const [value, setValue] = useState(defValue ? defValue : "");
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-  const reset = () => {
-    setValue("");
-  };
-  return {
-    type,
-    value,
-    onChange,
-    reset,
-  };
+    const [value, setValue] = useState(defValue ? defValue : "");
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+    };
+    const reset = () => {
+        setValue("");
+    };
+    return {
+        type,
+        value,
+        onChange,
+        reset,
+    };
 };
 
 export const useErrorNotification = (e: unknown) => {
@@ -30,11 +31,11 @@ export const useErrorNotification = (e: unknown) => {
                 if (data) toast.error(data.message)
 
                 // invalid fields
-                if (data.errors) for(const err in data.errors) for(const e of data.errors[err]) toast.error(e)
+                if (data.errors) for (const err in data.errors) for (const e of data.errors[err]) toast.error(e)
 
                 // invalid email
-                if (data.errors.Email)  for(const err of data.errors.Email) toast.error(err)
-                
+                if (data.errors.Email) for (const err of data.errors.Email) toast.error(err)
+
                 // invalid password
                 if (data.errors.Password) for (const err of data.errors.Password) toast.error(err)
                 break;
@@ -54,7 +55,7 @@ export const useErrorNotification = (e: unknown) => {
                         toast.error(errors.Message)
                         break;
                 }
-                for(const err of errors) toast.error(err.description)
+                for (const err of errors) toast.error(err.description)
                 break;
             case 401:
                 // Unauthorized
@@ -67,8 +68,10 @@ export const useErrorNotification = (e: unknown) => {
                 toast.error(e.message)
                 break;
         }
-    } else {
-        console.error(e);
+    }
+    else {
+        // console.error(e);
+        toast.error((e as Error).message)
     }
 }
 

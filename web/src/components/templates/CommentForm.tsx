@@ -84,8 +84,8 @@ const CommentForm = ({ tutorId, callback, ...props }) => {
 
         } catch (e) {
             commentForm.setValue("comment", "")
-            // useErrorNotification(e)
-            useSuccessNotification("Don't say bad words")
+            useErrorNotification(e)
+            // useSuccessNotification("Don't say bad words")
 
         }
 
