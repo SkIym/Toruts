@@ -18,6 +18,7 @@ import CommentForm from "./CommentForm";
 import { useEffect, useState } from "react";
 import commentService from "@/services/comments"
 import Comment from "./Comment";
+import comments from "@/services/comments";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
@@ -122,9 +123,13 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 
 				{/* view here */}
 				<div className="flex flex-col gap-5">
-					{comments.map((d: TutorComment) => {
+					{comments.map((d: TutorComment, i: number) => {
 						return (
-							<Comment commentData={d} />
+							<Comment commentData={d} callback={() => {
+								let commentCopy = Array.from(comments)
+								commentCopy.splice(i, 1)
+								setComments(commentCopy)
+							}} />
 						)
 					})}
 				</div>

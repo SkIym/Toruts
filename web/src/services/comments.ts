@@ -15,7 +15,7 @@ const get = async (tutorId: number) => {
 }
 
 const remove = async (commentId: number) => {
-    const { data } = await axios.get(`${API_ROUTES.COMMENT.delete(commentId)}`)
+    const { data } = await axios.delete(`${API_ROUTES.COMMENT.delete(commentId)}`)
     return data
 }
 

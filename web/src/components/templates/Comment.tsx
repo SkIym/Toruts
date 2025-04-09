@@ -4,6 +4,7 @@ import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button } from "../ui/button"
 // import regular from '@fortawesome/free-regular-svg-icons'
 import commentService from "@/services/comments"
+import { useErrorNotification, useSuccessNotification } from "@/hooks"
 
 const Rating = ({ v }) => {
     return (
@@ -18,13 +19,22 @@ const Rating = ({ v }) => {
     )
 }
 
-const Comment = ({ commentData }) => {
+const Comment = ({ commentData, callback }) => {
     return (
         <div className="border-2 p-6 rounded-2xl">
             <b className="text-2xl mb-2">{commentData.commenterFirstName} {commentData.commenterLastName}</b>
 
             <Button onClick={(e) => {
-                commentService.remove(commentData.id)
+                try {
+
+                    commentService.remove(commentData.id).then(() => {
+                        callback()
+                    })
+                    useSuccessNotification("Successfully deleted comment")
+                } catch (e) {
+                    useErrorNotification(e)
+
+                }
             }}><FontAwesomeIcon icon={faTrash} /></Button>
 
             <div className="flex justify-between w-4/5 items-center">
