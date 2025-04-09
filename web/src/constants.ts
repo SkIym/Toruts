@@ -33,6 +33,7 @@ export const API_ROUTES =
     {
         create: (username: string) => `${SERVER_URL}comments/create/${username}`
         , get: (id: number) => `${SERVER_URL}comments/tutor/${id}`
+        , delete: (id: number) => `${SERVER_URL}comments/delete/${id}`
     }
 }
 export const PATH =
