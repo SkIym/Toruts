@@ -265,7 +265,7 @@ const TutorForm = ({ info }: Props) => {
                       data-testid={TEST.select("mode")}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger data-testid={TEST.select("mode")}>
                           <SelectValue placeholder="Select your offered mode of learning" />
                         </SelectTrigger>
                       </FormControl>
