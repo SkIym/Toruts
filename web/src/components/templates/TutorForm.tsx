@@ -262,17 +262,16 @@ const TutorForm = ({ info }: Props) => {
                       defaultValue={
                         info ? info.learningMode.toString() : undefined
                       }
-                      data-testid={TEST.select("mode")}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger data-testid={TEST.select("mode")}>
                           <SelectValue placeholder="Select your offered mode of learning" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="0">Online</SelectItem>
-                        <SelectItem value="1">F2F</SelectItem>
-                        <SelectItem value="2">Hybrid</SelectItem>
+                        <SelectItem value="0" data-testid={TEST.select("online")}>Online</SelectItem>
+                        <SelectItem value="1" data-testid={TEST.select("f2f")}>F2F</SelectItem>
+                        <SelectItem value="2" data-testid={TEST.select("hybrid")}>Hybrid</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -407,7 +406,7 @@ const TutorForm = ({ info }: Props) => {
                   <LoadingButton
                     type="submit"
                     loading={submittingForm}
-                    date-testid={TEST.button("create")}
+                    data-testid={TEST.button('create')}
                   >
                     {submittingForm
                       ? "Creating tutor account"
