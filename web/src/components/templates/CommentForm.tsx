@@ -12,6 +12,7 @@ import { uploadComment } from "@/reducers/userReducer";
 
 import { isTutorInfo } from "@/types";
 import { useEffect, useState } from "react";
+import { TEST } from "@/constants";
 
 interface Props {
     tutorId: number,
@@ -98,6 +99,7 @@ const CommentForm = ({ tutorId, onCommentPost }: Props) => {
                 className="items-end mb-10"
                 onSubmit={commentForm.handleSubmit(handleCommentSubmit)}
                 id="comment-form"
+                data-testid={TEST.form('comment')}
             >
                 <div className="flex mb-5 mt-5 gap-2">
                     <FormField
@@ -110,6 +112,7 @@ const CommentForm = ({ tutorId, onCommentPost }: Props) => {
                                     <Input
                                         {...field}
                                         type="number"
+                                        data-testid={TEST.input("pedagogy")}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -127,6 +130,7 @@ const CommentForm = ({ tutorId, onCommentPost }: Props) => {
                                     <Input
                                         type="number"
                                         {...field}
+                                        data-testid={TEST.input("helpfulness")}
                                     />
                                 </FormControl>
                             </FormItem>
@@ -142,6 +146,7 @@ const CommentForm = ({ tutorId, onCommentPost }: Props) => {
                                     <Input
                                         type="number"
                                         {...field}
+                                        data-testid={TEST.input("easiness")}
                                     />
                                 </FormControl>
                             </FormItem>
@@ -151,14 +156,15 @@ const CommentForm = ({ tutorId, onCommentPost }: Props) => {
                 <FormField control={commentForm.control} name="comment" render={({ field }) => (
                     <FormItem>
                         <FormControl>
-                            <Textarea placeholder="Type your comment here" className="mb-5" {...field} />
+                            <Textarea placeholder="Type your comment here" className="mb-5" {...field} 
+                            data-testid={TEST.input("comment")}/>
                         </FormControl>
 
                     </FormItem>
 
                 )} />
 
-                <Button type="submit">Post Comment</Button>
+                <Button type="submit" data-testid={TEST.button("submit")}>Post Comment</Button>
             </form>
         </Form>
     )

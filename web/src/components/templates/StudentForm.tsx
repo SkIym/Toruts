@@ -152,7 +152,7 @@ const StudentForm = ({ info }: Props) => {
                             <Checkbox
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                data-testid={TEST.input('consent')}
+                                data-testid={TEST.checkbox('consent')}
                             />
                             </FormControl>
                             <FormLabel>Allow other users to view my profile</FormLabel>

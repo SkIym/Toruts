@@ -7,6 +7,7 @@ import { useErrorNotification, useSuccessNotification } from "@/hooks"
 import { useSelector } from "react-redux"
 import { RootState } from "store"
 import { TutorComment } from '@/types'
+import { TEST } from '@/constants'
 
 const Rating = ({ v }: {v: number}) => {
     return (
@@ -50,7 +51,7 @@ const Comment = ({ commentData, onCommentDelete }: Props) => {
                 {userId == commentData.commenterId ?
 
                     <div className="ml-auto">
-                        <Button onClick={handleDelete}>
+                        <Button onClick={handleDelete} data-testid={TEST.button('delete')}>
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
                     </div>

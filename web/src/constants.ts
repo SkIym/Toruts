@@ -65,6 +65,7 @@ export const TEST =
     , card: (card: string) => `${card}-card`
     , radio: (radio: string) => `${radio}-radio`
     , link: (link: string) => `${link}-link`
+    , checkbox: (checkbox: string) => `${checkbox}-checkbox`
 }
 export const PORTRAIT =
 {
