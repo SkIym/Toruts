@@ -1,4 +1,5 @@
 import {
+	TutorComment,
 	LearningMode,
 	StudentMatchInfo,
 	TutorInfo,
@@ -9,9 +10,19 @@ import { RootState } from "store";
 import { useSelector } from "react-redux";
 import TutorConfirmationForm from "./TutorConfirmationForm";
 import { Badge } from "../ui/badge";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import CommentForm from "./CommentForm";
+import { useEffect, useState } from "react";
+import commentService from "@/services/comments"
+import Comment from "./Comment";
+import comments from "@/services/comments";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
+
 
 const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 	const getLearningMode = (learningMode: LearningMode) => {
@@ -23,6 +34,19 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 		}
 		return <div>Hybrid</div>;
 	};
+
+	const getComments = async () => {
+		console.log("getting tutor comments")
+		const tutorComments = await commentService.get(selectedTutor.id)
+		setComments(tutorComments)
+	}
+
+	const [comments, setComments] = useState<TutorComment[]>([])
+
+	useEffect(() => {
+		getComments()
+	}, [selectedTutor])
+	console.log(comments)
 
 	const user = useSelector((state: RootState) => state.user);
 	console.log(selectedTutor);
@@ -83,52 +107,33 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 					);
 				})}
 			</div>
-			<p className="w-full p-4 border-t-2">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus laoreet
-				fringilla rhoncus. Aliquam lacinia ullamcorper eros interdum dictum. Nam
-				porta quis dolor sodales sodales. Ut sodales placerat mi a interdum.
-				Aliquam rhoncus dolor sed ligula luctus sagittis. Nullam id urna quis
-				orci lobortis tincidunt id nec massa. Quisque feugiat elementum
-				hendrerit. Fusce vel nisi felis. Donec quis mauris ut ipsum interdum
-				rutrum. Curabitur sit amet ultricies augue, vitae dignissim elit. Sed
-				pellentesque gravida odio, fermentum fringilla massa malesuada ut.
-				Aliquam non pulvinar lectus, a semper velit. Pellentesque eget nulla nec
-				libero tempus feugiat. Aenean nec gravida neque. Maecenas accumsan
-				pretium urna, eu varius nulla sagittis vitae. Morbi finibus diam vitae
-				mi suscipit placerat. Quisque et leo ac lectus fringilla blandit.
-				Pellentesque habitant morbi tristique senectus et netus et malesuada
-				fames ac turpis egestas. Nunc eu congue nulla. Sed et congue arcu, vitae
-				imperdiet ex. Phasellus auctor, tortor vel venenatis lacinia, metus
-				purus lacinia est, a bibendum turpis neque a libero. Pellentesque
-				tincidunt vulputate malesuada. Proin at consequat nulla, id mattis
-				turpis. Nullam consectetur eget arcu ut laoreet. Phasellus vestibulum
-				turpis eget turpis tempor egestas. Fusce tempus odio erat, et egestas
-				nunc imperdiet tristique. Aliquam sed sem et neque feugiat tempus.
-				Phasellus sed bibendum nulla. Mauris dignissim leo enim, sit amet
-				faucibus nulla hendrerit dapibus. Aenean nunc risus, feugiat in interdum
-				id, tincidunt at tellus. Vivamus eu urna et risus faucibus vehicula.
-				Donec eget nunc libero. Ut et pulvinar neque. Suspendisse potenti. Sed
-				venenatis semper ante, at placerat risus cursus eu. Nunc cursus arcu non
-				diam hendrerit, eu elementum urna accumsan. In molestie libero mi, quis
-				lacinia nulla porta ut. Vestibulum cursus porta quam, eget dictum justo
-				placerat vitae. Etiam vitae pretium arcu, eu auctor velit. Nam felis
-				lorem, imperdiet id risus ut, tincidunt semper nisi. Mauris at odio at
-				nisl imperdiet tincidunt. Cras urna lacus, pellentesque id leo at,
-				ornare dignissim metus. Duis ac elementum velit. Donec ac ligula nulla.
-				Pellentesque ex mi, pulvinar vel metus non, pulvinar venenatis dui. Nam
-				efficitur felis velit, et imperdiet justo sodales quis. Vestibulum
-				convallis elit a neque tincidunt ornare. Ut viverra nisl vel commodo
-				ultrices. In at ullamcorper ex, volutpat dapibus erat. Aliquam commodo
-				neque vitae scelerisque blandit. In arcu dolor, consequat vitae leo ut,
-				pretium imperdiet nulla. Integer sit amet ipsum quis dolor pharetra
-				mattis sit amet vel augue. Suspendisse potenti. Cras id dictum libero.
-				Cras vel orci odio. Praesent non blandit leo. Sed est urna, gravida id
-				egestas quis, mattis non massa. Vestibulum vel lorem arcu. Aenean
-				consectetur quam sit amet ex dignissim tempus.
-			</p>
 			<div className="border-t-2 p-4 flex flex-col">
 				<b>Contacts</b>
 				<span>123456789</span>
+			</div>
+
+			<div className="w-full p-4 flex flex-col border-t-2">
+				<b>Comments</b>
+
+				{/* Post here */}
+				<CommentForm tutorId={selectedTutor.id} callback={() => {
+					getComments()
+
+				}} />
+
+				{/* view here */}
+				<div className="flex flex-col gap-5">
+					{comments.map((d: TutorComment, i: number) => {
+						return (
+							<Comment commentData={d} callback={() => {
+								let commentCopy = Array.from(comments)
+								commentCopy.splice(i, 1)
+								setComments(commentCopy)
+							}} />
+						)
+					})}
+				</div>
+
 			</div>
 		</div>
 	);

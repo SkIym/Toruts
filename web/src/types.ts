@@ -50,7 +50,8 @@ export type StudentInfo = {
     id: number,
     areasOfImprovement: string[],
     degreeProgram?: string
-    matchedTutors?: TutorMatchInfo[]
+    matchedTutors?: TutorMatchInfo[],
+    displayConsent: boolean
 }
 
 export type StudentInfoWithoutId = Omit<StudentInfo, 'id'>
@@ -75,7 +76,7 @@ export function isTutorInfo(object: TutorInfo | StudentInfo): object is TutorInf
 
 export type TutorInfoUpload = Omit<TutorInfo, 'portraitUrl'>
 
-export type TutorResult = TutorInfo & {firstName: string, lastName: string, phoneNumber: string}
+export type TutorResult = TutorInfo & { firstName: string, lastName: string, phoneNumber: string }
 
 export type TutorInfoWithoutId = Omit<TutorInfoUpload, 'id'>
 
@@ -117,7 +118,8 @@ export interface CreateComment { // when POSTing
     easiness: number
 }
 
-export interface Comment { // when GETting
+export interface TutorComment { // when GETting
+    id: number,
     commenterFirstName: string,
     commenterLastName: string,
     commenterId: number,

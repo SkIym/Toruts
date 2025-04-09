@@ -21,7 +21,8 @@ namespace api.Mappers
                         LastName = m.Tutor.User.LastName,
                         PortraitUrl = m.Tutor.PortraitUrl
                     })
-                    .ToList()
+                    .ToList(),
+                DisplayConsent = studentModel.DisplayConsent
             };
 
         }

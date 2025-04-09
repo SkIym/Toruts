@@ -11,11 +11,15 @@ import {
 	UserType,
 	isTutorInfo,
 	CreateMatchInfo,
+	TutorComment,
+	CreateComment,
+	StudentInfo,
 } from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
 import studentService from "../services/student";
 import matchService from "../services/match";
+import commentService from "@/services/comments"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
 const LOCAL_STORAGE_KEY = "loggedInUser";
@@ -224,6 +228,19 @@ export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
 		}
 	};
 };
+
+export const uploadComment = (commentData: CreateComment, user: UserData) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			console.log("bruh")
+			await commentService.post(commentData, user);
+			useSuccessNotification("uploaded comment")
+		} catch (e) {
+			useErrorNotification(e)
+			return Promise.reject()
+		}
+	}
+}
 
 // Signup as a student
 export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {

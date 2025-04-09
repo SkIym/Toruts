@@ -58,6 +58,7 @@ namespace api.Controllers
             if (tutor == null) return NotFound("Tutor not found");
 
             var comments = tutor.Comments
+                .OrderByDescending(c => c.CreatedAt)
                 .Select(c => c.ToCommentDto());
 
             return Ok(comments);
@@ -85,6 +86,9 @@ namespace api.Controllers
             }
 
             var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                .ThenInclude(m => m.Student)
+                .ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(t => t.Id == commentDto.TutorId);
 
             if (tutor == null) return NotFound("Tutor not found");
@@ -94,7 +98,7 @@ namespace api.Controllers
 
             if (!isTutee) return Unauthorized("Student is or has not been a tutee of the tutor");
 
-            var comment = new Comment 
+            var comment = new Comment
             {
                 TutorId = commentDto.TutorId,
                 Tutor = tutor,
@@ -103,7 +107,7 @@ namespace api.Controllers
                 Text = commentDto.Text,
                 Helpfulness = commentDto.Helpfulness,
                 Pedagogy = commentDto.Pedagogy,
-                Easiness = commentDto.Easiness, 
+                Easiness = commentDto.Easiness,
             };
 
             tutor.Comments.Add(comment);
@@ -112,8 +116,32 @@ namespace api.Controllers
             await _context.Comment.AddAsync(comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new {
-                id = comment.Id }, comment.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new
+            {
+                id = comment.Id
+            }, comment.ToCommentDto());
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            // Validate the model state
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var comment = await _context.Comment
+                .FirstOrDefaultAsync(c => c.Id == id);
+            
+            if (comment == null)
+            {
+                return NotFound("Comment does not exist.");
+            }
+
+            _context.Comment.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return Ok("Deleted comment.");
         }
     }
 }
