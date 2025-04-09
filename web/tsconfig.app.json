@@ -23,7 +23,7 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": false,                                      /* Set to false to remove 'is declared but its value is never read.' errors*/
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
