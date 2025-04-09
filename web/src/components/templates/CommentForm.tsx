@@ -1,32 +1,35 @@
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
-import { useErrorNotification, useField, useSuccessNotification } from "@/hooks";
-import { number, z } from "zod";
+import { useErrorNotification } from "@/hooks";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { uploadComment } from "@/reducers/userReducer";
-import tutor from "@/services/tutor";
+
 import { isTutorInfo } from "@/types";
 import { useEffect, useState } from "react";
 
-const CommentForm = ({ tutorId, callback, ...props }) => {
+interface Props {
+    tutorId: number,
+    onCommentPost: () => void
+}
+
+const CommentForm = ({ tutorId, onCommentPost }: Props) => {
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
 
     const [badWords, setBadWords] = useState<string[]>([])
 
     useEffect(() => {
-        fetch("/badwords.txt")
+        fetch("../../badwords.txt")
             .then((res) => res.text())
             .then((text) => text.split("\n"))
             .then((words) => setBadWords(words))
             .catch((e) => console.error(e))
-
     }, [])
 
     const CommentSchema = z.object({
@@ -75,12 +78,9 @@ const CommentForm = ({ tutorId, callback, ...props }) => {
                 helpfulness: formData.helpfulness,
                 pedagogy: formData.pedagogy,
                 easiness: formData.easiness,
-            }, user)).then(() => {
-                if (callback == undefined || callback == null) {
-                    return
-                }
-                callback()
-            })
+            }, user))
+
+            onCommentPost()
 
         } catch (e) {
             commentForm.setValue("comment", "")

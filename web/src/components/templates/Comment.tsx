@@ -1,4 +1,3 @@
-import { TutorComment } from "@/types"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button } from "../ui/button"
@@ -7,8 +6,9 @@ import commentService from "@/services/comments"
 import { useErrorNotification, useSuccessNotification } from "@/hooks"
 import { useSelector } from "react-redux"
 import { RootState } from "store"
+import { TutorComment } from '@/types'
 
-const Rating = ({ v }) => {
+const Rating = ({ v }: {v: number}) => {
     return (
         <div className="flex">
             {[...Array(v)].map((_, i) =>
@@ -21,11 +21,27 @@ const Rating = ({ v }) => {
     )
 }
 
-const Comment = ({ commentData, callback }) => {
+interface Props {
+    commentData: TutorComment,
+    onCommentDelete: () => void
+}
+
+const Comment = ({ commentData, onCommentDelete }: Props) => {
     const user = useSelector((state: RootState) => state.user)
     console.log(user)
     console.log(commentData.commenterId)
     const userId = user?.roleInfo?.id
+
+    const handleDelete = async () => {
+        try {
+            await commentService.remove(commentData.id)
+            onCommentDelete()
+            useSuccessNotification("Successfully deleted comment")
+        } catch (e) {
+            useErrorNotification(e)
+
+        }
+    }
 
     return (
         <div className="border-2 p-6 rounded-2xl">
@@ -34,19 +50,7 @@ const Comment = ({ commentData, callback }) => {
                 {userId == commentData.commenterId ?
 
                     <div className="ml-auto">
-                        <Button onClick={(e) => {
-                            try {
-
-                                commentService.remove(commentData.id).then(() => {
-                                    callback()
-                                })
-                                useSuccessNotification("Successfully deleted comment")
-                            } catch (e) {
-                                useErrorNotification(e)
-
-                            }
-                        }}
-                        >
+                        <Button onClick={handleDelete}>
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
                     </div>

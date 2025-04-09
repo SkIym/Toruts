@@ -115,21 +115,14 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 			<div className="w-full p-4 flex flex-col border-t-2">
 				<b>Comments</b>
 
-				{/* Post here */}
-				<CommentForm tutorId={selectedTutor.id} callback={() => {
-					getComments()
-
-				}} />
-
+                {user?.userType === UserType.STUDENT && selectedTutor.matchedStudents?.find(m => m.id === user.roleInfo?.id)
+                ? <CommentForm tutorId={selectedTutor.id} onCommentPost={getComments}/> : null }
+				
 				{/* view here */}
 				<div className="flex flex-col gap-5">
 					{comments.map((d: TutorComment, i: number) => {
 						return (
-							<Comment commentData={d} callback={() => {
-								let commentCopy = Array.from(comments)
-								commentCopy.splice(i, 1)
-								setComments(commentCopy)
-							}} />
+							<Comment commentData={d} onCommentDelete={() => setComments(comments.filter(c => c.id === i))} />
 						)
 					})}
 				</div>
