@@ -379,8 +379,8 @@ const TutorForm = ({ info }: Props) => {
                       defaultValue={info ? info.status.toString() : undefined}
                     >
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your status" data-testid={TEST.select("status")}/>
+                        <SelectTrigger data-testid={TEST.select("status")}>
+                          <SelectValue placeholder="Select your status" data-testid={TEST.select("default")}/>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent >
