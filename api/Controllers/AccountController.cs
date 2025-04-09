@@ -11,6 +11,7 @@ using api.Data;
 using Microsoft.EntityFrameworkCore;
 using api.Enums;
 using api.Mappers;
+using api.Dtos.Record;
 
 namespace api.Controllers
 {
@@ -75,7 +76,8 @@ namespace api.Controllers
                     Token = _tokenService.CreateToken(user),
                     UserType = isTutor ? UserType.TUTOR : (isStudent ? UserType.STUDENT : null),
                     PrimaryInfo = user.ToUpdateUserDto(),
-                    RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null)
+                    RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null),
+                    Dual = isTutor && isStudent
                 }
             );
         }
@@ -103,7 +105,10 @@ namespace api.Controllers
                 var appUser = new User
                 {
                     UserName = signupDto.UserName,
-                    Email = signupDto.Email
+                    Email = signupDto.Email,
+                    FirstName = signupDto.FirstName,
+                    LastName = signupDto.LastName,
+                    PhoneNumber = signupDto.PhoneNumber
                 };
 
                 // Attempt to create the user
@@ -122,7 +127,13 @@ namespace api.Controllers
                             {
                                 UserName = appUser.UserName,
                                 Email = appUser.Email,
-                                Token = _tokenService.CreateToken(appUser)
+                                Token = _tokenService.CreateToken(appUser),
+                                PrimaryInfo = new UpdateUserDto 
+                                {
+                                    FirstName = appUser.FirstName,
+                                    LastName = appUser.LastName,
+                                    PhoneNumber = appUser.PhoneNumber
+                                }
                             }
                         );
                     }

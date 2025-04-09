@@ -1,16 +1,19 @@
-import { Link } from "react-router-dom"
+import { useLocation } from "react-router-dom";
+import SearchForm from "../templates/SearchForm";
+import { TEST } from "@/constants";
 
 const HomePage = () => {
-    return (
-        <div>
-            <h1>OMG HELLO</h1>
-            <h2>There will be a list of tutors here and a search bar...</h2>
-            <Link to={"/profile?"}>
-                <p>Profile</p>
-            </Link>
-        </div>
+	const location = useLocation();
+	const queryParams = new URLSearchParams(location.search);
+	const searchQuery = queryParams.get("query") || "";
 
-    )
-}
+	return (
+		<div data-testid={TEST.page("home")}>
+			<div className="pl-50 pr-50 pt-10">
+				<SearchForm initialQuery={searchQuery} />
+			</div>
+		</div>
+	);
+};
 
-export default HomePage
+export default HomePage;

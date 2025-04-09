@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Supabase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,17 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<Supabase.Client>(_ => 
+    new Supabase.Client(
+        builder.Configuration["SupabaseUrl"],
+        builder.Configuration["SupabaseKey"],
+        new SupabaseOptions {
+            AutoRefreshToken = true,
+            AutoConnectRealtime = true
+        }
+    )
+);
 
 // User identity configuration
 // Configure Identity with custom password requirements

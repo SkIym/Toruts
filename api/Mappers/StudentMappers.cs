@@ -13,7 +13,16 @@ namespace api.Mappers
                 Id = studentModel.Id,
                 AreasOfImprovement = studentModel.AreasOfImprovemnt,
                 DegreeProgram = studentModel.DegreeProgram,
-                UserId = studentModel.UserId
+                MatchedTutors = studentModel.Matches?
+                    .Select(m => new TutorMatchDto
+                    {
+                        Id = m.TutorId,
+                        FirstName = m.Tutor.User.FirstName,
+                        LastName = m.Tutor.User.LastName,
+                        PortraitUrl = m.Tutor.PortraitUrl
+                    })
+                    .ToList(),
+                DisplayConsent = studentModel.DisplayConsent
             };
 
         }

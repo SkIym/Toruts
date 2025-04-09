@@ -11,6 +11,9 @@ namespace api.Models
         public List<string>? AreasOfImprovemnt { get; set; } = [];
         public string? DegreeProgram { get; set; } = string.Empty;
 
+        public ICollection<Match> Matches { get; set; } = new List<Match>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public required bool DisplayConsent { get; set; } = false;
         // Foreign key to  User (Identity User uses ids of type string)
         public required string UserId { get; set; }
 

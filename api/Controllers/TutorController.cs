@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Mappers;
 using Microsoft.EntityFrameworkCore;
+using api.Enums;
+using api.Service;
+using Supabase.Storage;
+using System.Security.Cryptography.X509Certificates;
 
 namespace api.Controllers
 {
@@ -34,7 +38,12 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var tutorList = await _context.Tutor.ToListAsync();
+            var tutorList = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .ToListAsync();
             var tutors = tutorList.Select(t => t.ToTutorDto());
 
             return Ok(tutors);
@@ -57,7 +66,12 @@ namespace api.Controllers
                 return NotFound(username);
             }
 
-            var tutor = await _context.Tutor.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.UserId == user.Id);
 
             // If user not found, return 404 Not Found
             if (tutor == null)
@@ -68,12 +82,59 @@ namespace api.Controllers
             return Ok(tutor.ToTutorDto());
         }
 
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> SearchWithQuery(string? query, int? minPrice, int? maxPrice)
+        {
+            // build query first
+            var tutorsQuery = _context.Tutor
+                                .Include(t => t.Matches)
+                                    .ThenInclude(m => m.Student)
+                                        .ThenInclude(s => s.User)
+                                .Include(t => t.User)
+                                .AsQueryable();
+
+            tutorsQuery = tutorsQuery.Where(t => t.Status == Status.Active);
+
+            if (minPrice.HasValue)
+            {
+                tutorsQuery = tutorsQuery.Where(t => t.Price >= minPrice.Value);
+            }
+            if (maxPrice.HasValue)
+            {
+                tutorsQuery = tutorsQuery.Where(t => t.Price <= maxPrice.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                query = query.ToLower();
+                var tokens = query.Split(' ');
+
+                tutorsQuery = tutorsQuery.Where(t => (
+                    t.User.FirstName + " " + t.User.LastName).ToLower().Contains(query) ||
+                    t.EducAttainment.ToLower().Contains(query) ||
+                    t.AreasOfExpertise == null ? true : t.AreasOfExpertise.Intersect(tokens).Count() > 0
+                );
+            }
+
+            // then execute
+            var tutors = await tutorsQuery
+                    .Select(t => t.ToTutorResultDto())
+                    .ToListAsync();
+                   
+            return Ok(tutors);
+        }
 
         // GET endpoint to get tutor by id
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] string id)
         {
-            var tutor = await _context.Tutor.FindAsync(id);
+            var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.UserId == id);
 
             // If user not found, return 404 Not Found
             if (tutor == null)
@@ -121,10 +182,10 @@ namespace api.Controllers
                 AreasOfExpertise = tutorDto.AreasOfExpertise,
                 TutoringExperiences = tutorDto.TutoringExperiences,
                 Availability = tutorDto.Availability,
-                PortraitUrl = tutorDto.PortraitUrl,
+                PortraitUrl = null,
                 Status = tutorDto.Status
             };
-
+           
             await _context.Tutor.AddAsync(tutor);
             user.Tutor = tutor;
             await _context.SaveChangesAsync();
@@ -133,12 +194,50 @@ namespace api.Controllers
 
         }
 
+        [HttpPost]
+        [Route("upload/portrait/{id}")]
+        public async Task<IActionResult> Upload([FromRoute] int id, [FromForm] IFormFile portrait, Supabase.Client client)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var tutor = await _context.Tutor.FirstAsync(t => t.Id == id);
+            using var memoryStream = new MemoryStream();
+            await portrait.CopyToAsync(memoryStream);
+            var lastIndexOfDot = portrait.FileName.LastIndexOf('.');
+            string ext = portrait.FileName[(lastIndexOfDot + 1)..];
+
+            if (tutor.PortraitUrl == null)
+            {
+                
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+            } 
+            else 
+            {
+                Console.WriteLine("updating");
+                var dot = tutor.PortraitUrl.LastIndexOf('.');
+                string prevExt = tutor.PortraitUrl[(dot + 1)..];
+                await client.Storage.From("profile-pictures").Remove(
+                    $"tutor-{tutor.Id}.{prevExt}");
+                await client.Storage.From("profile-pictures").Upload(
+                    memoryStream.ToArray(),
+                    $"tutor-{tutor.Id}.{ext}");
+            }
+                
+            tutor.PortraitUrl = client.Storage.From("profile-pictures").GetPublicUrl($"tutor-{tutor.Id}.{ext}");
+            await _context.SaveChangesAsync();
+            return Ok(tutor.PortraitUrl);
+            
+        }
+
         [HttpPut("update/{username}")]
         public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateTutorDto updateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
@@ -146,21 +245,20 @@ namespace api.Controllers
                 return NotFound($"User '{username}' does not exist");
             }
 
-            var tutor = await _context.Tutor.FirstOrDefaultAsync(s => s.UserId == user.Id);
+            var tutor = await _context.Tutor
+                .Include(t => t.Matches)
+                    .ThenInclude(m => m.Student)
+                        .ThenInclude(s => s.User)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.UserId == user.Id);
             if (tutor == null)
             {
                 return NotFound($"User '{username}' does not have a tutor profile");
             }
 
-            tutor.EducAttainment = updateDto.EducAttainment;
-            tutor.LearningMode = updateDto.LearningMode;
-            tutor.Venue = updateDto.Venue;
-            tutor.Price = updateDto.Price;
-            tutor.AreasOfExpertise = updateDto.AreasOfExpertise;
-            tutor.TutoringExperiences = updateDto.TutoringExperiences;
-            tutor.Availability = updateDto.Availability;
-            tutor.PortraitUrl = updateDto.PortraitUrl;
-            tutor.Status = updateDto.Status;
+            _context.Entry(tutor).CurrentValues.SetValues(updateDto);
+            _context.Entry(tutor).State = EntityState.Modified;
+            _context.Entry(tutor).Property(x => x.PortraitUrl).IsModified = false;
 
             await _context.SaveChangesAsync();
 

@@ -169,6 +169,78 @@ namespace api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("api.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Easiness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Helpfulness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Pedagogy")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TutorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TutorId");
+
+                    b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("api.Models.Match", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TutorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TutorId");
+
+                    b.ToTable("Match");
+                });
+
             modelBuilder.Entity("api.Models.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -183,16 +255,14 @@ namespace api.Migrations
                     b.Property<string>("DegreeProgram")
                         .HasColumnType("text");
 
-                    b.Property<int?>("TutorId")
-                        .HasColumnType("integer");
+                    b.Property<bool>("DisplayConsent")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TutorId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -378,12 +448,46 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("api.Models.Comment", b =>
+                {
+                    b.HasOne("api.Models.Student", "Student")
+                        .WithMany("Comments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Tutor", "Tutor")
+                        .WithMany("Comments")
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Tutor");
+                });
+
+            modelBuilder.Entity("api.Models.Match", b =>
+                {
+                    b.HasOne("api.Models.Student", "Student")
+                        .WithMany("Matches")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Tutor", "Tutor")
+                        .WithMany("Matches")
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Tutor");
+                });
+
             modelBuilder.Entity("api.Models.Student", b =>
                 {
-                    b.HasOne("api.Models.Tutor", null)
-                        .WithMany("Students")
-                        .HasForeignKey("TutorId");
-
                     b.HasOne("api.Models.User", "User")
                         .WithOne("Student")
                         .HasForeignKey("api.Models.Student", "UserId")
@@ -404,9 +508,18 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("api.Models.Student", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Matches");
+                });
+
             modelBuilder.Entity("api.Models.Tutor", b =>
                 {
-                    b.Navigation("Students");
+                    b.Navigation("Comments");
+
+                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("api.Models.User", b =>

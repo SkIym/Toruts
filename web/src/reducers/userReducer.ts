@@ -1,177 +1,348 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { SignupInfo, LoginInfo, UserInfo, UserData, TutorInfo, TutorInfoWithoutId, StudentInfoWithoutId, StudentInfo } from "../types";
+import {
+	SignupInfo,
+	LoginInfo,
+	UserInfo,
+	UserData,
+	TutorInfoWithoutId,
+	StudentInfoWithoutId,
+	TutorResult,
+	TutorSearch,
+	UserType,
+	isTutorInfo,
+	CreateMatchInfo,
+	TutorComment,
+	CreateComment,
+	StudentInfo,
+} from "../types";
 import accountService from "../services/account";
 import tutorService from "../services/tutor";
-import studentService from "../services/student"
+import studentService from "../services/student";
+import matchService from "../services/match";
+import commentService from "@/services/comments"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
+const LOCAL_STORAGE_KEY = "loggedInUser";
+const updateLocalUser = (user: UserData | null) => {
+	if (user) {
+		window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+	} else {
+		window.localStorage.removeItem(LOCAL_STORAGE_KEY);
+	}
+};
+
+const getLocalUser = (): UserData | null => {
+	const loggedInUserJSON = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+	return loggedInUserJSON ? JSON.parse(loggedInUserJSON) : null;
+};
 
 const userSlice = createSlice({
-    name: "user",
-    initialState: null as UserData | null,
-    reducers: {
-        setUser(_state, action) {
-            return action.payload;
-        },
-        clearUser() {
-            return null;
-        },
-        setType(state, action) {
-            const type = action.payload;
-            if (state)
-                state.userType = type
-            return state
-        },
-        setRoleInfo(state, action) {
-            const info = action.payload;
-            if (state)
-                state.roleInfo = info
-            return state
-        },
-        setPrimaryInfo(state, action) {
-            const info = action.payload;
-            if (state)
-                state.primaryInfo = info
-            return state
-        }
-    },
+	name: "user",
+	initialState: null as UserData | null,
+	reducers: {
+		setUser(_state, action) {
+			return action.payload;
+		},
+		clearUser() {
+			return null;
+		},
+		setType(state, action) {
+			if (state) state.userType = action.payload;
+			return state;
+		},
+		setRoleInfo(state, action) {
+			if (state) state.roleInfo = action.payload;
+			console.log(state?.roleInfo);
+			return state;
+		},
+		setPrimaryInfo(state, action) {
+			if (state) state.primaryInfo = action.payload;
+			return state;
+		},
+	},
 });
 
-export const { setUser, clearUser, setType, setRoleInfo, setPrimaryInfo } = userSlice.actions
+export const { setUser, clearUser, setType, setRoleInfo, setPrimaryInfo } =
+	userSlice.actions;
 
+// Signup
 export const signupUser = (creds: SignupInfo) => {
-    console.log("signup reached")
-    return async (dispatch: Dispatch) => {
-        try {
-            const user = await accountService.signup(creds);
-            user.type = null;
-            user.roleInfo = null;
-            user.primaryInfo = null;
-            // accountService.setToken(user.token);
-            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-            dispatch(setUser(user));
-            useSuccessNotification("Signup succesful!")
-        } catch (e) {
-            useErrorNotification(e)
-            return Promise.reject();
-        }
-    };
+	console.log("signup reached");
+	return async (dispatch: Dispatch) => {
+		try {
+			const user = await accountService.signup(creds);
+			user.userType = null;
+			user.roleInfo = null;
+			user.dual = false;
+			updateLocalUser(user);
+			dispatch(setUser(user));
+			useSuccessNotification("Signup succesful!");
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
 };
 
+// Get user from local storage
 export const getLoggedInUser = () => {
-    return async (dispatch: Dispatch) => {
-        const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-        if (loggedInUserJSON) {
-            const user = JSON.parse(loggedInUserJSON);
-            dispatch(setUser(user));
-        }
-    };
+	return async (dispatch: Dispatch) => {
+		const user = getLocalUser();
+		if (user) {
+			dispatch(setUser(user));
+		}
+	};
 };
+
+// Login
 
 export const loginUser = (creds: LoginInfo) => {
-    console.log("login reducer reached")
-    return async (dispatch: Dispatch) => {
-        try {
-            const user = await accountService.login(creds);
-            // accountService.setToken(user.token);
-            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-            dispatch(setUser(user));
-            console.log(user)
-            useSuccessNotification("Login succesful!")
-        } catch (e) {
-            useErrorNotification(e)
-            return Promise.reject();
-        }
-    };
-}
-
-export const addUserInfo = (username: string, info: UserInfo) => {
-    console.log("user info reducer reached")
-    return async (dispatch: Dispatch) => {
-        try {
-            const primaryInfo = await accountService.setUserInfo(username, info)
-            dispatch(setPrimaryInfo(primaryInfo))
-            useSuccessNotification(`User information saved.`)
-        } catch (err) {
-            useErrorNotification(err)
-            return Promise.reject()
-        }
-    }
-
-}
-export const logoutUser = () => {
-    return async (dispatch: Dispatch) => {
-        window.localStorage.removeItem("loggedInUser");
-        dispatch(clearUser());
-        useSuccessNotification("Logged out.")
-    };
+	console.log("login reducer reached");
+	return async (dispatch: Dispatch) => {
+		try {
+			const user = await accountService.login(creds);
+			// accountService.setToken(user.token);
+			updateLocalUser(user);
+			dispatch(setUser(user));
+			console.log(user);
+			useSuccessNotification("Login succesful!");
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
 };
 
+// Add or update user's primary information
+
+export const addUserInfo = (username: string, info: UserInfo) => {
+	console.log("user info reducer reached");
+	return async (dispatch: Dispatch) => {
+		try {
+			const primaryInfo = await accountService.setUserInfo(username, info);
+			dispatch(setPrimaryInfo(primaryInfo));
+			const user = getLocalUser();
+			if (user) {
+				user.primaryInfo = primaryInfo;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`User information saved.`);
+		} catch (err) {
+			useErrorNotification(err);
+			return Promise.reject();
+		}
+	};
+};
+
+// Logout
+export const logoutUser = () => {
+	return async (dispatch: Dispatch) => {
+		updateLocalUser(null);
+		dispatch(clearUser());
+		useSuccessNotification("Logged out.");
+	};
+};
+
+// Delete account
 export const deleteUser = (user: UserData) => {
-    return async (dispatch: Dispatch) => {
-        try {
-            window.localStorage.removeItem("loggedInUser");
-            accountService.deleteUser(user.userName)
-            dispatch(clearUser());
-            useSuccessNotification("Deleted user.")
-        } catch (e) {
-            useErrorNotification(e)
-            return Promise.reject()
-        }
+	return async (dispatch: Dispatch) => {
+		try {
+			updateLocalUser(null);
+			await accountService.deleteUser(user.userName);
+			dispatch(clearUser());
+			useSuccessNotification("Deleted user.");
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
 
-    }
-}
+const hasOtherAccount = (user: UserData): boolean => {
+	if (user && user.userType !== null) {
+		return true;
+	}
+	return false;
+};
 
+export const uploadPicture = (file: File) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			const user = getLocalUser();
+			if (user && user.roleInfo && isTutorInfo(user.roleInfo)) {
+				const tutorId = user.roleInfo.id;
+				const url = await tutorService.upload(tutorId, file);
+				user.roleInfo.portraitUrl = url;
+				console.log({ pic: url });
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`You have uploaded your picture!`);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
+
+// Sign up as a tutor
 export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
-    return async (dispatch: Dispatch) => {
-        try {
-            const tutorData = await tutorService.create(username, creds);
-            dispatch(setType('TUTOR'))
-            dispatch(setRoleInfo(tutorData))
-            useSuccessNotification(`You have signed up as a tutor!`)
-        } catch (e) {
-            useErrorNotification(e);
-            return Promise.reject();
-        }
-    }
+	return async (dispatch: Dispatch) => {
+		try {
+			const tutorData = await tutorService.create(username, creds);
+			const user = getLocalUser();
+			if (user) {
+				user.roleInfo = tutorData;
+				if (hasOtherAccount(user)) user.dual = true;
+				user.userType = UserType.TUTOR;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`You have signed up as a tutor!`);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
+
+// Update user's tutor information
+
+export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			const tutorData = await tutorService.update(username, creds);
+			const user = getLocalUser();
+			if (user) {
+				user.roleInfo = tutorData;
+				if (hasOtherAccount(user)) user.dual = true;
+				user.userType = UserType.TUTOR;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`Updated your tutor record`);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
+
+export const uploadComment = (commentData: CreateComment, user: UserData) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			console.log("bruh")
+			await commentService.post(commentData, user);
+			useSuccessNotification("uploaded comment")
+		} catch (e) {
+			useErrorNotification(e)
+			return Promise.reject()
+		}
+	}
 }
 
+// Signup as a student
 export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
-    return async (dispatch: Dispatch) => {
-        try {
-            const exists = await studentService.find(username)
-            // If exists, modify instead of creating
-            if (exists) {
-                const studentData = await studentService.update(username, info)
-                dispatch(setType("STUDENT"))
-                dispatch(setRoleInfo(studentData))
-                useSuccessNotification(`Updated your student record`)
-                return
-            }
-            const studentData = await studentService.create(username, info)
-
-            dispatch(setType("STUDENT"))
-            dispatch(setRoleInfo(studentData))
-            useSuccessNotification(`You have signed up as a student!`)
-        } catch (e) {
-            useErrorNotification(e)
-            return Promise.reject()
-        }
-    }
-}
+	return async (dispatch: Dispatch) => {
+		try {
+			const studentData = await studentService.create(username, info);
+			const user = getLocalUser();
+			if (user) {
+				if (hasOtherAccount(user)) user.dual = true;
+				user.userType = UserType.STUDENT;
+				user.roleInfo = studentData;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`You have signed up as a student!`);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
 
 export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
-    return async (dispatch: Dispatch) => {
-        try {
-            const studentData = await studentService.update(username, info)
-            dispatch(setRoleInfo(studentData))
-            useSuccessNotification(`Updated student data`)
-        } catch (e) {
-            useErrorNotification(e)
-            return Promise.reject()
-        }
-    }
+	return async (dispatch: Dispatch) => {
+		try {
+			const studentData = await studentService.update(username, info);
+			const user = getLocalUser();
+			if (user) {
+				user.roleInfo = studentData;
+				if (hasOtherAccount(user)) user.dual = true;
+				user.userType = UserType.STUDENT;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`Updated student data`);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
 
-}
+export const getTutors = (
+	query: TutorSearch,
+	callback: (t: TutorResult[]) => void,
+) => {
+	return async (_: Dispatch) => {
+		console.log(query);
+		try {
+			const tutors = await tutorService.search(query);
+			callback(tutors);
+			console.log(tutors);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
 
-export default userSlice.reducer
+export const switchMode = (toUserType: UserType, username: string) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			let roleInfo = null;
+			if (toUserType == UserType.STUDENT) {
+				roleInfo = await studentService.get(username);
+			} else {
+				roleInfo = await tutorService.get(username);
+			}
+			const user = getLocalUser();
+			if (user) {
+				user.roleInfo = roleInfo;
+				user.userType = toUserType;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(
+				`You have switched to your ${UserType[toUserType]} account!`,
+			);
+		} catch (e) {
+			console.log(e);
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
+
+export const matchWithTutor = (username: string, creds: CreateMatchInfo) => {
+	return async (dispatch: Dispatch) => {
+		try {
+			const studentData = await matchService.create(username, creds);
+			const user = getLocalUser();
+			if (user) {
+				user.roleInfo = studentData;
+				updateLocalUser(user);
+				dispatch(setUser(user));
+			}
+			useSuccessNotification(`Storing`);
+		} catch (e) {
+			useErrorNotification(e);
+			return Promise.reject();
+		}
+	};
+};
+
+export default userSlice.reducer;

@@ -24,21 +24,26 @@ namespace api.Dtos.Record
         public string? Availability { get; set; }
         public string? PortraitUrl { get; set; } 
         public Status Status { get; set; } 
+
+        public List<StudentMatchDto>? MatchedStudents { get; set; }
+    }
+
+    public class StudentMatchDto
+    {
+        public int Id { get; set; }
+        public required string FirstName { get; set; } 
+        public required string LastName { get; set; } 
     }
 
     public class UpdateTutorDto
     {
-        public string EducAttainment { get; set; } 
-        [Required]
-        public LearningModal LearningMode { get; set; } 
-        [Required]
-        public string Venue { get; set; }
-        [Required]
-        public double Price { get; set; }
+        public string? EducAttainment { get; set; } 
+        public LearningModal? LearningMode { get; set; } 
+        public string? Venue { get; set; }
+        public double? Price { get; set; }
         public List<string>? AreasOfExpertise { get; set; }
         public string? TutoringExperiences { get; set; } 
         public string? Availability { get; set; }
-        public string? PortraitUrl { get; set; } 
-        public Status Status { get; set; } 
+        public Status? Status { get; set; } 
     }
 }
