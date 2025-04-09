@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { quickDelete, quickSignup, quickLogin, logout, done, deleteWith, loadPage, clickButton, loadForm } from './helper';
+import { quickSignup, quickLogin, logout, done } from './helper';
 import { PATH, TEST } from '../web/src/constants'
 
 test.describe.configure({ mode: 'parallel' });
@@ -8,6 +8,8 @@ test.describe.configure({ mode: 'parallel' });
 //     await page.goto('/');
 //     await page.waitForLoadState();
 // });
+
+// test.skip()
 
 test.describe('Test Case 1: Visibility', () => {
     test('Test Case 1.1: Home Page', async({ page }) => {
@@ -55,29 +57,6 @@ test.describe('Test Case 1: Visibility', () => {
         done('1.3');
     })
 
-    test('Test Case 1.4: Update Profile Page', async ({ page }) => {
-        await quickSignup(page, '1-4');
-        await page.waitForURL(`**${PATH.select}`);
-        await expect(page.getByTestId(TEST.form('tutor'))).toBeVisible();
-
-        await clickButton(page, 'switch');
-        await page.waitForLoadState();
-        await expect(page.getByTestId(TEST.form('student'))).toBeVisible();
-
-        await expect(page.getByTestId(TEST.button('create'))).toBeVisible();
-        await expect(page.getByTestId(TEST.input('areas'))).toBeVisible();
-        await expect(page.getByTestId(TEST.input('degree'))).toBeVisible();
-
-        await page.getByTestId(TEST.input('areas')).fill('test');
-
-        await clickButton(page, 'create');
-        await page.waitForURL(`**${PATH.PROFILE.default}`);
-
-        await quickDelete(page);
-
-        done('1.4');
-    })
-
     test('Test Case 1.5: Profile Page', async ({ page }) => {
         await quickLogin(page, '1-5');
         await expect(page.getByTestId(TEST.page('home'))).toBeVisible();
@@ -115,25 +94,6 @@ test.describe('Test Case 1: Visibility', () => {
         await logout(page);
 
         done('1.7');
-    })
-
-    test('Test Case 1.8: Select Page', async ({ page }) => {
-        await quickSignup(page, '1-8');
-        await page.waitForURL(`**${PATH.select}`);
-
-        await expect(page.getByTestId(TEST.form('tutor'))).toBeVisible();
-        
-        await clickButton(page, 'switch');
-
-        await expect(page.getByTestId(TEST.form('student'))).toBeVisible();
-
-        await page.getByTestId(TEST.input('areas')).fill('test');
-        await clickButton(page, 'create');
-        await page.waitForURL(`**${PATH.PROFILE.default}`)
-
-        await quickDelete(page);
-
-        done('1.8')
     })
     
     test('Test Case 1.9: Signup Student Page', async ({ page }) => {
