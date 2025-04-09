@@ -1,7 +1,9 @@
 import { TutorComment } from "@/types"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { Button } from "../ui/button"
 // import regular from '@fortawesome/free-regular-svg-icons'
+import commentService from "@/services/comments"
 
 const Rating = ({ v }) => {
     return (
@@ -20,6 +22,11 @@ const Comment = ({ commentData }) => {
     return (
         <div className="border-2 p-6 rounded-2xl">
             <b className="text-2xl mb-2">{commentData.commenterFirstName} {commentData.commenterLastName}</b>
+
+            <Button onClick={(e) => {
+                commentService.remove(commentData.id)
+            }}><FontAwesomeIcon icon={faTrash} /></Button>
+
             <div className="flex justify-between w-4/5 items-center">
                 <b>Pedagogy</b>
                 <Rating v={commentData.pedagogy} />

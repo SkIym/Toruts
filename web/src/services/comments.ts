@@ -12,7 +12,11 @@ const post = async (comment: CreateComment, user: UserData) => {
 const get = async (tutorId: number) => {
     const { data } = await axios.get<TutorComment[]>(`${API_ROUTES.COMMENT.get(tutorId)}`)
     return data
-
 }
 
-export default { post, get }
+const remove = async (commentId: number) => {
+    const { data } = await axios.get(`${API_ROUTES.COMMENT.delete(commentId)}`)
+    return data
+}
+
+export default { post, get, remove }
