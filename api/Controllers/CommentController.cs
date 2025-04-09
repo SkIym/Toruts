@@ -121,5 +121,27 @@ namespace api.Controllers
                 id = comment.Id
             }, comment.ToCommentDto());
         }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            // Validate the model state
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var comment = await _context.Comment
+                .FirstOrDefaultAsync(c => c.Id == id);
+            
+            if (comment == null)
+            {
+                return NotFound("Comment does not exist.");
+            }
+
+            _context.Comment.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return Ok("Deleted comment.");
+        }
     }
 }
