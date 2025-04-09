@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import commentService from "@/services/comments"
 import Comment from "./Comment";
 import comments from "@/services/comments";
+import { TEST } from "@/constants";
 
 const defaultPicture =
 	"https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
@@ -63,7 +64,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 						alt=""
 						className="h-20 w-20 rounded-full object-cover"
 					/>
-					<div className="flex flex-col">
+					<div className="flex flex-col" data-testid={TEST.card('selected-tutor')}>
 						<b>
 							{selectedTutor.firstName} {selectedTutor.lastName}
 						</b>
