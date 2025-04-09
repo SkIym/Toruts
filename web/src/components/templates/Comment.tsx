@@ -5,6 +5,8 @@ import { Button } from "../ui/button"
 // import regular from '@fortawesome/free-regular-svg-icons'
 import commentService from "@/services/comments"
 import { useErrorNotification, useSuccessNotification } from "@/hooks"
+import { useSelector } from "react-redux"
+import { RootState } from "store"
 
 const Rating = ({ v }) => {
     return (
@@ -20,22 +22,39 @@ const Rating = ({ v }) => {
 }
 
 const Comment = ({ commentData, callback }) => {
+    const user = useSelector((state: RootState) => state.user)
+    console.log(user)
+    console.log(commentData.commenterId)
+    const userId = user?.roleInfo?.id
+
     return (
         <div className="border-2 p-6 rounded-2xl">
-            <b className="text-2xl mb-2">{commentData.commenterFirstName} {commentData.commenterLastName}</b>
+            <div className="w-full flex">
+                <b className="text-2xl mb-2">{commentData.commenterFirstName} {commentData.commenterLastName}</b>
+                {userId == commentData.commenterId ?
 
-            <Button onClick={(e) => {
-                try {
+                    <div className="ml-auto">
+                        <Button onClick={(e) => {
+                            try {
 
-                    commentService.remove(commentData.id).then(() => {
-                        callback()
-                    })
-                    useSuccessNotification("Successfully deleted comment")
-                } catch (e) {
-                    useErrorNotification(e)
+                                commentService.remove(commentData.id).then(() => {
+                                    callback()
+                                })
+                                useSuccessNotification("Successfully deleted comment")
+                            } catch (e) {
+                                useErrorNotification(e)
 
+                            }
+                        }}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    </div>
+                    :
+                    <div></div>
                 }
-            }}><FontAwesomeIcon icon={faTrash} /></Button>
+
+            </div>
 
             <div className="flex justify-between w-4/5 items-center">
                 <b>Pedagogy</b>
