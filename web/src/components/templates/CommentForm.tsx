@@ -4,7 +4,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
-import { useField } from "@/hooks";
+import { useErrorNotification, useField } from "@/hooks";
 import { number, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -12,10 +12,22 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { uploadComment } from "@/reducers/userReducer";
 import tutor from "@/services/tutor";
 import { isTutorInfo } from "@/types";
+import { useEffect, useState } from "react";
 
 const CommentForm = ({ tutorId, callback, ...props }) => {
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
+
+    const [badWords, setBadWords] = useState<string[]>([])
+
+    useEffect(() => {
+        fetch("/badwords.txt")
+            .then((res) => res.text())
+            .then((text) => text.split("\n"))
+            .then((words) => setBadWords(words))
+            .catch((e) => console.error(e))
+
+    }, [])
 
     const CommentSchema = z.object({
         pedagogy: z.coerce.number().min(1).max(5),
@@ -45,6 +57,18 @@ const CommentForm = ({ tutorId, callback, ...props }) => {
             console.log("Helo")
             if (isTutorInfo(user.roleInfo)) {
                 return
+            }
+
+            for (const badword of badWords) {
+                const re = new RegExp(`${badword}`, "gi")
+                const rep = "#".repeat(badword.length)
+
+                if (formData.comment.match(re)) {
+                    useErrorNotification("You're not supposed to say that")
+                    commentForm.setValue("comment", "")
+                    return
+                }
+
             }
 
             await dispatch(uploadComment({

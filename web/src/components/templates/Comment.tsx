@@ -56,7 +56,7 @@ const Comment = ({ commentData, callback }) => {
 
             </div>
 
-            <div className="flex justify-between w-4/5 items-center">
+            <div className="flex justify-between w-4/5 items-center flex-row">
                 <b>Pedagogy</b>
                 <Rating v={commentData.pedagogy} />
                 <b>Helpfulness</b>
