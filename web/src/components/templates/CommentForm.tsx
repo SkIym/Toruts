@@ -4,7 +4,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
-import { useErrorNotification, useField } from "@/hooks";
+import { useErrorNotification, useField, useSuccessNotification } from "@/hooks";
 import { number, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -64,9 +64,7 @@ const CommentForm = ({ tutorId, callback, ...props }) => {
                 const rep = "#".repeat(badword.length)
 
                 if (formData.comment.match(re)) {
-                    useErrorNotification("You're not supposed to say that")
-                    commentForm.setValue("comment", "")
-                    return
+                    throw new Error("Don't say bad words");
                 }
 
             }
@@ -84,7 +82,10 @@ const CommentForm = ({ tutorId, callback, ...props }) => {
                 callback()
             })
 
-        } catch {
+        } catch (e) {
+            commentForm.setValue("comment", "")
+            // useErrorNotification(e)
+            useSuccessNotification("Don't say bad words")
 
         }
 
