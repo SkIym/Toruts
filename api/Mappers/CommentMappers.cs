@@ -20,7 +20,8 @@ namespace api.Mappers
                 Text = commentModel.Text,
                 Helpfulness = commentModel.Helpfulness,
                 Pedagogy = commentModel.Pedagogy,
-                Easiness = commentModel.Easiness
+                Easiness = commentModel.Easiness,
+                Id = commentModel.Id
             };
         }
     }
