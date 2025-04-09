@@ -380,12 +380,12 @@ const TutorForm = ({ info }: Props) => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select your status" />
+                          <SelectValue placeholder="Select your status" data-testid={TEST.select("status")}/>
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent data-testid={TEST.select("status")}>
-                        <SelectItem value="0">Active</SelectItem>
-                        <SelectItem value="1">Inactive</SelectItem>
+                      <SelectContent >
+                        <SelectItem value="0" data-testid={TEST.select("active")}>Active</SelectItem>
+                        <SelectItem value="1" data-testid={TEST.select("inactive")}>Inactive</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
