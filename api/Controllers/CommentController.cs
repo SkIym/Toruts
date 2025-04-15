@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.Comment;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,9 +66,10 @@ namespace api.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         [Route("create/{username}")]
-        public async Task<IActionResult> GetTutorComments([FromRoute] string username, [FromBody] CreateCommentRequestDto commentDto)
+        public async Task<IActionResult> CreateTutorComments([FromRoute] string username, [FromBody] CreateCommentRequestDto commentDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -122,6 +124,7 @@ namespace api.Controllers
             }, comment.ToCommentDto());
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

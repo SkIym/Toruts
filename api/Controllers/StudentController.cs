@@ -7,6 +7,7 @@ using api.Models;
 using api.Data;
 using api.Mappers;
 using api.Dtos.Record;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace api.Controllers
@@ -85,6 +86,7 @@ namespace api.Controllers
             return Ok(student.ToStudentDto());
         }
 
+        [Authorize]
         [HttpPost]
         [Route("create/{username}")]
         public async Task<IActionResult> StudentCreate([FromRoute] string username, CreateStudentRequestDto request)
@@ -123,7 +125,9 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = student.Id }, student.ToStudentDto());
         }
 
-        [HttpPut("update/{username}")]
+        [Authorize]
+        [HttpPut]
+        [Route("update/{username}")]
         public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateStudentDto updateDto)
         {
             if (!ModelState.IsValid)

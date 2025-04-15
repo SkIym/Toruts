@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -33,7 +34,9 @@ namespace api.Controllers
 
 
         // DELETE endpoint to delete a user by username
-        [HttpDelete("delete/{username}")]
+        [Authorize]
+        [HttpDelete]
+        [Route("delete/{username}")]
         public async Task<IActionResult> Delete([FromRoute] string username)
         {
             // Validate the model state
@@ -59,7 +62,9 @@ namespace api.Controllers
 
 
         // PUT endpoint to update a user's first and last name by username
-        [HttpPut("update/{username}")]
+        [Authorize]
+        [HttpPut]
+        [Route("update/{username}")]
         public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateUserDto updateDto)
         {
             // Validate the model state

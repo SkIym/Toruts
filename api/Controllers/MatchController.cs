@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.Match;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -27,6 +28,7 @@ namespace api.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         [HttpPost]
         [Route("create/{username}")]
         public async Task<IActionResult> CreateMatch([FromRoute] string username, [FromBody] CreateMatchRequestDto matchDto)
@@ -80,6 +82,7 @@ namespace api.Controllers
 
         }
 
+        [Authorize]
         [HttpGet]
         [Route("student/{id}")]
         public async Task<IActionResult> GetTutors([FromRoute] int id)
@@ -105,7 +108,8 @@ namespace api.Controllers
             return Ok(tutorList);
         }
 
-            [HttpGet]
+        [Authorize]
+        [HttpGet]
         [Route("tutor/{id}")]
         public async Task<IActionResult> GetTutees([FromRoute] int id)
         {

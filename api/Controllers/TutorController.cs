@@ -14,6 +14,7 @@ using api.Enums;
 using api.Service;
 using Supabase.Storage;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -145,7 +146,8 @@ namespace api.Controllers
             return Ok(tutor.ToTutorDto());
         }
 
-        // POST endpoint to create tutors
+        // POST endpoint to create tutors\
+        [Authorize]
         [HttpPost]
         [Route("create/{username}")]
         public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto)
@@ -194,6 +196,7 @@ namespace api.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         [Route("upload/portrait/{id}")]
         public async Task<IActionResult> Upload([FromRoute] int id, IFormFile portrait, Supabase.Client client)
@@ -232,7 +235,9 @@ namespace api.Controllers
             
         }
 
-        [HttpPut("update/{username}")]
+        [Authorize]
+        [HttpPut]
+        [Route("update/{username}")]
         public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateTutorDto updateDto)
         {
             if (!ModelState.IsValid)
