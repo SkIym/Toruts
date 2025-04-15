@@ -196,7 +196,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("upload/portrait/{id}")]
-        public async Task<IActionResult> Upload([FromRoute] int id, [FromForm] IFormFile portrait, Supabase.Client client)
+        public async Task<IActionResult> Upload([FromRoute] int id, IFormFile portrait, Supabase.Client client)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
