@@ -3,11 +3,20 @@ import { LoginInfo, SignupInfo, UserInfo, UserData } from "../types";
 import { API_ROUTES } from "../constants";
 
 
-// let token: string = '';
+let token: string = '';
 
-// const setToken = async (newToken: string) => {
-//     token = `Bearer ${newToken}`;
-// };
+const setToken = async (newToken: string) => {
+    token = `Bearer ${newToken}`;
+};
+
+const getConfig = (addtlHeader: Record<string, string> = {}) => {
+    return {
+        headers: { 
+            'Authorization': token,
+            ...addtlHeader
+        }
+    };
+}
 
 const signup = async (creds: SignupInfo) => {
     console.log("Requesting singup...")
@@ -25,16 +34,16 @@ const login = async (creds: LoginInfo) => {
 
 const setUserInfo = async (username: string, info: UserInfo) => {
     console.log("info reached") 
-    const { data } = await axios.put<UserInfo>(`${API_ROUTES.RECORD.update(username)}`, info)
+    const { data } = await axios.put<UserInfo>(`${API_ROUTES.RECORD.update(username)}`, info, getConfig())
     return data
 }
 
 const deleteUser = async (username: string) => {
     console.log("delete user reached")
-    const { data } = await axios.delete(`${API_ROUTES.RECORD.delete(username)}`)
+    const { data } = await axios.delete(`${API_ROUTES.RECORD.delete(username)}`, getConfig())
     return data
 }
 
 export default {
-    signup, login, setUserInfo, deleteUser
+    signup, login, setUserInfo, deleteUser, setToken, getConfig
 }

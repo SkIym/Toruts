@@ -1,12 +1,13 @@
 import axios from "axios";
 import { API_ROUTES } from "../constants";
 import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types";
+import accountService  from "./account"
 
 
 const create = async (username: string, creds: TutorInfoWithoutId) => {
     console.log("Requesting to create tutor account")
 
-    const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create(username)}`, creds)
+    const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create(username)}`, creds, accountService.getConfig())
     return data
 }
 
@@ -14,13 +15,11 @@ const upload = async (id: number, file: File) => {
 
     const formData = new FormData();
     formData.append("portrait", file);
-    const { data } = await axios.post<string>(`${API_ROUTES.TUTOR.upload(id)}`, formData, {
-        headers: {
+    const { data } = await axios.post<string>(`${API_ROUTES.TUTOR.upload(id)}`, formData, accountService.getConfig({
         'Content-Type': 'multipart/form-data'
-        }
-    })
+        })
+    )
     return data
-
 }
 
 const search = async (query: TutorSearch) => {
@@ -31,8 +30,8 @@ const search = async (query: TutorSearch) => {
 }
 
 const update = async (username: string, creds: TutorInfoWithoutId) => {
-    console.log("Requresting to update tutor record")
-    const { data } = await axios.put<TutorInfo>(`${API_ROUTES.TUTOR.update(username)}`, creds)
+    console.log("Requesting to update tutor record")
+    const { data } = await axios.put<TutorInfo>(`${API_ROUTES.TUTOR.update(username)}`, creds, accountService.getConfig())
     return data;
 }
 
