@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_ROUTES } from "../constants";
-import { CreateMatchInfo, StudentInfo } from "@/types";
+import { API_ROUTES } from "../constants/constants";
+import { CreateMatchInfo, StudentInfo } from "@/types/types";
 
 // student users are the ones calling this
 const create = async (username: string, creds: CreateMatchInfo) => {

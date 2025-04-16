@@ -14,11 +14,11 @@ import {
 	TutorComment,
 	CreateComment,
 	StudentInfo,
-} from "../types";
-import accountService from "../services/account";
-import tutorService from "../services/tutor";
-import studentService from "../services/student";
-import matchService from "../services/match";
+} from "../../types/types";
+import accountService from "../../services/account";
+import tutorService from "../../services/tutor";
+import studentService from "../../services/student";
+import matchService from "../../services/match";
 import commentService from "@/services/comments"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 

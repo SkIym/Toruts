@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_ROUTES } from "../constants";
-import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types";
+import { API_ROUTES } from "../constants/constants";
+import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types/types";
 
 
 const create = async (username: string, creds: TutorInfoWithoutId) => {

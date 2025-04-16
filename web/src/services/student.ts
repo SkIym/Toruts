@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_ROUTES } from "../constants";
-import { StudentInfo, StudentInfoWithoutId } from "../types";
+import { API_ROUTES } from "../constants/constants";
+import { StudentInfo, StudentInfoWithoutId } from "../types/types";
 
 const create = async (username: string, creds: StudentInfoWithoutId) => {
     console.log("Requesting to create student account")

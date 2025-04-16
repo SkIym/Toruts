@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
-import SearchForm from "../templates/SearchForm";
-import { TEST } from "@/constants";
+import SearchForm from "../containers/SearchForm";
+import { TEST } from "@/constants/constants";
 
 const HomePage = () => {
 	const location = useLocation();

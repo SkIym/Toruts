@@ -4,14 +4,14 @@ import App from "../App";
 import ProtectedRoute from "./ProtectedRoute";
 import UserTypeProtectedRoute from "./UserTypeProtectedRoute";
 
-import ProfilePage from "../components/pages/ProfilePage";
-import HomePage from "../components/pages/HomePage";
-import LoginPage from "../components/pages/LoginPage";
-import SignupPage from "../components/pages/SignupPage";
-import InfoPage from "../components/pages/ProfileEditPage";
-import SelectPage from "../components/pages/SelectPage";
-import { UserType } from "../types";
-import { PATH } from "@/constants";
+import ProfilePage from "../pages/ProfilePage";
+import HomePage from "../pages/HomePage";
+import LoginPage from "../pages/LoginPage";
+import SignupPage from "../pages/SignupPage";
+import InfoPage from "../pages/ProfileEditPage";
+import SelectPage from "../pages/SelectPage";
+import { UserType } from "../types/types";
+import { PATH } from "@/constants/constants";
 
 
 export const router = createBrowserRouter([

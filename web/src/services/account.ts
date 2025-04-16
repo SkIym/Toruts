@@ -1,6 +1,6 @@
 import axios from "axios";
-import { LoginInfo, SignupInfo, UserInfo, UserData } from "../types";
-import { API_ROUTES } from "../constants";
+import { LoginInfo, SignupInfo, UserInfo, UserData } from "../types/types";
+import { API_ROUTES } from "../constants/constants";
 
 
 // let token: string = '';
