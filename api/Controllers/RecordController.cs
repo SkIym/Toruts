@@ -36,12 +36,19 @@ namespace api.Controllers
         // DELETE endpoint to delete a user by username
         [Authorize]
         [HttpDelete]
-        [Route("delete/{username}")]
-        public async Task<IActionResult> Delete([FromRoute] string username)
+        [Route("delete")]
+        public async Task<IActionResult> Delete()
         {
             // Validate the model state
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             // Find the user by username
             var user = await _userManager.FindByNameAsync(username);
@@ -64,12 +71,19 @@ namespace api.Controllers
         // PUT endpoint to update a user's first and last name by username
         [Authorize]
         [HttpPut]
-        [Route("update/{username}")]
-        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateUserDto updateDto)
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateUserDto updateDto)
         {
             // Validate the model state
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             // Find the user by username
             var user = await _userManager.FindByNameAsync(username);
