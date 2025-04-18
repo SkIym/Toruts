@@ -88,12 +88,18 @@ namespace api.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("create/{username}")]
-        public async Task<IActionResult> StudentCreate([FromRoute] string username, CreateStudentRequestDto request)
+        [Route("create")]
+        public async Task<IActionResult> StudentCreate(CreateStudentRequestDto request)
         {
             if (!ModelState.IsValid)
                 return BadRequest((ModelState));
 
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
@@ -127,11 +133,18 @@ namespace api.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("update/{username}")]
-        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateStudentDto updateDto)
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateStudentDto updateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             var user = await _userManager.FindByNameAsync(username);
 
