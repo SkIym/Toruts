@@ -30,9 +30,15 @@ namespace api.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("create/{username}")]
-        public async Task<IActionResult> CreateMatch([FromRoute] string username, [FromBody] CreateMatchRequestDto matchDto)
+        [Route("create")]
+        public async Task<IActionResult> CreateMatch([FromBody] CreateMatchRequestDto matchDto)
         {
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
@@ -78,7 +84,7 @@ namespace api.Controllers
                             .ThenInclude(t => t.User)
                     .FirstOrDefaultAsync(s => s.Id == student.Id);
 
-            return Ok(studentWithMatches.ToStudentDto());
+            return Ok(studentWithMatches?.ToStudentDto());
 
         }
 
