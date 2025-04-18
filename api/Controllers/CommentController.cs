@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.Comment;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,12 +66,19 @@ namespace api.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
-        [Route("create/{username}")]
-        public async Task<IActionResult> GetTutorComments([FromRoute] string username, [FromBody] CreateCommentRequestDto commentDto)
+        [Route("create")]
+        public async Task<IActionResult> CreateTutorComments([FromBody] CreateCommentRequestDto commentDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
@@ -122,6 +130,7 @@ namespace api.Controllers
             }, comment.ToCommentDto());
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
@@ -130,8 +139,20 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+            {
+                return NotFound("Invalid user");
+            }
+
             var comment = await _context.Comment
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Include(c => c.Student)
+                .FirstOrDefaultAsync(c => c.Id == id && c.Student.UserId == user.Id);
             
             if (comment == null)
             {

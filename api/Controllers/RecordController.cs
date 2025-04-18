@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -33,12 +34,21 @@ namespace api.Controllers
 
 
         // DELETE endpoint to delete a user by username
-        [HttpDelete("delete/{username}")]
-        public async Task<IActionResult> Delete([FromRoute] string username)
+        [Authorize]
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<IActionResult> Delete()
         {
             // Validate the model state
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             // Find the user by username
             var user = await _userManager.FindByNameAsync(username);
@@ -59,12 +69,21 @@ namespace api.Controllers
 
 
         // PUT endpoint to update a user's first and last name by username
-        [HttpPut("update/{username}")]
-        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateUserDto updateDto)
+        [Authorize]
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateUserDto updateDto)
         {
             // Validate the model state
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             // Find the user by username
             var user = await _userManager.FindByNameAsync(username);

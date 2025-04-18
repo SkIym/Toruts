@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import { RootState } from "../../store";
-import { PATH } from "@/constants";
+import { RootState } from "../app/store";
+import { PATH } from "@/constants/constants";
 
 type Props = { children: React.ReactNode };
 

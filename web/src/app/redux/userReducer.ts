@@ -14,11 +14,11 @@ import {
 	TutorComment,
 	CreateComment,
 	StudentInfo,
-} from "../types";
-import accountService from "../services/account";
-import tutorService from "../services/tutor";
-import studentService from "../services/student";
-import matchService from "../services/match";
+} from "../../types/types";
+import accountService from "../../services/account";
+import tutorService from "../../services/tutor";
+import studentService from "../../services/student";
+import matchService from "../../services/match";
 import commentService from "@/services/comments"
 import { useErrorNotification, useSuccessNotification } from "../hooks";
 
@@ -76,6 +76,7 @@ export const signupUser = (creds: SignupInfo) => {
 			user.dual = false;
 			updateLocalUser(user);
 			dispatch(setUser(user));
+            accountService.setToken(user.token);
 			useSuccessNotification("Signup succesful!");
 		} catch (e) {
 			useErrorNotification(e);
@@ -90,6 +91,7 @@ export const getLoggedInUser = () => {
 		const user = getLocalUser();
 		if (user) {
 			dispatch(setUser(user));
+            accountService.setToken(user.token);
 		}
 	};
 };
@@ -101,9 +103,9 @@ export const loginUser = (creds: LoginInfo) => {
 	return async (dispatch: Dispatch) => {
 		try {
 			const user = await accountService.login(creds);
-			// accountService.setToken(user.token);
 			updateLocalUser(user);
 			dispatch(setUser(user));
+            accountService.setToken(user.token);
 			console.log(user);
 			useSuccessNotification("Login succesful!");
 		} catch (e) {

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch, RootState } from "../../../store";
-import { addUserInfo } from "../../reducers/userReducer";
+import { AppDispatch, RootState } from "../app/store";
+import { addUserInfo } from "../app/redux/userReducer";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,15 +14,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { PATH, TEST } from "@/constants";
-import { LoadingButton } from "../ui/loadingButton";
+import { PATH, TEST } from "@/constants/constants";
+import { LoadingButton } from "../components/ui/loadingButton";
 import { useState } from "react";
 
 // Define the Zod schema for the form
@@ -60,9 +55,11 @@ export const ProfileEditForm = () => {
     },
   });
 
-  const [submittingForm, setSubmittingForm] = useState(false)
-  const handleInformation: SubmitHandler<ProfileEditFormSchemaType> = async (formData) => {
-    setSubmittingForm(true)
+  const [submittingForm, setSubmittingForm] = useState(false);
+  const handleInformation: SubmitHandler<ProfileEditFormSchemaType> = async (
+    formData
+  ) => {
+    setSubmittingForm(true);
     try {
       const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
       if (user == null || loggedInUserJSON == null) {
@@ -76,16 +73,16 @@ export const ProfileEditForm = () => {
           phoneNumber: formData.phoneNumber,
         })
       );
-      navigate(PATH.PROFILE.default)
+      navigate(PATH.PROFILE.default);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
 
-    setSubmittingForm(false)
+    setSubmittingForm(false);
   };
 
   return (
-    <div data-testid={TEST.form('profile-edit')}>
+    <div data-testid={TEST.form("profile-edit")}>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Primary information</CardTitle>
@@ -111,7 +108,7 @@ export const ProfileEditForm = () => {
                         <Input
                           placeholder="First Name"
                           {...field}
-                          data-testid={TEST.input('first-name')}
+                          data-testid={TEST.input("first-name")}
                         />
                       </FormControl>
                     </FormItem>
@@ -130,7 +127,7 @@ export const ProfileEditForm = () => {
                         <Input
                           placeholder="Last Name"
                           {...field}
-                          data-testid={TEST.input('last-name')}
+                          data-testid={TEST.input("last-name")}
                         />
                       </FormControl>
                     </FormItem>
@@ -150,15 +147,22 @@ export const ProfileEditForm = () => {
                       <Input
                         placeholder="Phone Number"
                         {...field}
-                        data-testid={TEST.input('phone-number')}
+                        data-testid={TEST.input("phone-number")}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
               <div className="flex flex-row gap-4 justify-end">
-                <LoadingButton loading={submittingForm} disabled={!infoForm.formState.isDirty} type="submit" data-testid={TEST.button('update-profile')}>
-                { submittingForm ? "Saving primary information": "Save primary information"}
+                <LoadingButton
+                  loading={submittingForm}
+                  disabled={!infoForm.formState.isDirty}
+                  type="submit"
+                  data-testid={TEST.button("update-profile")}
+                >
+                  {submittingForm
+                    ? "Saving primary information"
+                    : "Save primary information"}
                 </LoadingButton>
               </div>
             </form>

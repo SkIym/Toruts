@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.Match;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -27,10 +28,17 @@ namespace api.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         [HttpPost]
-        [Route("create/{username}")]
-        public async Task<IActionResult> CreateMatch([FromRoute] string username, [FromBody] CreateMatchRequestDto matchDto)
+        [Route("create")]
+        public async Task<IActionResult> CreateMatch([FromBody] CreateMatchRequestDto matchDto)
         {
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
@@ -76,10 +84,11 @@ namespace api.Controllers
                             .ThenInclude(t => t.User)
                     .FirstOrDefaultAsync(s => s.Id == student.Id);
 
-            return Ok(studentWithMatches.ToStudentDto());
+            return Ok(studentWithMatches?.ToStudentDto());
 
         }
 
+        [Authorize]
         [HttpGet]
         [Route("student/{id}")]
         public async Task<IActionResult> GetTutors([FromRoute] int id)
@@ -105,7 +114,8 @@ namespace api.Controllers
             return Ok(tutorList);
         }
 
-            [HttpGet]
+        [Authorize]
+        [HttpGet]
         [Route("tutor/{id}")]
         public async Task<IActionResult> GetTutees([FromRoute] int id)
         {

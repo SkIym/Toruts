@@ -1,18 +1,18 @@
 import { useDispatch } from "react-redux";
-import { useField } from "../../hooks";
-import { AppDispatch } from "../../../store";
-import { getTutors } from "../../reducers/userReducer";
+import { useField } from "../app/hooks";
+import { AppDispatch } from "../app/store";
+import { getTutors } from "../app/redux/userReducer";
 import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
+import { Input } from "../components/ui/input";
 
 import TutorSearchResult from "./TutorSearchResult";
 import TutorDetails from "./TutorDetails";
 
-import tutorService from "../../services/tutor";
-import { LearningMode, TutorResult } from "@/types";
+import tutorService from "../services/tutor";
+import { LearningMode, TutorResult } from "@/types/types";
 
-import { Card, CardContent } from "../ui/card";
-import { TEST } from "@/constants";
+import { Card, CardContent } from "../components/ui/card";
+import { TEST } from "@/constants/constants";
 
 const SearchForm = ({ initialQuery = "" }) => {
   const { ...search } = useField("text");
@@ -79,7 +79,7 @@ const SearchForm = ({ initialQuery = "" }) => {
   };
 
   return (
-    <div className="flex h-200 gap-4"  data-testid={TEST.form("search")}>
+    <div className="flex h-200 gap-4" data-testid={TEST.form("search")}>
       {/* Search Results */}
       <div className="min-w-1/3 bg-white">
         <Card>
@@ -88,7 +88,7 @@ const SearchForm = ({ initialQuery = "" }) => {
               <div className="flex pr-10 gap-4">
                 <Input
                   {...search}
-                  data-testid={TEST.input('search')}
+                  data-testid={TEST.input("search")}
                   placeholder="Jane Doe, Ellen Joe, etc."
                   className="placeholder:italic"
                 />
@@ -98,14 +98,14 @@ const SearchForm = ({ initialQuery = "" }) => {
                 <span>Price: </span>{" "}
                 <Input
                   {...minPrice}
-                  data-testid={TEST.input('min-price')}
+                  data-testid={TEST.input("min-price")}
                   className="w-1/4"
                   min={0}
                 />
                 <span> - </span>
                 <Input
                   {...maxPrice}
-                  data-testid={TEST.input('max-price')}
+                  data-testid={TEST.input("max-price")}
                   className="w-1/4"
                   min={0}
                 />
@@ -131,16 +131,14 @@ const SearchForm = ({ initialQuery = "" }) => {
                 })}
           </div>
         ) : (
-          <div data-testid={TEST.form('tutor-result')}>Searching...</div>
+          <div data-testid={TEST.form("tutor-result")}>Searching...</div>
         )}
       </div>
 
       {/*Tutor Results*/}
       <div className="min-w-2/3 bg-white border-2 min-h-165 rounded">
         {selectedTutor ? (
-          <TutorDetails
-            selectedTutor={selectedTutor}
-          />
+          <TutorDetails selectedTutor={selectedTutor} />
         ) : (
           <div className="flex flex-col justify-center items-center h-full">
             <img

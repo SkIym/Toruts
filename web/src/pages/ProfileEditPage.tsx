@@ -1,12 +1,12 @@
-import { ProfileEditForm } from "../templates/ProfileEditForm";
-import TutorForm from "../templates/TutorForm";
-import StudentForm from "../templates/StudentForm";
+import { ProfileEditForm } from "../containers/ProfileEditForm";
+import TutorForm from "../containers/TutorForm";
+import StudentForm from "../containers/StudentForm";
 import { useSelector } from "react-redux";
-import { RootState } from "store";
-import { UserType, TutorInfo, StudentInfo } from "@/types";
+import { RootState } from "@/app/store";
+import { UserType, TutorInfo, StudentInfo } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { PATH, TEST } from "@/constants";
+import { PATH, TEST } from "@/constants/constants";
 
 const InfoPage = () => {
     const user = useSelector((state: RootState) => state.user);

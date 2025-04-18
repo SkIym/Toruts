@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { AppDispatch } from "../../../store";
+import { AppDispatch } from "../../app/store";
 import { useDispatch } from "react-redux";
-import { logoutUser } from "@/reducers/userReducer";
+import { logoutUser } from "@/app/redux/userReducer";
 import { useState } from "react";
 import { Input } from "./input";
-import { TEST } from "@/constants";
+import { TEST } from "@/constants/constants";
 
 const NavBar = () => {
     const navigate = useNavigate();

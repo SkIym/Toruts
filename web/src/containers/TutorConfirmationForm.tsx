@@ -1,6 +1,6 @@
-import { TutorResult } from "@/types";
+import { TutorResult } from "@/types/types";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "store";
+import { AppDispatch, RootState } from "@/app/store";
 import {
   Dialog,
   DialogTrigger,
@@ -10,19 +10,19 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "../ui/dialog";
-import { StudentInfo } from "@/types";
-import { Button } from "../ui/button";
-import { matchWithTutor } from "@/reducers/userReducer";
+} from "../components/ui/dialog";
+import { StudentInfo } from "@/types/types";
+import { Button } from "../components/ui/button";
+import { matchWithTutor } from "@/app/redux/userReducer";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { TEST } from "@/constants";
+import { TEST } from "@/constants/constants";
 
 interface Props {
   tutor: TutorResult;
 }
-const Emph = ({ children }) => {                                                     /* Binding element 'children' implicitly has an 'any' type. error*/
+const Emph = ({ children }) => {
   return <span className="text-orange-500">{children}</span>;
 };
 

@@ -7,6 +7,7 @@ using api.Models;
 using api.Data;
 using api.Mappers;
 using api.Dtos.Record;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace api.Controllers
@@ -85,13 +86,20 @@ namespace api.Controllers
             return Ok(student.ToStudentDto());
         }
 
+        [Authorize]
         [HttpPost]
-        [Route("create/{username}")]
-        public async Task<IActionResult> StudentCreate([FromRoute] string username, CreateStudentRequestDto request)
+        [Route("create")]
+        public async Task<IActionResult> StudentCreate(CreateStudentRequestDto request)
         {
             if (!ModelState.IsValid)
                 return BadRequest((ModelState));
 
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
@@ -123,11 +131,20 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = student.Id }, student.ToStudentDto());
         }
 
-        [HttpPut("update/{username}")]
-        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateStudentDto updateDto)
+        [Authorize]
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateStudentDto updateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             var user = await _userManager.FindByNameAsync(username);
 

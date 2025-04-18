@@ -1,5 +1,5 @@
-import LoginForm from "../templates/LoginForm"
-import { TEST } from "@/constants"
+import LoginForm from "../containers/LoginForm"
+import { TEST } from "@/constants/constants"
 
 const LoginPage = () => {
 

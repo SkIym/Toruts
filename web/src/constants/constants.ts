@@ -8,30 +8,30 @@ export const API_ROUTES =
     }
     , RECORD:
     {
-        update: (username: string) => { return `${SERVER_URL}record/update/${username}` }
-        , delete: (username: string) => { return `${SERVER_URL}record/delete/${username}` }
+        update: () => { return `${SERVER_URL}record/update/` }
+        , delete: () => { return `${SERVER_URL}record/delete/` }
     }
     , STUDENT:
     {
-        update: (username: string) => { return `${SERVER_URL}student/update/${username}` }
+        update: () => { return `${SERVER_URL}student/update/` }
         , get: (username: string) => { return `${SERVER_URL}student/get/${username}` }
-        , create: (username: string) => { return `${SERVER_URL}student/create/${username}` }
+        , create: () => { return `${SERVER_URL}student/create/` }
     }
     , TUTOR:
     {
-        update: (username: string) => { return `${SERVER_URL}tutors/update/${username}` }
+        update: () => { return `${SERVER_URL}tutors/update/` }
         , get: (username: string) => { return `${SERVER_URL}tutors/get/${username}` }
-        , create: (username: string) => { return `${SERVER_URL}tutors/create/${username}` }
-        , upload: (id: number) => `${SERVER_URL}tutors/upload/portrait/${id}`
+        , create: () => { return `${SERVER_URL}tutors/create/` }
+        , upload: () => `${SERVER_URL}tutors/upload/portrait/`
         , search: `${SERVER_URL}tutors/search/`
     }
     , MATCH:
     {
-        create: (username: string) => `${SERVER_URL}matches/create/${username}`
+        create: () => `${SERVER_URL}matches/create/`
     }
     , COMMENT:
     {
-        create: (username: string) => `${SERVER_URL}comments/create/${username}`
+        create: () => `${SERVER_URL}comments/create/`
         , get: (id: number) => `${SERVER_URL}comments/tutor/${id}`
         , delete: (id: number) => `${SERVER_URL}comments/delete/${id}`
     }

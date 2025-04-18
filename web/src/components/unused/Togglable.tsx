@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, Ref } from "react";
-import { ToggleObject } from "../../types";
+import { ToggleObject } from "../../types/types";
 
 interface Props {
     className: string,
