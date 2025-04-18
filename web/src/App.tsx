@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../store'
+import { AppDispatch } from './app/store'
 import { useEffect, useState } from 'react'
-import { getLoggedInUser } from './reducers/userReducer'
+import { getLoggedInUser } from './app/redux/userReducer'
 import { Toaster } from "@/components/ui/sonner"
 import "./index.css"
 import NavBar from "./components/ui/navigationBar"

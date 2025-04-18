@@ -1,8 +1,7 @@
 import axios from "axios";
-import { API_ROUTES } from "../constants";
-import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types";
-import accountService  from "./account"
-
+import { API_ROUTES } from "../constants/constants";
+import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types/types";
+import accountService from "./account"
 
 const create = async (username: string, creds: TutorInfoWithoutId) => {
     console.log("Requesting to create tutor account")

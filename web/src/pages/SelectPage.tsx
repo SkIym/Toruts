@@ -1,5 +1,5 @@
-import { TEST } from "@/constants"
-import SelectTypeForm from "../templates/SelectTypeForm"
+import { TEST } from "@/constants/constants"
+import SelectTypeForm from "../containers/SelectTypeForm"
 
 const SelectPage = () => {
 

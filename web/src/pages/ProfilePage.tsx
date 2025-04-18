@@ -1,17 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store";
-import { logoutUser, deleteUser, switchMode } from "../../reducers/userReducer";
+import { AppDispatch, RootState } from "../app/store";
+import { logoutUser, deleteUser, switchMode } from "../app/redux/userReducer";
 import { useNavigate, Link } from "react-router-dom";
-import { StudentInfo, TutorInfo, UserType } from "../../types";
-import TutorProfile from "../templates/TutorProfile";
-import { PATH, TEST } from "@/constants";
+import { StudentInfo, TutorInfo, UserType } from "../types/types";
+import TutorProfile from "../containers/TutorProfile";
+import { PATH, TEST } from "@/constants/constants";
 
-import StudentProfile from "../templates/StudentProfile";
-import Navbar from "../ui/navigationBar";
-import { Card, CardContent, CardHeader } from "../ui/card";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import StudentProfile from "../containers/StudentProfile";
+import Navbar from "../components/ui/navigationBar";
+import { Card, CardContent, CardHeader } from "../components/ui/card";
+import { Avatar, AvatarImage } from "../components/ui/avatar";
 
-import { Button } from "../ui/button";
+import { Button } from "../components/ui/button";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -21,9 +21,9 @@ import {
 	AlertDialogHeader,
 	AlertDialogTrigger,
 	AlertDialogCancel,
-} from "../ui/alert-dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+} from "../components/ui/alert-dialog";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 
 const ProfilePage = () => {
 	const user = useSelector((state: RootState) => state.user);

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CommentError } from "@/types"
+import { CommentError } from "@/types/types"
 
 export const useField = (type: string, defValue?: string) => {
     const [value, setValue] = useState(defValue ? defValue : "");

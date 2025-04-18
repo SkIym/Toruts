@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store";
+import { AppDispatch, RootState } from "../app/store";
 import {
   signAsTutor,
   updateAsTutor,
   uploadPicture,
-} from "../../reducers/userReducer";
-import { TutorInfo } from "../../types";
+} from "../app/redux/userReducer";
+import { TutorInfo } from "../types/types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,7 +19,7 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -35,11 +35,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PATH, PORTRAIT, TEST } from "@/constants";
+import { PATH, PORTRAIT, TEST } from "@/constants/constants";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRandomString } from "@/hooks";
-import { LoadingButton } from "../ui/loadingButton";
+import { useRandomString } from "@/app/hooks";
+import { LoadingButton } from "../components/ui/loadingButton";
 
 const TutorSchema = z.object({
   educAttainment: z
@@ -180,7 +180,7 @@ const TutorForm = ({ info }: Props) => {
                 <Input
                   id="picture"
                   type="file"
-                  data-testid={TEST.input('picture')}
+                  data-testid={TEST.input("picture")}
                   onChange={handleFileInputChange}
                   className="w-full"
                 />
@@ -269,9 +269,21 @@ const TutorForm = ({ info }: Props) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="0" data-testid={TEST.select("online")}>Online</SelectItem>
-                        <SelectItem value="1" data-testid={TEST.select("f2f")}>F2F</SelectItem>
-                        <SelectItem value="2" data-testid={TEST.select("hybrid")}>Hybrid</SelectItem>
+                        <SelectItem
+                          value="0"
+                          data-testid={TEST.select("online")}
+                        >
+                          Online
+                        </SelectItem>
+                        <SelectItem value="1" data-testid={TEST.select("f2f")}>
+                          F2F
+                        </SelectItem>
+                        <SelectItem
+                          value="2"
+                          data-testid={TEST.select("hybrid")}
+                        >
+                          Hybrid
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -379,12 +391,25 @@ const TutorForm = ({ info }: Props) => {
                     >
                       <FormControl>
                         <SelectTrigger data-testid={TEST.select("status")}>
-                          <SelectValue placeholder="Select your status" data-testid={TEST.select("default")}/>
+                          <SelectValue
+                            placeholder="Select your status"
+                            data-testid={TEST.select("default")}
+                          />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent >
-                        <SelectItem value="0" data-testid={TEST.select("active")}>Active</SelectItem>
-                        <SelectItem value="1" data-testid={TEST.select("inactive")}>Inactive</SelectItem>
+                      <SelectContent>
+                        <SelectItem
+                          value="0"
+                          data-testid={TEST.select("active")}
+                        >
+                          Active
+                        </SelectItem>
+                        <SelectItem
+                          value="1"
+                          data-testid={TEST.select("inactive")}
+                        >
+                          Inactive
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -406,7 +431,7 @@ const TutorForm = ({ info }: Props) => {
                   <LoadingButton
                     type="submit"
                     loading={submittingForm}
-                    data-testid={TEST.button('create')}
+                    data-testid={TEST.button("create")}
                   >
                     {submittingForm
                       ? "Creating tutor account"

@@ -13,10 +13,10 @@ const Rating = ({ v }: {v: number}) => {
     return (
         <div className="flex">
             {[...Array(v)].map((_, i) =>
-                <FontAwesomeIcon icon={faStar} className="text-orange-300" />
+                <FontAwesomeIcon key={i} icon={faStar} className="text-orange-300" />
             )}
             {[...Array(5 - v)].map((_, i) =>
-                <FontAwesomeIcon icon={faStar} className="text-gray-400" />
+                <FontAwesomeIcon key={`empty-${i}`} icon={faStar} className="text-gray-400" />
             )}
         </div>
     )

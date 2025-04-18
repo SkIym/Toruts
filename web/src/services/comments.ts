@@ -1,6 +1,6 @@
-import { TutorComment, CreateComment, UserData } from "@/types";
+import { TutorComment, CreateComment, UserData } from "@/types/types";
 import axios from "axios";
-import { API_ROUTES } from "@/constants"
+import { API_ROUTES } from "@/constants/constants"
 import accountService from "./account"
 
 const post = async (comment: CreateComment, user: UserData) => {

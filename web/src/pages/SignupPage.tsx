@@ -1,8 +1,8 @@
-import SignUpForm from "../templates/SignupForm";
-import { UserType } from "../../types";
-import TutorForm from "../templates/TutorForm";
-import StudentForm from "../templates/StudentForm";
-import { TEST } from "@/constants";
+import SignUpForm from "../containers/SignupForm";
+import { UserType } from "../types/types";
+import TutorForm from "../containers/TutorForm";
+import StudentForm from "../containers/StudentForm";
+import { TEST } from "@/constants/constants";
 
 const SignupPage = ({ type }: { type: UserType | null }) => {
   let child;
