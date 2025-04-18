@@ -149,13 +149,19 @@ namespace api.Controllers
         // POST endpoint to create tutors\
         [Authorize]
         [HttpPost]
-        [Route("create/{username}")]
-        public async Task<IActionResult> TutorCreate([FromRoute] string username, [FromBody] CreateTutorRequestDto tutorDto)
+        [Route("create")]
+        public async Task<IActionResult> TutorCreate([FromBody] CreateTutorRequestDto tutorDto)
         {
 
             // Validate the model state
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
 
             // Find username
             var user = await _userManager.FindByNameAsync(username);
@@ -198,13 +204,27 @@ namespace api.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("upload/portrait/{id}")]
-        public async Task<IActionResult> Upload([FromRoute] int id, IFormFile portrait, Supabase.Client client)
+        [Route("upload/portrait")]
+        public async Task<IActionResult> Upload(IFormFile portrait, Supabase.Client client)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var tutor = await _context.Tutor.FirstAsync(t => t.Id == id);
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return NotFound("Invalid user");
+            }
+
+            var tutor = await _context.Tutor
+                        .FirstAsync(t => t.UserId == user.Id);
+
             using var memoryStream = new MemoryStream();
             await portrait.CopyToAsync(memoryStream);
             var lastIndexOfDot = portrait.FileName.LastIndexOf('.');
@@ -237,11 +257,18 @@ namespace api.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("update/{username}")]
-        public async Task<IActionResult> Update([FromRoute] string username, [FromBody] UpdateTutorDto updateDto)
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateTutorDto updateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+            
 
             var user = await _userManager.FindByNameAsync(username);
 
