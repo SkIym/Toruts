@@ -6,7 +6,7 @@ import accountService from "./account"
 // student users are the ones calling this
 const create = async (username: string, creds: CreateMatchInfo) => {
     console.log("Requesting to create a match")
-    const { data } = await axios.post<StudentInfo>(`${API_ROUTES.MATCH.create(username)}`, creds, accountService.getConfig())
+    const { data } = await axios.post<StudentInfo>(`${API_ROUTES.MATCH.create()}`, creds, accountService.getConfig())
     return data
 }
 

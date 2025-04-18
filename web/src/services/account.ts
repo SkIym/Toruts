@@ -34,13 +34,13 @@ const login = async (creds: LoginInfo) => {
 
 const setUserInfo = async (username: string, info: UserInfo) => {
     console.log("info reached") 
-    const { data } = await axios.put<UserInfo>(`${API_ROUTES.RECORD.update(username)}`, info, getConfig())
+    const { data } = await axios.put<UserInfo>(`${API_ROUTES.RECORD.update()}`, info, getConfig())
     return data
 }
 
 const deleteUser = async (username: string) => {
     console.log("delete user reached")
-    const { data } = await axios.delete(`${API_ROUTES.RECORD.delete(username)}`, getConfig())
+    const { data } = await axios.delete(`${API_ROUTES.RECORD.delete()}`, getConfig())
     return data
 }
 

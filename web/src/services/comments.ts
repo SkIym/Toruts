@@ -5,7 +5,7 @@ import accountService from "./account"
 
 const post = async (comment: CreateComment, user: UserData) => {
     console.log("sending comment")
-    const { data } = await axios.post<CreateComment>(`${API_ROUTES.COMMENT.create(user.userName)}`, comment, accountService.getConfig())
+    const { data } = await axios.post<CreateComment>(`${API_ROUTES.COMMENT.create()}`, comment, accountService.getConfig())
 
     return data
 }
