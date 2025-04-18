@@ -14,13 +14,13 @@ export const API_ROUTES =
     , STUDENT:
     {
         update: () => { return `${SERVER_URL}student/update/` }
-        , get: (username: string) => { return `${SERVER_URL}student/get/${username}` }
+        , get: () => { return `${SERVER_URL}student/get/` }
         , create: () => { return `${SERVER_URL}student/create/` }
     }
     , TUTOR:
     {
         update: () => { return `${SERVER_URL}tutors/update/` }
-        , get: (username: string) => { return `${SERVER_URL}tutors/get/${username}` }
+        , get: () => { return `${SERVER_URL}tutors/get/` }
         , create: () => { return `${SERVER_URL}tutors/create/` }
         , upload: () => `${SERVER_URL}tutors/upload/portrait/`
         , search: `${SERVER_URL}tutors/search/`

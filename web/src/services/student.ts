@@ -16,7 +16,7 @@ const update = async (username: string, creds: StudentInfoWithoutId) => {
 }
 
 const find = async (username: string) => {
-    const { data } = await axios.get<StudentInfo | null>(`${API_ROUTES.STUDENT.get(username)}`)
+    const { data } = await axios.get<StudentInfo | null>(`${API_ROUTES.STUDENT.get()}`)
     if (data) {
         return true
     } else {
@@ -25,10 +25,10 @@ const find = async (username: string) => {
 }
 
 const get = async (username: string) => {
-    const { data } = await axios.get<StudentInfo>(`${API_ROUTES.STUDENT.get(username)}`)
+    const { data } = await axios.get<StudentInfo>(`${API_ROUTES.STUDENT.get()}`, accountService.getConfig())
     return data;
 }
-
+    
 export default {
     create, update, find, get
 }

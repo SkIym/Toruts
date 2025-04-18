@@ -35,7 +35,7 @@ const update = async (username: string, creds: TutorInfoWithoutId) => {
 }
 
 const get = async (username: string) => {
-    const { data } = await axios.get<TutorInfo>(`${API_ROUTES.TUTOR.get(username)}`)
+    const { data } = await axios.get<TutorInfo>(`${API_ROUTES.TUTOR.get()}`, accountService.getConfig())
     return data;
 }
 

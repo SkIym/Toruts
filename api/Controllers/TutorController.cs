@@ -50,15 +50,17 @@ namespace api.Controllers
             return Ok(tutors);
         }
 
-        // GET endpoint to search tutors
-
-        // GET endpoint to filter tutors
-
         // GET endpoint to get tutor by username
+        [Authorize]
         [HttpGet]
-        [Route("get/{username}")]
-        public async Task<IActionResult> GetByUsername([FromRoute] string username)
-        {
+        [Route("get")]
+        public async Task<IActionResult> GetByUsername()
+        {   
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
             var user = await _userManager.FindByNameAsync(username);
 
             // If user not found, return 404 Not Found

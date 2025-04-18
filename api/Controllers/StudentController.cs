@@ -36,14 +36,21 @@ namespace api.Controllers
                         .ThenInclude(t => t.User)
                 .Include(s => s.User)
                 .ToListAsync();
-            var student = studentList.Select(t => t.ToStudentDto());
-            return Ok(student);
+            var students = studentList.Select(t => t.ToStudentDto());
+            return Ok(students);
         }
 
+        [Authorize]
         [HttpGet]
-        [Route("get/{username}")]
-        public async Task<IActionResult> GetByUsername([FromRoute] string username)
-        {
+        [Route("get")]
+        public async Task<IActionResult> GetByUsername()
+        {   
+            var username = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid session. Please log-in again");
+            }
+
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
