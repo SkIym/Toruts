@@ -51,7 +51,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
   const user = useSelector((state: RootState) => state.user);
   console.log(selectedTutor);
   return (
-    <div className="h-full overflow-y-auto">
+    <>
       <div className="flex border-b-2 w-full">
         <div className="p-6 flex gap-5 w-2/3">
           <img
@@ -138,8 +138,8 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
             );
           })}
         </div>
-      </div>
     </div>
+  </>
   );
 };
 

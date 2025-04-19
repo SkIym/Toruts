@@ -68,9 +68,9 @@ const SearchForm = ({ initialQuery = "" }) => {
 
 
   return (
-    <div className="flex h-200 gap-4" data-testid={TEST.form("search")}>
+    <div className="flex max-h-9/11 gap-4" data-testid={TEST.form("search")}>
       {/* Search Results */}
-      <div className="min-w-1/3 bg-white">
+      <div className="min-w-1/3 h-100 bg-white">
         <Card>
           <CardContent>
             <form onSubmit={handleSearch} className="flex flex-col gap-2">
@@ -104,7 +104,7 @@ const SearchForm = ({ initialQuery = "" }) => {
         </Card>
         <br />
         {isReady ? (
-          <div className="flex flex-col flex-grow gap-2 max-h-160 overflow-y-auto">
+          <div className="flex flex-col flex-grow gap-2 max-h-full overflow-y-auto">
             {tutors.length === 0
               ? "No tutors found :(. The name or subject you're trying to find is non-existent. Try adjusting your filters instead. "
               : tutors.map((tutor) => {
@@ -126,7 +126,7 @@ const SearchForm = ({ initialQuery = "" }) => {
       </div>
 
       {/*Tutor Results*/}
-      <div className="min-w-2/3 bg-white border-2 min-h-165 rounded">
+      <div className="min-w-2/3 bg-white border-2 rounded flex flex-col h-140 overflow-auto">
         {selectedTutor ? (
           <TutorDetails selectedTutor={selectedTutor} />
         ) : (

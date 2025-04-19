@@ -106,7 +106,7 @@ const CommentForm = ({ tutorId, onCommentPost }: Props) => {
   return (
     <Form {...commentForm}>
       <form
-        className="items-end mb-10"
+        className="items-end mb-5"
         onSubmit={commentForm.handleSubmit(handleCommentSubmit)}
         id="comment-form"
         data-testid={TEST.form("comment")}
