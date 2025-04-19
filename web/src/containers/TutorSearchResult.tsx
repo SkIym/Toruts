@@ -21,12 +21,15 @@ const getLearningMode = (learningMode: LearningMode) => {
     return <div>Hybrid</div>;
   };
 
+
+
 const TutorSearchResult = ({ tutor, onSelect }: Props) => {
+
   return (
     <div>
       <Card
         onClick={onSelect}
-        className="hover:bg-gray-100 gap-5 hover:cursor-pointer wrap-anywhere"
+        className="hover:bg-gray-50 gap-5 hover:cursor-pointer wrap-anywhere border-1 hover:border-primary/70"
         data-testid={TEST.card("tutor")}
       >
         <CardHeader className="flex items-center gap-5">
@@ -50,14 +53,14 @@ const TutorSearchResult = ({ tutor, onSelect }: Props) => {
             
         </CardHeader>
         <CardContent className="flex flex-row gap-2 flex-wrap">
-          <Badge className="text-base" variant="default"> &#8369; {tutor.price}</Badge>
+          <Badge variant="secondary" className="border-rose-100"> &#8369; {tutor.price}</Badge>
           <div className="flex gap-2">
             {tutor.areasOfExpertise.map((exp: string) => (
-                <Badge className="border-rose-100" variant="outline">{exp}</Badge>
+                <Badge className="border-rose-100" variant="default">{exp}</Badge>
             ))}
             
           </div>
-          <Badge className="border-rose-100" variant="outline">{tutor.availability}</Badge>
+          <Badge className="border-rose-100" variant="default">{tutor.availability}</Badge>
         </CardContent>
       </Card>
     </div>
