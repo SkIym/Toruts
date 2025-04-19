@@ -29,7 +29,9 @@ const NavBar = () => {
 		try {
 			await dispatch(logoutUser());
 			navigate("/login");
-		} catch {}
+		} catch {
+            //
+        }
 	};
 
     const toggleProfileDropdown = () => {
@@ -40,8 +42,8 @@ const NavBar = () => {
     const shouldHide = hideRoutes.indexOf(location.pathname);
 
     return (
-        <nav className="max-w-full bg-gray-800 p-5 max-h-1/11">
-            <div className="flex flex-row justify-between items-center mr-10 ml-10">
+        <nav className="max-w-full bg-gray-800 p-5 max-h-1/11 flex flex-row">
+            <div className="flex flex-row flex-1 justify-between items-center mr-10 ml-10">
                 <div className="flex items-center">
                     <Link to="/" className="font-pacifico text-white text-3xl m-2"  data-testid={TEST.link("toruts")}>Toruts</Link>
                 </div>
