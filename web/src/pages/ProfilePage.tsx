@@ -89,8 +89,8 @@ const ProfilePage = () => {
 
 	return (
 		<div data-testid={TEST.page("profile")} className="w-full">
-			<div className="p-10 pl-30 pr-30 flex w-full justify-center gap-5">
-				<Card className="w-3/4">
+			<div className="p-10 pl-30 pr-30 flex flex-row w-full justify-center gap-5">
+				<Card className="w-3/4 max-h-140 overflow-y-auto">
 					<CardHeader>
 						<b className="text-2xl">
 							Welcome Back {user?.primaryInfo?.firstName}!
@@ -153,7 +153,7 @@ const ProfilePage = () => {
 					</CardContent>
 				</Card>
 
-				<Card className="w-1/4">
+				<Card className="w-1/4 max-h-fit">
 					<CardHeader>
 						<b>Profile</b>
 					</CardHeader>
