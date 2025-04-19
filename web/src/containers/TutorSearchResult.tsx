@@ -1,36 +1,63 @@
-import { TutorResult } from "@/types/types";
-import { Card, CardHeader, CardContent } from "../components/ui/card";
+import { LearningMode, TutorResult } from "@/types/types";
+import { Card, CardHeader, CardDescription, CardContent } from "../components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { TEST } from "@/constants/constants";
 
 const defaultPicture =
   "https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg";
 
-const TutorSearchResult = ({ tutor, callback }: { tutor: TutorResult }) => {
+interface Props {
+    tutor: TutorResult
+    onSelect: () => void
+}
+
+const getLearningMode = (learningMode: LearningMode) => {
+    if (learningMode === 0) {
+      return <div>Online</div>;
+    }
+    if (learningMode === 1) {
+      return <div>F2F</div>;
+    }
+    return <div>Hybrid</div>;
+  };
+
+const TutorSearchResult = ({ tutor, onSelect }: Props) => {
   return (
     <div>
       <Card
-        onClick={callback}
-        className="hover:bg-gray-50"
+        onClick={onSelect}
+        className="hover:bg-gray-100 gap-5 hover:cursor-pointer wrap-anywhere"
         data-testid={TEST.card("tutor")}
       >
-        <CardHeader>
-          <b>
-            {tutor.firstName} {tutor.lastName}
-          </b>
-        </CardHeader>
-        <CardContent className="flex gap-10">
-          <img
+        <CardHeader className="flex items-center gap-5">
+            <img
             // src="https://img.freepik.com/free-photo/serious-young-african-man-standing-isolated_171337-9633.jpg"
             src={
               tutor.portraitUrl !== "None" ? tutor.portraitUrl : defaultPicture
             }
             alt=""
-            className="h-20 w-20 rounded-full object-cover"
-          />
-          <div className="flex flex-col">
-            <span>{tutor.price} PHP</span>
-            <span>{tutor.availability}</span>
+            className="h-15 w-15 rounded-full object-cover"
+            />
+            <div>
+                <b>
+                {tutor.firstName} {tutor.lastName}
+            </b>
+            <CardDescription>
+                {tutor.educAttainment}
+                {getLearningMode(tutor.learningMode)}
+            </CardDescription>
+            </div>
+            
+        </CardHeader>
+        <CardContent className="flex flex-row gap-2 flex-wrap">
+          <Badge className="text-base" variant="default"> &#8369; {tutor.price}</Badge>
+          <div className="flex gap-2">
+            {tutor.areasOfExpertise.map((exp: string) => (
+                <Badge className="border-rose-100" variant="outline">{exp}</Badge>
+            ))}
+            
           </div>
+          <Badge className="border-rose-100" variant="outline">{tutor.availability}</Badge>
         </CardContent>
       </Card>
     </div>

@@ -9,7 +9,7 @@ import TutorSearchResult from "./TutorSearchResult";
 import TutorDetails from "./TutorDetails";
 
 import tutorService from "../services/tutor";
-import { LearningMode, TutorResult } from "@/types/types";
+import { TutorResult } from "@/types/types";
 
 import { Card, CardContent } from "../components/ui/card";
 import { TEST } from "@/constants/constants";
@@ -23,8 +23,6 @@ const SearchForm = ({ initialQuery = "" }) => {
 
   const [tutors, setTutors] = useState<TutorResult[]>([]);
   const [isReady, setIsReady] = useState(false);
-
-  const [isApplying, setApplying] = useState(false);
 
   const [selectedTutor, setSelectedTutor] = useState<TutorResult | null>(null);
 
@@ -68,15 +66,6 @@ const SearchForm = ({ initialQuery = "" }) => {
     }
   };
 
-  const getLearningMode = (learningMode: LearningMode) => {
-    if (learningMode === 0) {
-      return <div>Online</div>;
-    }
-    if (learningMode === 1) {
-      return <div>F2F</div>;
-    }
-    return <div>Hybrid</div>;
-  };
 
   return (
     <div className="flex h-200 gap-4" data-testid={TEST.form("search")}>
@@ -122,8 +111,9 @@ const SearchForm = ({ initialQuery = "" }) => {
                   return (
                     // biome-ignore lint/correctness/useJsxKeyInIterable: wtf is going on
                     <TutorSearchResult
+                      key={tutor.id}
                       tutor={tutor}
-                      callback={() => {
+                      onSelect={() => {
                         setSelectedTutor(tutor);
                       }}
                     />

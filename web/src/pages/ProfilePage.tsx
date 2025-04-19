@@ -167,7 +167,7 @@ const ProfilePage = () => {
 							</Button>
 							<AlertDialog>
 								<AlertDialogTrigger>
-									<Button className="w-full" data-testid={TEST.button("delete-trigger")}>Delete Profile</Button>
+									<Button className="w-full" data-testid={TEST.button("delete-trigger")} variant="default">Delete Profile</Button>
 								</AlertDialogTrigger>
 
 								<AlertDialogContent>
