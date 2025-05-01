@@ -7,14 +7,14 @@ import { PATH } from "@/constants/constants";
 type Props = { children: React.ReactNode };
 
 const ProtectedRoute = ({ children }: Props) => {
-    const location = useLocation();
-    const user = useSelector((state: RootState) => state.user);
+	const location = useLocation();
+	const user = useSelector((state: RootState) => state.user);
     
-    return user ? (
-        <>{children}</>
-    ) : (
-        <Navigate to={PATH.login} state={{ from: location }} replace />
-    );
+	return user ? (
+		<>{children}</>
+	) : (
+		<Navigate to={PATH.login} state={{ from: location }} replace />
+	);
 };
 
 export default ProtectedRoute;

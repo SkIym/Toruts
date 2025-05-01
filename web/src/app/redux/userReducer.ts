@@ -11,9 +11,7 @@ import {
 	UserType,
 	isTutorInfo,
 	CreateMatchInfo,
-	TutorComment,
 	CreateComment,
-	StudentInfo,
 } from "../../types/types";
 import accountService from "../../services/account";
 import tutorService from "../../services/tutor";
@@ -65,6 +63,9 @@ const userSlice = createSlice({
 export const { setUser, clearUser, setType, setRoleInfo, setPrimaryInfo } =
 	userSlice.actions;
 
+const showSuccess = useSuccessNotification();
+const showError = useErrorNotification();
+
 // Signup
 export const signupUser = (creds: SignupInfo) => {
 	console.log("signup reached");
@@ -76,10 +77,10 @@ export const signupUser = (creds: SignupInfo) => {
 			user.dual = false;
 			updateLocalUser(user);
 			dispatch(setUser(user));
-            accountService.setToken(user.token);
-			useSuccessNotification("Signup succesful!");
+			accountService.setToken(user.token);
+			showSuccess("Signup succesful!");
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -91,7 +92,7 @@ export const getLoggedInUser = () => {
 		const user = getLocalUser();
 		if (user) {
 			dispatch(setUser(user));
-            accountService.setToken(user.token);
+			accountService.setToken(user.token);
 		}
 	};
 };
@@ -105,11 +106,11 @@ export const loginUser = (creds: LoginInfo) => {
 			const user = await accountService.login(creds);
 			updateLocalUser(user);
 			dispatch(setUser(user));
-            accountService.setToken(user.token);
+			accountService.setToken(user.token);
 			console.log(user);
-			useSuccessNotification("Login succesful!");
+			showSuccess("Login succesful!");
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -117,11 +118,11 @@ export const loginUser = (creds: LoginInfo) => {
 
 // Add or update user's primary information
 
-export const addUserInfo = (username: string, info: UserInfo) => {
+export const addUserInfo = (info: UserInfo) => {
 	console.log("user info reducer reached");
 	return async (dispatch: Dispatch) => {
 		try {
-			const primaryInfo = await accountService.setUserInfo(username, info);
+			const primaryInfo = await accountService.setUserInfo(info);
 			dispatch(setPrimaryInfo(primaryInfo));
 			const user = getLocalUser();
 			if (user) {
@@ -129,9 +130,9 @@ export const addUserInfo = (username: string, info: UserInfo) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`User information saved.`);
-		} catch (err) {
-			useErrorNotification(err);
+			showSuccess(`User information saved.`);
+		} catch (e) {
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -142,20 +143,20 @@ export const logoutUser = () => {
 	return async (dispatch: Dispatch) => {
 		updateLocalUser(null);
 		dispatch(clearUser());
-		useSuccessNotification("Logged out.");
+		showSuccess("Logged out.");
 	};
 };
 
 // Delete account
-export const deleteUser = (user: UserData) => {
+export const deleteUser = () => {
 	return async (dispatch: Dispatch) => {
 		try {
 			updateLocalUser(null);
-			await accountService.deleteUser(user.userName);
+			await accountService.deleteUser();
 			dispatch(clearUser());
-			useSuccessNotification("Deleted user.");
+			showSuccess("Deleted user.");
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -173,16 +174,15 @@ export const uploadPicture = (file: File) => {
 		try {
 			const user = getLocalUser();
 			if (user && user.roleInfo && isTutorInfo(user.roleInfo)) {
-				const tutorId = user.roleInfo.id;
-				const url = await tutorService.upload(tutorId, file);
+				const url = await tutorService.upload(file);
 				user.roleInfo.portraitUrl = url;
 				console.log({ pic: url });
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`You have uploaded your picture!`);
+			showSuccess(`You have uploaded your picture!`);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -201,9 +201,9 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`You have signed up as a tutor!`);
+			showSuccess(`You have signed up as a tutor!`);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -211,10 +211,10 @@ export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
 
 // Update user's tutor information
 
-export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
+export const updateAsTutor = (creds: TutorInfoWithoutId) => {
 	return async (dispatch: Dispatch) => {
 		try {
-			const tutorData = await tutorService.update(username, creds);
+			const tutorData = await tutorService.update(creds);
 			const user = getLocalUser();
 			if (user) {
 				user.roleInfo = tutorData;
@@ -223,32 +223,32 @@ export const updateAsTutor = (username: string, creds: TutorInfoWithoutId) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`Updated your tutor record`);
+			showSuccess(`Updated your tutor record`);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
 };
 
-export const uploadComment = (commentData: CreateComment, user: UserData) => {
-	return async (dispatch: Dispatch) => {
+export const uploadComment = (commentData: CreateComment) => {
+	return async () => {
 		try {
 			console.log("bruh")
-			await commentService.post(commentData, user);
-			useSuccessNotification("uploaded comment")
+			await commentService.post(commentData);
+			showSuccess("uploaded comment")
 		} catch (e) {
-			useErrorNotification(e)
+			showError(e)
 			return Promise.reject()
 		}
 	}
 }
 
 // Signup as a student
-export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
+export const signAsStudent = (info: StudentInfoWithoutId) => {
 	return async (dispatch: Dispatch) => {
 		try {
-			const studentData = await studentService.create(username, info);
+			const studentData = await studentService.create(info);
 			const user = getLocalUser();
 			if (user) {
 				if (hasOtherAccount(user)) user.dual = true;
@@ -257,18 +257,18 @@ export const signAsStudent = (username: string, info: StudentInfoWithoutId) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`You have signed up as a student!`);
+			showSuccess(`You have signed up as a student!`);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
 };
 
-export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
+export const updateStudent = (info: StudentInfoWithoutId) => {
 	return async (dispatch: Dispatch) => {
 		try {
-			const studentData = await studentService.update(username, info);
+			const studentData = await studentService.update(info);
 			const user = getLocalUser();
 			if (user) {
 				user.roleInfo = studentData;
@@ -277,9 +277,9 @@ export const updateStudent = (username: string, info: StudentInfoWithoutId) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`Updated student data`);
+			showSuccess(`Updated student data`);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -289,27 +289,27 @@ export const getTutors = (
 	query: TutorSearch,
 	callback: (t: TutorResult[]) => void,
 ) => {
-	return async (_: Dispatch) => {
+	return async () => {
 		console.log(query);
 		try {
 			const tutors = await tutorService.search(query);
 			callback(tutors);
 			console.log(tutors);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
 };
 
-export const switchMode = (toUserType: UserType, username: string) => {
+export const switchMode = (toUserType: UserType) => {
 	return async (dispatch: Dispatch) => {
 		try {
 			let roleInfo = null;
 			if (toUserType == UserType.STUDENT) {
-				roleInfo = await studentService.get(username);
+				roleInfo = await studentService.get();
 			} else {
-				roleInfo = await tutorService.get(username);
+				roleInfo = await tutorService.get();
 			}
 			const user = getLocalUser();
 			if (user) {
@@ -318,12 +318,12 @@ export const switchMode = (toUserType: UserType, username: string) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(
+			showSuccess(
 				`You have switched to your ${UserType[toUserType]} account!`,
 			);
 		} catch (e) {
 			console.log(e);
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};
@@ -339,9 +339,9 @@ export const matchWithTutor = (username: string, creds: CreateMatchInfo) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			useSuccessNotification(`Storing`);
+			showSuccess(`Storing`);
 		} catch (e) {
-			useErrorNotification(e);
+			showError(e);
 			return Promise.reject();
 		}
 	};

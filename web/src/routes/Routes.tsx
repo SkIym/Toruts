@@ -15,32 +15,32 @@ import { PATH } from "@/constants/constants";
 
 
 export const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        children: [
-            { path: "", element: <HomePage /> },
-            {
-                path: PATH.PROFILE.default,
-                element: (
-                    <ProtectedRoute>
-                        <UserTypeProtectedRoute>
-                            <ProfilePage />
-                        </UserTypeProtectedRoute>
-                    </ProtectedRoute>)
-            },
-            { path: PATH.login, element: <LoginPage /> },
-            { path: PATH.SIGNUP.default, element: <SignupPage type={null}/> },
-            { path: PATH.select, element: <SelectPage /> },
-            { path: PATH.SIGNUP.tutor, element: <SignupPage type={UserType.TUTOR}/>},
-            { path: PATH.SIGNUP.student, element: <SignupPage type={UserType.STUDENT}/>},
-            {
-                path: PATH.PROFILE.edit,
-                element: (
-                    <ProtectedRoute>
-                        <InfoPage />
-                    </ProtectedRoute>)
-            },
-        ],
-    },
+	{
+		path: "/",
+		element: <App />,
+		children: [
+			{ path: "", element: <HomePage /> },
+			{
+				path: PATH.PROFILE.default,
+				element: (
+					<ProtectedRoute>
+						<UserTypeProtectedRoute>
+							<ProfilePage />
+						</UserTypeProtectedRoute>
+					</ProtectedRoute>)
+			},
+			{ path: PATH.login, element: <LoginPage /> },
+			{ path: PATH.SIGNUP.default, element: <SignupPage type={null}/> },
+			{ path: PATH.select, element: <SelectPage /> },
+			{ path: PATH.SIGNUP.tutor, element: <SignupPage type={UserType.TUTOR}/>},
+			{ path: PATH.SIGNUP.student, element: <SignupPage type={UserType.STUDENT}/>},
+			{
+				path: PATH.PROFILE.edit,
+				element: (
+					<ProtectedRoute>
+						<InfoPage />
+					</ProtectedRoute>)
+			},
+		],
+	},
 ]);

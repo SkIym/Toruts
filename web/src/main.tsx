@@ -6,10 +6,10 @@ import store from "./app/store.ts";
 import { router } from './routes/Routes.tsx';
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={router}>
-            </RouterProvider>
-        </Provider>
-    </StrictMode>,
+	<StrictMode>
+		<Provider store={store}>
+			<RouterProvider router={router}>
+			</RouterProvider>
+		</Provider>
+	</StrictMode>,
 )

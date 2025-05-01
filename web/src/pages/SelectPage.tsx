@@ -3,9 +3,9 @@ import SelectTypeForm from "../containers/SelectTypeForm"
 
 const SelectPage = () => {
 
-    return <div data-testid={TEST.page('select')}>
-        <SelectTypeForm />
-    </div>
+	return <div data-testid={TEST.page('select')}>
+		<SelectTypeForm />
+	</div>
 
 }
 

@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { logoutUser, deleteUser, switchMode } from "../app/redux/userReducer";
-import { useNavigate, Link } from "react-router-dom";
-import { StudentInfo, TutorInfo, UserType } from "../types/types";
+import { useNavigate } from "react-router-dom";
+import { isTutorInfo, StudentInfo, TutorInfo, UserType } from "../types/types";
 import TutorProfile from "../containers/TutorProfile";
 import { PATH, TEST } from "@/constants/constants";
 
 import StudentProfile from "../containers/StudentProfile";
-import Navbar from "../components/ui/navigationBar";
 import { Card, CardContent, CardHeader } from "../components/ui/card";
 import { Avatar, AvatarImage } from "../components/ui/avatar";
 
@@ -48,7 +47,7 @@ const ProfilePage = () => {
 				throw "not logged in";
 			}
 
-			await dispatch(deleteUser(JSON.parse(loggedInUserJSON)));
+			await dispatch(deleteUser());
 		} catch {
 			//
 		}
@@ -63,7 +62,7 @@ const ProfilePage = () => {
 					console.log("Handling switching modes");
 					const toUserType =
 						userType === UserType.STUDENT ? UserType.TUTOR : UserType.STUDENT;
-					await dispatch(switchMode(toUserType, user?.userName));
+					await dispatch(switchMode(toUserType));
 				} catch {
 					return;
 				}
@@ -98,16 +97,22 @@ const ProfilePage = () => {
 					</CardHeader>
 					<CardContent>
 						<div className="flex w-full gap-5 items-center">
-							<Avatar className="w-25 h-25">
-								{user?.userType == UserType.TUTOR ? (
-									<AvatarImage src={user?.roleInfo.portraitUrl} width={100} />
-								) : (
-									<AvatarImage
-										src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
-										width={100}
-									/>
-								)}
-							</Avatar>
+							{
+								user && user.roleInfo != null && isTutorInfo(user.roleInfo) ? 
+									<Avatar className="w-25 h-25">
+										{user.userType == UserType.TUTOR ? (
+											<AvatarImage src={user.roleInfo?.portraitUrl} width={100} />
+										) : (
+											<AvatarImage
+												src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+												width={100}
+											/>
+										)}
+									</Avatar>
+									:
+									null
+							}
+              
 							<div className="ml-16 w-1/4">
 								<Label>First Name</Label>
 								<Input disabled value={primaryInfo?.firstName} data-testid={TEST.input('first-name')} />
