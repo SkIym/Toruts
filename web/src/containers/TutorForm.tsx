@@ -137,7 +137,7 @@ const TutorForm = ({ info }: Props) => {
 			else if (user) {
 				console.log("WDA");
 				await dispatch(
-					signAsTutor(user.userName, {
+					signAsTutor({
 						educAttainment: formData.educAttainment,
 						learningMode: parseInt(formData.mode),
 						venue: formData.venue,

@@ -3,7 +3,7 @@ import { API_ROUTES } from "../constants/constants";
 import { TutorInfo, TutorInfoWithoutId, TutorResult, TutorSearch } from "../types/types";
 import accountService from "./account"
 
-const create = async (username: string, creds: TutorInfoWithoutId) => {
+const create = async (creds: TutorInfoWithoutId) => {
 	console.log("Requesting to create tutor account")
 
 	const { data } = await axios.post<TutorInfo>(`${API_ROUTES.TUTOR.create()}`, creds, accountService.getConfig())

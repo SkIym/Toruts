@@ -189,10 +189,10 @@ export const uploadPicture = (file: File) => {
 };
 
 // Sign up as a tutor
-export const signAsTutor = (username: string, creds: TutorInfoWithoutId) => {
+export const signAsTutor = (creds: TutorInfoWithoutId) => {
 	return async (dispatch: Dispatch) => {
 		try {
-			const tutorData = await tutorService.create(username, creds);
+			const tutorData = await tutorService.create(creds);
 			const user = getLocalUser();
 			if (user) {
 				user.roleInfo = tutorData;
@@ -329,10 +329,10 @@ export const switchMode = (toUserType: UserType) => {
 	};
 };
 
-export const matchWithTutor = (username: string, creds: CreateMatchInfo) => {
+export const matchWithTutor = (creds: CreateMatchInfo) => {
 	return async (dispatch: Dispatch) => {
 		try {
-			const studentData = await matchService.create(username, creds);
+			const studentData = await matchService.create(creds);
 			const user = getLocalUser();
 			if (user) {
 				user.roleInfo = studentData;

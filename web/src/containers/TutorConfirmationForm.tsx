@@ -22,7 +22,7 @@ import { TEST } from "@/constants/constants";
 interface Props {
   tutor: TutorResult;
 }
-const Emph = ({ children }) => {
+const Emph = ({ children }: {children: string}) => {
 	return <span className="text-orange-500">{children}</span>;
 };
 
@@ -39,9 +39,8 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
 	const handleApply = async () => {
 		if (user)
 			try {
-				console.log(tutor.id, subject, tutor.price);
 				await dispatch(
-					matchWithTutor(user?.userName, {
+					matchWithTutor({
 						tutorId: tutor.id,
 						subject,
 						price: tutor.price,
@@ -57,7 +56,7 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
 
 	return (
 		<div className="flex w-1/3 items-center justify-end mr-20">
-			<Dialog className="relative z-10">
+			<Dialog>
 				<DialogTrigger
 					className="bg-green-100 p-2 w-40 rounded-lg hover:bg-green-200"
 					data-testid={TEST.button("apply")}
