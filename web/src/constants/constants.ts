@@ -1,4 +1,4 @@
-export const SERVER_URL = 'http://localhost:5177/api/'
+export const SERVER_URL = 'https://toruts.azurewebsites.net/api/'
 export const API_ROUTES =
 {
 	ACCOUNT:
