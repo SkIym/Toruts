@@ -114,6 +114,11 @@ app.UseCors(x => x
     .AllowCredentials()                                                                 // Allow credentials (e.g., cookies)
     .SetIsOriginAllowed(origin => true));                                               // Allow any origin
 
+// Serve frontend stored in wwwroot
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
+
+
 // Enable authentication and authorization
 app.UseAuthentication();                                                                // Enable authentication middleware
 app.UseAuthorization();                                                                 // Enable authorization middleware
