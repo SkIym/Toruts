@@ -48,7 +48,7 @@ const NavBar = () => {
 					<Link to="/" className="font-pacifico text-white text-3xl m-2"  data-testid={TEST.link("toruts")}>Toruts</Link>
 				</div>
 				{shouldHide !== -1 && (
-					<form className="flex flex-row basis-1/3 space-x-10 h-4/5 text-black" onSubmit={handleSearchSubmit}>
+					<form className="flex flex-row basis-1/3 space-x-10 text-black" onSubmit={handleSearchSubmit}>
 						<Input
 							type="text"
 							value={searchQuery}
