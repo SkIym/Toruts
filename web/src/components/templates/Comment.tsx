@@ -3,11 +3,11 @@ import { faStar, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button } from "../ui/button"
 // import regular from '@fortawesome/free-regular-svg-icons'
 import commentService from "@/services/comments"
-import { useErrorNotification, useSuccessNotification } from "@/hooks"
+import { useErrorNotification, useSuccessNotification } from "@/app/hooks"
 import { useSelector } from "react-redux"
-import { RootState } from "store"
-import { TutorComment } from '@/types'
-import { TEST } from '@/constants'
+import { RootState } from "@/app/store"
+import { TutorComment } from '@/types/types'
+import { TEST } from '@/constants/constants'
 
 const Rating = ({ v }: {v: number}) => {
 	return (

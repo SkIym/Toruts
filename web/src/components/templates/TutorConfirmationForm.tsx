@@ -1,6 +1,6 @@
-import { TutorResult } from "@/types";
+import { TutorResult } from "@/types/types";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "store";
+import { AppDispatch, RootState } from "@/app/store";
 import {
 	Dialog,
 	DialogTrigger,
@@ -11,18 +11,18 @@ import {
 	DialogFooter,
 	DialogClose,
 } from "../ui/dialog";
-import { StudentInfo } from "@/types";
+import { StudentInfo } from "@/types/types";
 import { Button } from "../ui/button";
-import { matchWithTutor } from "@/reducers/userReducer";
+import { matchWithTutor } from "@/app/redux/userReducer";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { TEST } from "@/constants";
+import { TEST } from "@/constants/constants";
 
 interface Props {
   tutor: TutorResult;
 }
-const Emph = ({ children }) => {                                                     /* Binding element 'children' implicitly has an 'any' type. error*/
+const Emph = ({ children }: {children: string}) => {                                                     /* Binding element 'children' implicitly has an 'any' type. error*/
 	return <span className="text-orange-500">{children}</span>;
 };
 
@@ -41,7 +41,7 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
 			try {
 				console.log(tutor.id, subject, tutor.price);
 				await dispatch(
-					matchWithTutor(user?.userName, {
+					matchWithTutor({
 						tutorId: tutor.id,
 						subject,
 						price: tutor.price,
@@ -57,7 +57,7 @@ const TutorConfirmationForm = ({ tutor }: Props) => {
 
 	return (
 		<div className="flex w-1/3 items-center justify-end mr-20">
-			<Dialog className="relative z-10">
+			<Dialog>
 				<DialogTrigger
 					className="bg-green-100 p-2 w-40 rounded-lg hover:bg-green-200"
 					data-testid={TEST.button("apply")}
