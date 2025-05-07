@@ -106,7 +106,7 @@ const TutorDetails = ({ selectedTutor }: { selectedTutor: TutorResult }) => {
 			</div>
 			<div className="border-t-2 p-4 flex flex-col">
 				<b>Contacts</b>
-				<span>123456789</span>
+				<span>{selectedTutor.phoneNumber}</span>
 			</div>
 
 			<div className="w-full p-4 flex flex-col border-t-2">
