@@ -12,32 +12,19 @@ const SelectTypeForm = () => {
 	};
 
 	return (
-		<div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-			{type ? (
-				<div>
-					<h1 className="page-title font-bold text-gray-900">Who are you?</h1>
-					<Button
-						type="button"
-						onClick={toggleForm}
-						data-testid={TEST.button("switch")}
-					>
-            I'm a student
-					</Button>
-					<TutorForm></TutorForm>
-				</div>
-			) : (
-				<div>
-					<h1 className="page-title font-bold text-gray-900">Who are you?</h1>
-					<Button
-						type="button"
-						onClick={toggleForm}
-						data-testid={TEST.button("switch")}
-					>
-            I'm a tutor
-					</Button>
-					<StudentForm></StudentForm>
-				</div>
-			)}
+		<div className="flex flex-col min-h-svh items-center p-6 md:p-10 gap-5">
+			<div className="flex flex-row justify-center w-full">
+				<Button
+					type="button"
+					onClick={toggleForm}
+					data-testid={TEST.button("switch")}
+				>
+					{type ? "I'm a student" : "I'm a tutor"}
+				</Button>
+			</div>
+			<div className="w-2/3">
+				{type ? <TutorForm></TutorForm> : <StudentForm></StudentForm>}
+			</div>
 		</div>
 	);
 };
