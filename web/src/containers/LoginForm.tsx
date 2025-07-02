@@ -56,8 +56,9 @@ const LoginForm = () => {
 			navigate("/");
 			
 		} catch (err) {
-			return err;
+			console.log(err)
 		}
+
 		setSubmittingForm(false)
 	};
 
