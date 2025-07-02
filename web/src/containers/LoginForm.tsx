@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { TEST } from "@/constants/constants";
+import { LoadingButton } from "@/components/ui/loadingButton";
+import { useState } from "react";
 
 const LoginForm = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -37,9 +39,12 @@ const LoginForm = () => {
 		resolver: zodResolver(LogInSchema),
 	});
 
+	const [submittingForm, setSubmittingForm] = useState(false)
+
   type LogInSchemaType = z.infer<typeof LogInSchema>;
 
   const handleLogin: SubmitHandler<LogInSchemaType> = async (formData) => {
+  	setSubmittingForm(true)
   	try {
   		await dispatch(
   			loginUser({
@@ -48,6 +53,7 @@ const LoginForm = () => {
   			})
   		);
   		navigate("/");
+  		setSubmittingForm(false)
   	} catch (err) {
   		return err;
   	}
@@ -59,7 +65,7 @@ const LoginForm = () => {
   			<CardHeader>
   				<CardTitle className="text-2xl">Login</CardTitle>
   				<CardDescription>
-            Enter your username below to login to your account
+			Enter your username below to login to your account
   				</CardDescription>
   			</CardHeader>
   			<CardContent>
@@ -110,16 +116,25 @@ const LoginForm = () => {
   							)}
   						/>
   						<div className="flex flex-row gap-4 justify-between">
-  							<Button type="submit" data-testid={TEST.button("login")}>
-                  Login
-  							</Button>
+							
+  							<LoadingButton
+  								loading={submittingForm}
+  								disabled={!loginForm.formState.isDirty}
+  								type="submit"
+  								data-testid={TEST.button("login")}
+  							>
+  								{submittingForm
+  									? "Logging in"
+  									: "Log in"}
+  							</LoadingButton>
+
   							<Button
   								type="button"
   								variant="outline"
   								onClick={() => navigate("/signup")}
   								data-testid={TEST.button("signup")}
   							>
-                  Sign up instead
+				  Sign up instead
   								<svg
   									width="15"
   									height="15"
