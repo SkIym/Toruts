@@ -17,6 +17,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { PATH, TEST } from "@/constants/constants";
+import { LoadingButton } from "@/components/ui/loadingButton";
+import { useState } from "react";
 
 const SignUpSchema = z
 	.object({
@@ -40,7 +42,7 @@ const SignUpSchema = z
 			.min(8)
 			.regex(/(?=.*[^A-Za-z0-9])/, {
 				message:
-          "Password must contain at least one non-alphanumeric character.",
+		  "Password must contain at least one non-alphanumeric character.",
 			}),
 		confirmPassword: z.string(),
 	})
@@ -60,8 +62,12 @@ const SignupForm = () => {
 		resolver: zodResolver(SignUpSchema),
 	});
 
+	const [submittingForm, setSubmittingForm] = useState(false)
+
 	const handleSignup: SubmitHandler<SignUpSchemaType> = async (formData) => {
+		
 		try {
+			setSubmittingForm(true)
 			await dispatch(
 				signupUser({
 					firstName: formData.firstName,
@@ -76,6 +82,7 @@ const SignupForm = () => {
 		} catch (err) {
 			console.error(err)
 		}
+		setSubmittingForm(false)
 	};
 
 	return (
@@ -253,11 +260,18 @@ const SignupForm = () => {
 											clip-rule="evenodd"
 										></path>
 									</svg>
-                  Login instead
+				  				Login instead
 								</Button>
-								<Button type="submit" data-testid={TEST.button("signup")}>
-                  Sign up
-								</Button>
+								<LoadingButton
+									loading={submittingForm}
+									disabled={!signUpForm.formState.isDirty}
+									type="submit"
+									data-testid={TEST.button("signup")}
+								>
+									{submittingForm
+										? "Signing up"
+										: "Sign up"}
+								</LoadingButton>
 							</div>
 						</form>
 					</Form>
