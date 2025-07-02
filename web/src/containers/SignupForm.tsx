@@ -203,7 +203,7 @@ const SignupForm = () => {
 									name="password"
 									render={({ field }) => (
 										<FormItem>
-											<div className="flex flex-col justify-between">
+											<div className="flex flex-row justify-between">
 												<FormLabel>Password</FormLabel>
 												<FormMessage />
 											</div>
