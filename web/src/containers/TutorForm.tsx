@@ -40,6 +40,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRandomString } from "@/app/hooks";
 import { LoadingButton } from "../components/ui/loadingButton";
+import SchedulePicker from "@/components/templates/SchedulePicker";
 
 const TutorSchema = z.object({
 	educAttainment: z
@@ -170,12 +171,12 @@ const TutorForm = ({ info }: Props) => {
 					<CardDescription></CardDescription>
 				</CardHeader>
 				<CardContent className="flex flex-col gap-5">
-					<div className="items-center flex flex-row justify-start gap-5 border-2 p-5 rounded-2xl">
+					<div className="items-center flex justify-start gap-5 border-2 p-5 rounded-2xl bg-gray-100">
 						<Avatar className="w-[100px] h-[100px]">
 							<AvatarImage src={portraitTempUrl} />
 							<AvatarFallback>AVTR</AvatarFallback>
 						</Avatar>
-						<div className="flex flex-col">
+						<div className="flex flex-col gap-2">
 							<h1>Profile Picture (optional)</h1>
 							<div className="flex flex-col items-center gap-4">
 								<Input
@@ -444,6 +445,7 @@ const TutorForm = ({ info }: Props) => {
 					</Form>
 				</CardContent>
 			</Card>
+			<SchedulePicker></SchedulePicker>
 		</div>
 	);
 };
