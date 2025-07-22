@@ -43,9 +43,6 @@ const SchedulePicker = ({
 }: SchedulePickerProps) => {
 	const [internalSelectedDays, setInternalSelectedDays] = useState<string[]>(selectedDays)
 	const [internalTimeRange, setInternalTimeRange] = useState<TimeRange>(timeRange)
-	const [startTimeInput, setStartTimeInput] = useState("")
-	const [endTimeInput, setEndTimeInput] = useState("")
-
 	const currentSelectedDays = onDaysChange ? selectedDays : internalSelectedDays
 	const currentTimeRange = onTimeRangeChange ? timeRange : internalTimeRange
 	const setSelectedDays = onDaysChange || setInternalSelectedDays
@@ -164,7 +161,7 @@ const SchedulePicker = ({
 
 		return (
 			<div className="space-y-2">
-				<Label className="text-sm font-medium capitalize">{type} Time</Label>
+				<Label className="text-xs font-medium capitalize">{type} Time</Label>
 				<Input
 					value={currentDisplayValue}
 					onChange={(e) => handleInputChange(e.target.value)}
@@ -175,7 +172,7 @@ const SchedulePicker = ({
 				/>
 				{!isValid && (
 					<p className="text-xs text-red-500">
-            Invalid time format. {timeFormat === "12" ? "Use format like 9:00 AM" : "Use 24-hour format like 09:00"}
+			Invalid time format. {timeFormat === "12" ? "Use format like 9:00 AM" : "Use 24-hour format like 09:00"}
 					</p>
 				)}
 				<p className="text-xs text-muted-foreground">
@@ -190,20 +187,10 @@ const SchedulePicker = ({
 	}
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 bg-gray-50 p-5 rounded-sm">
+			<Separator />
 			{/* Days Section */}
 			<div className="space-y-4">
-				<div className="flex items-center justify-between">
-					<Label className="text-base font-medium">Select Days</Label>
-					<div className="flex gap-2">
-						<Button variant="ghost" size="sm" onClick={selectAllDays} className="h-8 px-2 text-xs">
-              Select All
-						</Button>
-						<Button variant="ghost" size="sm" onClick={clearAllDays} className="h-8 px-2 text-xs">
-              Clear
-						</Button>
-					</div>
-				</div>
 				<div className="grid grid-cols-7 gap-2">
 					{DAYS.map((day) => {
 						const isSelected = currentSelectedDays.includes(day.key)
@@ -212,6 +199,7 @@ const SchedulePicker = ({
 								key={day.key}
 								variant={isSelected ? "default" : "outline"}
 								size="sm"
+								type="button"
 								onClick={() => toggleDay(day.key)}
 								className={cn("h-12 w-full relative flex flex-col", isSelected && "bg-primary text-primary-foreground")}
 							>
@@ -223,54 +211,8 @@ const SchedulePicker = ({
 				</div>
 			</div>
 
-			<Separator />
-
 			{/* Time Range Section */}
 			<div className="space-y-4">
-				<Label className="text-base font-medium">Select Time Range</Label>
-
-				{/* Quick Presets */}
-				<div className="space-y-2">
-					<Label className="text-xs text-muted-foreground">Quick Presets</Label>
-					<div className="flex flex-wrap gap-2">
-						<Button
-							size="sm"
-							variant="outline"
-							onClick={() =>
-								setCommonTimeRanges(
-									timeFormat === "12" ? "9:00 AM" : "09:00",
-									timeFormat === "12" ? "5:00 PM" : "17:00",
-								)
-							}
-						>
-              9-5
-						</Button>
-						<Button
-							size="sm"
-							variant="outline"
-							onClick={() =>
-								setCommonTimeRanges(
-									timeFormat === "12" ? "8:00 AM" : "08:00",
-									timeFormat === "12" ? "6:00 PM" : "18:00",
-								)
-							}
-						>
-              8-6
-						</Button>
-						<Button
-							size="sm"
-							variant="outline"
-							onClick={() =>
-								setCommonTimeRanges(
-									timeFormat === "12" ? "10:00 AM" : "10:00",
-									timeFormat === "12" ? "2:00 PM" : "14:00",
-								)
-							}
-						>
-              10-2
-						</Button>
-					</div>
-				</div>
 
 				{/* Time Input Fields */}
 				<div className="grid gap-6 md:grid-cols-2">
@@ -288,32 +230,30 @@ const SchedulePicker = ({
 							setEndTimeInput("")
 						}}
 					>
-            Clear Times
+			Clear Times
 					</Button>
 				</div> */}
 			</div>
 
 			{/* Summary */}
 			{(currentSelectedDays.length > 0 || currentTimeRange.startTime || currentTimeRange.endTime) && (
-				<>
-					<Separator />
-					<div className="space-y-2">
-						<Label className="text-base font-medium">Schedule Summary</Label>
-						<div className="text-sm text-muted-foreground">
-							{currentSelectedDays.length > 0 && (currentTimeRange.startTime || currentTimeRange.endTime) ? (
-								<>
-                  Every {currentSelectedDays.map((dayKey) => DAYS.find((d) => d.key === dayKey)?.full).join(", ")} from{" "}
-									{formatDisplayTimeRange()}
-								</>
-							) : currentSelectedDays.length > 0 ? (
-								<>Days: {currentSelectedDays.map((dayKey) => DAYS.find((d) => d.key === dayKey)?.full).join(", ")}</>
-							) : currentTimeRange.startTime || currentTimeRange.endTime ? (
-								<>Time range: {formatDisplayTimeRange()}</>
-							) : null}
-						</div>
+				<div className="space-y-2">
+					<Label className="text-base font-medium">Schedule Summary</Label>
+					<div className="text-sm text-muted-foreground">
+						{currentSelectedDays.length > 0 && (currentTimeRange.startTime || currentTimeRange.endTime) ? (
+							<>
+				Every {currentSelectedDays.map((dayKey) => DAYS.find((d) => d.key === dayKey)?.full).join(", ")} from{" "}
+								{formatDisplayTimeRange()}
+							</>
+						) : currentSelectedDays.length > 0 ? (
+							<>Days: {currentSelectedDays.map((dayKey) => DAYS.find((d) => d.key === dayKey)?.full).join(", ")}</>
+						) : currentTimeRange.startTime || currentTimeRange.endTime ? (
+							<>Time range: {formatDisplayTimeRange()}</>
+						) : null}
 					</div>
-				</>
+				</div>
 			)}
+			<Separator />
 		</div>
 	)
 }

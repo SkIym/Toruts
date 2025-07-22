@@ -241,7 +241,7 @@ const TutorForm = ({ info }: Props) => {
 									render={({ field }) => (
 										<FormItem>
 											<div className="flex flex-row justify-between">
-												<FormLabel>Price (per hour)</FormLabel>
+												<FormLabel>Rate per hour</FormLabel>
 												<FormMessage />
 											</div>
 											<FormControl>
@@ -321,15 +321,6 @@ const TutorForm = ({ info }: Props) => {
 									)}
 								/>
 							</div>
-							<Popover>
-								<PopoverTrigger>
-									<Button variant="outline" type="button">Availability: Click to Set</Button>
-								</PopoverTrigger>
-								<PopoverContent className="md:w-2xl w-auto border-1" align="start">
-									<SchedulePicker></SchedulePicker>
-								</PopoverContent>
-							</Popover>
-
 							<FormField
 								control={tutorForm.control}
 								name="avail"
@@ -339,13 +330,12 @@ const TutorForm = ({ info }: Props) => {
 											<FormLabel>Availability</FormLabel>
 											<FormMessage />
 										</div>
-										<FormControl>
-											<Input
-												placeholder="Availability"
-												{...field}
-												data-testid={TEST.input("availability")}
-											/>
-										</FormControl>
+										{/* <Input
+											placeholder="Availability"
+											{...field}
+											data-testid={TEST.input("availability")}
+										/> */}
+										<SchedulePicker></SchedulePicker>
 									</FormItem>
 								)}
 							/>
