@@ -41,6 +41,15 @@ import { useNavigate } from "react-router-dom";
 import { useRandomString } from "@/app/hooks";
 import { LoadingButton } from "../components/ui/loadingButton";
 import SchedulePicker from "@/components/templates/SchedulePicker";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+	Button
+} from "@/components/ui/button"
+
 
 const TutorSchema = z.object({
 	educAttainment: z
@@ -62,7 +71,7 @@ const TutorSchema = z.object({
 type TutorSchemaType = z.infer<typeof TutorSchema>;
 
 type Props = {
-  info?: TutorInfo;
+	info?: TutorInfo;
 };
 
 const areasOfExpSeparator = " ";
@@ -89,7 +98,7 @@ const TutorForm = ({ info }: Props) => {
 	});
 
 	const [portrait, setPortrait] = useState<File | null>(null);
-   
+	 
 	const [portraitTempUrl, setPortraitUrl] = useState<string>(
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		info ? `${info.portraitUrl}?random=${useRandomString()}` : PORTRAIT.default
@@ -250,48 +259,48 @@ const TutorForm = ({ info }: Props) => {
 									)}
 								/>
 							</div>
-							<FormField
-								control={tutorForm.control}
-								name="mode"
-								render={({ field }) => (
-									<FormItem>
-										<div className="flex flex-row justify-between">
-											<FormLabel>Learning Mode</FormLabel>
-											<FormMessage />
-										</div>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={
-												info ? info.learningMode.toString() : undefined
-											}
-										>
-											<FormControl>
-												<SelectTrigger data-testid={TEST.select("mode")}>
-													<SelectValue placeholder="Select your offered mode of learning" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												<SelectItem
-													value="0"
-													data-testid={TEST.select("online")}
-												>
-                          Online
-												</SelectItem>
-												<SelectItem value="1" data-testid={TEST.select("f2f")}>
-                          F2F
-												</SelectItem>
-												<SelectItem
-													value="2"
-													data-testid={TEST.select("hybrid")}
-												>
-                          Hybrid
-												</SelectItem>
-											</SelectContent>
-										</Select>
-									</FormItem>
-								)}
-							/>
-							<div className="grid grid-cols-2 gap-5 justify-evenly">
+							<div className="grid grid-cols-2 gap-5 w-2xl">
+								<FormField
+									control={tutorForm.control}
+									name="mode"
+									render={({ field }) => (
+										<FormItem>
+											<div className="flex flex-row justify-between">
+												<FormLabel>Learning Mode</FormLabel>
+												<FormMessage />
+											</div>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={
+													info ? info.learningMode.toString() : undefined
+												}
+											>
+												<FormControl>
+													<SelectTrigger data-testid={TEST.select("mode")}>
+														<SelectValue placeholder="Select your offered mode of learning" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													<SelectItem
+														value="0"
+														data-testid={TEST.select("online")}
+													>
+													Online
+													</SelectItem>
+													<SelectItem value="1" data-testid={TEST.select("f2f")}>
+													F2F
+													</SelectItem>
+													<SelectItem
+														value="2"
+														data-testid={TEST.select("hybrid")}
+													>
+													Hybrid
+													</SelectItem>
+												</SelectContent>
+											</Select>
+										</FormItem>
+									)}
+								/>
 								<FormField
 									control={tutorForm.control}
 									name="venue"
@@ -311,26 +320,35 @@ const TutorForm = ({ info }: Props) => {
 										</FormItem>
 									)}
 								/>
-								<FormField
-									control={tutorForm.control}
-									name="avail"
-									render={({ field }) => (
-										<FormItem>
-											<div className="flex flex-row justify-between">
-												<FormLabel>Availability</FormLabel>
-												<FormMessage />
-											</div>
-											<FormControl>
-												<Input
-													placeholder="Availability"
-													{...field}
-													data-testid={TEST.input("availability")}
-												/>
-											</FormControl>
-										</FormItem>
-									)}
-								/>
 							</div>
+							<Popover>
+								<PopoverTrigger>
+									<Button variant="outline" type="button">Availability: Click to Set</Button>
+								</PopoverTrigger>
+								<PopoverContent className="md:w-2xl w-auto border-1" align="start">
+									<SchedulePicker></SchedulePicker>
+								</PopoverContent>
+							</Popover>
+
+							<FormField
+								control={tutorForm.control}
+								name="avail"
+								render={({ field }) => (
+									<FormItem>
+										<div className="flex flex-row justify-between">
+											<FormLabel>Availability</FormLabel>
+											<FormMessage />
+										</div>
+										<FormControl>
+											<Input
+												placeholder="Availability"
+												{...field}
+												data-testid={TEST.input("availability")}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
 							<div className="grid gap-5">
 								<FormField
 									control={tutorForm.control}
@@ -342,7 +360,7 @@ const TutorForm = ({ info }: Props) => {
 												<FormMessage />
 											</div>
 											<FormDescription>
-                        Separate terms by spaces, e.g.{" "}
+												Separate terms by spaces, e.g.{" "}
 												<i>`programming cs11 data competititve`</i>{" "}
 											</FormDescription>
 											<FormControl>
@@ -385,7 +403,7 @@ const TutorForm = ({ info }: Props) => {
 											<FormMessage />
 										</div>
 										<FormDescription>
-                      If Active, your profile will be public.
+											If Active, your profile will be public.
 										</FormDescription>
 										<Select
 											onValueChange={field.onChange}
@@ -404,13 +422,13 @@ const TutorForm = ({ info }: Props) => {
 													value="0"
 													data-testid={TEST.select("active")}
 												>
-                          Active
+													Active
 												</SelectItem>
 												<SelectItem
 													value="1"
 													data-testid={TEST.select("inactive")}
 												>
-                          Inactive
+													Inactive
 												</SelectItem>
 											</SelectContent>
 										</Select>
@@ -445,7 +463,6 @@ const TutorForm = ({ info }: Props) => {
 					</Form>
 				</CardContent>
 			</Card>
-			<SchedulePicker></SchedulePicker>
 		</div>
 	);
 };
