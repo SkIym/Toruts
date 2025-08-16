@@ -41,15 +41,6 @@ import { useNavigate } from "react-router-dom";
 import { useRandomString } from "@/app/hooks";
 import { LoadingButton } from "../components/ui/loadingButton";
 import SchedulePicker from "@/components/templates/SchedulePicker";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-	Button
-} from "@/components/ui/button"
-
 
 const TutorSchema = z.object({
 	educAttainment: z
@@ -60,7 +51,8 @@ const TutorSchema = z.object({
 		.string()
 		.nonempty({ message: "required" })
 		.regex(/^[A-Za-z\s]+$/, "Please enter only alphabetical characters."),
-	price: z.coerce.number(),
+	price: z.coerce
+		.number(),
 	areasExp: z.coerce.string(),
 	tutorExp: z.string().or(z.literal("")),
 	avail: z.string().or(z.literal("")),
@@ -112,6 +104,10 @@ const TutorForm = ({ info }: Props) => {
 			setPortraitUrl(URL.createObjectURL(file));
 		}
 	};
+
+	const handleAvailabilitySelect = () => {
+		
+	}
 
 	const [uploadingPicture, setUploadingPicture] = useState(false);
 	const handlePictureUpload = async () => {
@@ -330,12 +326,10 @@ const TutorForm = ({ info }: Props) => {
 											<FormLabel>Availability</FormLabel>
 											<FormMessage />
 										</div>
-										{/* <Input
-											placeholder="Availability"
-											{...field}
-											data-testid={TEST.input("availability")}
-										/> */}
-										<SchedulePicker></SchedulePicker>
+										<SchedulePicker
+											value={field.value}
+											onChange={field.onChange}
+										/>
 									</FormItem>
 								)}
 							/>
