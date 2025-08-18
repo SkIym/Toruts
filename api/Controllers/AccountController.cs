@@ -43,8 +43,6 @@ namespace api.Controllers
             // Validate the model state
             if (!ModelState.IsValid) return BadRequest(new { Message = "Invalid model state", Errors = ModelState.Values.SelectMany(v => v.Errors) });
 
-            Console.WriteLine("Logging in...");
-
             // Find the user by username
             var user = await _userManager.Users
                     .Include(u => u.Tutor)
@@ -56,7 +54,6 @@ namespace api.Controllers
 
             // Check if the password is correct
             var result = await _signInManger.CheckPasswordSignInAsync(user, loginDto.Password, false);
-            Console.WriteLine(loginDto.Password);
 
             // If password check fails, return unauthorized
             // NOTE: for security, username or password dapat sabihin nating mali not password lang kasi malalaman na tama ung username
@@ -64,16 +61,23 @@ namespace api.Controllers
 
             var isTutor = user.Tutor != null;
             var isStudent = user.Student != null;
+            var token = _tokenService.CreateToken(user);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false,     // Set true for prod
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
 
-            Console.WriteLine(isTutor.ToString());
-
+            Response.Cookies.Append("accessToken", token, cookieOptions);
+            
             // Return user details and JWT token
             return Ok(
                 new NewUserDto
                 {
                     UserName = user.UserName,
                     Email = user.Email,
-                    Token = _tokenService.CreateToken(user),
                     UserType = isTutor ? UserType.TUTOR : (isStudent ? UserType.STUDENT : null),
                     PrimaryInfo = user.ToUpdateUserDto(),
                     RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null),
@@ -127,7 +131,6 @@ namespace api.Controllers
                             {
                                 UserName = appUser.UserName,
                                 Email = appUser.Email,
-                                Token = _tokenService.CreateToken(appUser),
                                 PrimaryInfo = new UpdateUserDto 
                                 {
                                     FirstName = appUser.FirstName,

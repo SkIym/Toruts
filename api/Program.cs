@@ -82,6 +82,18 @@ builder.Services.AddAuthentication(options =>
             System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
         )
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = ctx =>                                                      // Get token from cookie
+        {
+            ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+            if (!string.IsNullOrEmpty(accessToken))
+                ctx.Token = accessToken;
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 // Add authorization services
