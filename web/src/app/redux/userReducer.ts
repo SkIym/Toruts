@@ -77,7 +77,6 @@ export const signupUser = (creds: SignupInfo) => {
 			user.dual = false;
 			updateLocalUser(user);
 			dispatch(setUser(user));
-			accountService.setToken(user.token);
 			showSuccess("Signup succesful!");
 		} catch (e) {
 			showError(e);
@@ -92,7 +91,6 @@ export const getLoggedInUser = () => {
 		const user = getLocalUser();
 		if (user) {
 			dispatch(setUser(user));
-			accountService.setToken(user.token);
 		}
 	};
 };
@@ -106,7 +104,6 @@ export const loginUser = (creds: LoginInfo) => {
 			const user = await accountService.login(creds);
 			updateLocalUser(user);
 			dispatch(setUser(user));
-			accountService.setToken(user.token);
 			console.log(user);
 			showSuccess("Login succesful!");
 		} catch (e) {

@@ -32,7 +32,6 @@ export enum LearningMode {
 export type UserData = {
     userName: string;
     email: string;
-    token: string;
     userType: UserType | null;
     primaryInfo: UserInfo | null
     roleInfo: TutorInfo | StudentInfo | null
