@@ -2,39 +2,40 @@ export const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 export const API_ROUTES =
 {
 	ACCOUNT:
-    {
-    	login: `${SERVER_URL}account/login`
-    	, signup: `${SERVER_URL}account/signup`
-    }
+	{
+		login: `${SERVER_URL}account/login`
+		, signup: `${SERVER_URL}account/signup`
+		, logout: `${SERVER_URL}account/logout`
+	}
 	, RECORD:
-    {
-    	update: () => { return `${SERVER_URL}record/update/` }
-    	, delete: () => { return `${SERVER_URL}record/delete/` }
-    }
+	{
+		update: () => { return `${SERVER_URL}record/update/` }
+		, delete: () => { return `${SERVER_URL}record/delete/` }
+	}
 	, STUDENT:
-    {
-    	update: () => { return `${SERVER_URL}student/update/` }
-    	, get: () => { return `${SERVER_URL}student/get/` }
-    	, create: () => { return `${SERVER_URL}student/create/` }
-    }
+	{
+		update: () => { return `${SERVER_URL}student/update/` }
+		, get: () => { return `${SERVER_URL}student/get/` }
+		, create: () => { return `${SERVER_URL}student/create/` }
+	}
 	, TUTOR:
-    {
-    	update: () => { return `${SERVER_URL}tutors/update/` }
-    	, get: () => { return `${SERVER_URL}tutors/get/` }
-    	, create: () => { return `${SERVER_URL}tutors/create/` }
-    	, upload: () => `${SERVER_URL}tutors/upload/portrait/`
-    	, search: `${SERVER_URL}tutors/search/`
-    }
+	{
+		update: () => { return `${SERVER_URL}tutors/update/` }
+		, get: () => { return `${SERVER_URL}tutors/get/` }
+		, create: () => { return `${SERVER_URL}tutors/create/` }
+		, upload: () => `${SERVER_URL}tutors/upload/portrait/`
+		, search: `${SERVER_URL}tutors/search/`
+	}
 	, MATCH:
-    {
-    	create: () => `${SERVER_URL}matches/create/`
-    }
+	{
+		create: () => `${SERVER_URL}matches/create/`
+	}
 	, COMMENT:
-    {
-    	create: () => `${SERVER_URL}comments/create/`
-    	, get: (id: number) => `${SERVER_URL}comments/tutor/${id}`
-    	, delete: (id: number) => `${SERVER_URL}comments/delete/${id}`
-    }
+	{
+		create: () => `${SERVER_URL}comments/create/`
+		, get: (id: number) => `${SERVER_URL}comments/tutor/${id}`
+		, delete: (id: number) => `${SERVER_URL}comments/delete/${id}`
+	}
 }
 export const PATH =
 {
@@ -42,16 +43,16 @@ export const PATH =
 	, login: '/login'
 	, select: '/select'
 	, SIGNUP:
-    {
-    	default: '/signup'
-    	, tutor: '/signup/tutor'
-    	, student: '/signup/student'
-    }
+	{
+		default: '/signup'
+		, tutor: '/signup/tutor'
+		, student: '/signup/student'
+	}
 	, PROFILE:
-    {
-    	default: '/profile'
-    	, edit: '/profile/edit'
-    }
+	{
+		default: '/profile'
+		, edit: '/profile/edit'
+	}
 }
 
 export const TEST =

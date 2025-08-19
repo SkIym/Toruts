@@ -139,6 +139,7 @@ export const addUserInfo = (info: UserInfo) => {
 export const logoutUser = () => {
 	return async (dispatch: Dispatch) => {
 		updateLocalUser(null);
+		await accountService.logout();
 		dispatch(clearUser());
 		showSuccess("Logged out.");
 	};
