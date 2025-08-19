@@ -86,6 +86,14 @@ namespace api.Controllers
             );
         }
 
+        // POST endpoint for user logout
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("accessToken");
+            return Ok("User logged out");
+        }
+
         // POST endpoint for user signup
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupDto signupDto)
@@ -135,7 +143,7 @@ namespace api.Controllers
                         };
 
                         Response.Cookies.Append("accessToken", token, cookieOptions);
-                        
+
                         // Return user details 
                         return Ok(
                             new NewUserDto
