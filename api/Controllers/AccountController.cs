@@ -73,9 +73,7 @@ namespace api.Controllers
             {
                 HttpOnly = true,
                 Secure = !_env.IsDevelopment(),
-                SameSite = _env.IsDevelopment()
-                    ? SameSiteMode.None 
-                    : SameSiteMode.Strict,
+                SameSite = SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddHours(1)
                 };
             Response.Cookies.Append("accessToken", token, cookieOptions);
@@ -146,9 +144,7 @@ namespace api.Controllers
                         {
                             HttpOnly = true,
                             Secure = !_env.IsDevelopment(),
-                            SameSite = _env.IsDevelopment()
-                                ? SameSiteMode.None 
-                                : SameSiteMode.Strict,
+                            SameSite = SameSiteMode.Strict,
                             Expires = DateTime.UtcNow.AddHours(1),
                         };
 

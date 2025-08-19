@@ -91,9 +91,21 @@ builder.Services.AddAuthentication(options =>
             if (!string.IsNullOrEmpty(accessToken))
                 ctx.Token = accessToken;
 
+            Console.WriteLine($"[DEBUG] Token received: {accessToken}");
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = ctx =>
+        {
+            Console.WriteLine("[DEBUG] Auth failed");
+            if (ctx.Exception != null)
+            {
+                Console.WriteLine($"[DEBUG] Exception: {ctx.Exception.GetType().Name}");
+                Console.WriteLine($"[DEBUG] Message: {ctx.Exception.Message}");
+                Console.WriteLine($"[DEBUG] Stack: {ctx.Exception.StackTrace}");
+            }
             return Task.CompletedTask;
         }
-    };
+    };  
 });
 
 // Add authorization services

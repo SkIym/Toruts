@@ -268,6 +268,7 @@ namespace api.Controllers
             var username = User?.Identity?.Name;
             if (string.IsNullOrEmpty(username))
             {
+                Console.WriteLine("HELPPPP");
                 return Unauthorized("Invalid session. Please log-in again");
             }
             
