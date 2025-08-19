@@ -28,12 +28,19 @@ namespace api.Controllers
         // SignInManager for handling user sign-in operations
         private readonly SignInManager<User> _signInManger;
 
+        private readonly IWebHostEnvironment _env;
+
         // Constructor to inject dependencies
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
+        public AccountController(
+            UserManager<User> userManager,
+            ITokenService tokenService,
+            SignInManager<User> signInManager,
+            IWebHostEnvironment env)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManger = signInManager;
+            _env = env;
         }
 
         // POST endpoint for user login
@@ -65,11 +72,12 @@ namespace api.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false,     // Set true for prod
-                SameSite = SameSiteMode.Strict,
+                Secure = !_env.IsDevelopment(),
+                SameSite = _env.IsDevelopment()
+                    ? SameSiteMode.None 
+                    : SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddHours(1)
-            };
-
+                };
             Response.Cookies.Append("accessToken", token, cookieOptions);
             
             // Return user details and JWT token
@@ -137,9 +145,11 @@ namespace api.Controllers
                         var cookieOptions = new CookieOptions
                         {
                             HttpOnly = true,
-                            Secure = false,     // Set true for prod
-                            SameSite = SameSiteMode.Strict,
-                            Expires = DateTime.UtcNow.AddHours(1)
+                            Secure = !_env.IsDevelopment(),
+                            SameSite = _env.IsDevelopment()
+                                ? SameSiteMode.None 
+                                : SameSiteMode.Strict,
+                            Expires = DateTime.UtcNow.AddHours(1),
                         };
 
                         Response.Cookies.Append("accessToken", token, cookieOptions);

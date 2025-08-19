@@ -119,12 +119,23 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Configure CORS (Cross-Origin Resource Sharing)
-// Allow any method, header, and origin for simplicity (tighten this in production)
-app.UseCors(x => x
-    .AllowAnyMethod()                                                                   // Allow any HTTP method (GET, POST, etc.)
-    .AllowAnyHeader()                                                                   // Allow any HTTP header
-    .AllowCredentials()                                                                 // Allow credentials (e.g., cookies)
-    .SetIsOriginAllowed(origin => true));                                               // Allow any origin
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors(policy => policy
+        .WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+}
+else
+{
+    app.UseCors(policy => policy
+        .WithOrigins("https://toruts.azurewebsites.net")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+}
 
 // Serve frontend stored in wwwroot
 app.UseStaticFiles();
