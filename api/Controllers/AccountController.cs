@@ -125,13 +125,24 @@ namespace api.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
                     if (roleResult.Succeeded)
                     {
-                        // Return user details and JWT token
+                        var token = _tokenService.CreateToken(appUser);
+                        var cookieOptions = new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Secure = false,     // Set true for prod
+                            SameSite = SameSiteMode.Strict,
+                            Expires = DateTime.UtcNow.AddHours(1)
+                        };
+
+                        Response.Cookies.Append("accessToken", token, cookieOptions);
+                        
+                        // Return user details 
                         return Ok(
                             new NewUserDto
                             {
                                 UserName = appUser.UserName,
                                 Email = appUser.Email,
-                                PrimaryInfo = new UpdateUserDto 
+                                PrimaryInfo = new UpdateUserDto
                                 {
                                     FirstName = appUser.FirstName,
                                     LastName = appUser.LastName,
