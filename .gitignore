@@ -6,3 +6,5 @@ test-results
 /blob-report/
 /playwright/.cache/
 .github/workflows/playwright.yml
+bin/
+obj/

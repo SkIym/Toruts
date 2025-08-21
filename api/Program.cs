@@ -184,3 +184,5 @@ if (app.Environment.IsDevelopment())
 
 // Run the application
 app.Run();
+
+public partial class Program { }
