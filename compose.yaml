@@ -1,23 +1,10 @@
-networks:
-  meow:
-    driver: bridge
+version: "3.9"
 
 services:
-  frontend:
-    build: web/
-    ports:
-      - "5173:5173"
-    environment:
-      - PORT=5173
-      - VITE_PORT=5173
-    networks:
-      - meow
   backend:
-    build: api/
+    build: .
     ports:
       - "5177:5177"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5172;http://+:5173
-    networks:
-      - meow
+      - ASPNETCORE_URLS=http://+:5177

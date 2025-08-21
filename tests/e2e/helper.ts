@@ -1,4 +1,4 @@
-import { PATH, TEST } from "../web/src/constants";
+import { PATH, TEST } from "../../web/src/constants/constants";
 
 export const clickButton = async(page: any, name: string) => {
     const button = page.getByTestId(TEST.button(name));

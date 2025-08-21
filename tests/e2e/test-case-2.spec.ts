@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { updateInfo, logout, quickLogin, quickSignup, quickDelete, signupWith, done, clickButton, studentForm } from './helper';
-import { PATH, TEST } from '../web/src/constants';
+import { PATH, TEST } from '../../web/src/constants/constants';
 
 test.describe.configure({ mode: 'parallel' });
 
