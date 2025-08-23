@@ -337,7 +337,7 @@ export const matchWithTutor = (creds: CreateMatchInfo) => {
 				updateLocalUser(user);
 				dispatch(setUser(user));
 			}
-			showSuccess(`Storing`);
+			showSuccess(`Your choice has been registered in the system`);
 		} catch (e) {
 			showError(e);
 			return Promise.reject();
