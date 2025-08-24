@@ -1,29 +1,23 @@
 import { TutorComment, CreateComment } from "@/types/types";
-import axios from "axios";
+import api from "./api";
 import { API_ROUTES } from "@/constants/constants"
 
 const post = async (comment: CreateComment) => {
 	console.log("sending comment")
-	const { data } = await axios.post<CreateComment>(
+	const { data } = await api.post<CreateComment>(
 		`${API_ROUTES.COMMENT.create()}`, 
-		comment,
-		{
-			withCredentials: true
-		})
+		comment)
 	return data
 }
 
 const get = async (tutorId: number) => {
-	const { data } = await axios.get<TutorComment[]>(`${API_ROUTES.COMMENT.get(tutorId)}`)
+	const { data } = await api.get<TutorComment[]>(`${API_ROUTES.COMMENT.get(tutorId)}`)
 	return data
 }
 
 const remove = async (commentId: number) => {
-	const { data } = await axios.delete(
-		`${API_ROUTES.COMMENT.delete(commentId)}`,
-		{
-			withCredentials: true
-		})
+	const { data } = await api.delete(
+		`${API_ROUTES.COMMENT.delete(commentId)}`)
 	return data
 }
 
