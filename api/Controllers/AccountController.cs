@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using api.Enums;
 using api.Mappers;
 using api.Dtos.Record;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -78,7 +79,7 @@ namespace api.Controllers
                 };
             Response.Cookies.Append("accessToken", token, cookieOptions);
             
-            // Return user details and JWT token
+            // Return user details
             return Ok(
                 new NewUserDto
                 {
@@ -100,6 +101,34 @@ namespace api.Controllers
             return Ok("User logged out");
         }
 
+        // GET generic endpoint for checking if user is authenticated
+        [Authorize]
+        [HttpGet("check-auth")]
+        public async Task<IActionResult> CheckAuth()
+        {
+            // Find the current user from the claims principal
+            var user = await _userManager.Users
+                .Include(u => u.Tutor)
+                .Include(u => u.Student)
+                .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+
+            if (user == null) return Unauthorized("User not found");
+
+            var isTutor = user.Tutor != null;
+            var isStudent = user.Student != null;
+
+            return Ok(
+                new NewUserDto
+                {
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    UserType = isTutor ? UserType.TUTOR : (isStudent ? UserType.STUDENT : null),
+                    PrimaryInfo = user.ToUpdateUserDto(),
+                    RoleInfo = isTutor ? user.Tutor.ToTutorDto() : (isStudent ? user.Student.ToStudentDto() : null),
+                    Dual = isTutor && isStudent
+                }
+            );
+        }
         // POST endpoint for user signup
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupDto signupDto)
