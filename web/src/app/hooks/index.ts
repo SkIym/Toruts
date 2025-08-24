@@ -60,7 +60,7 @@ export const useErrorNotification = () => {
 				break;
 			case 401:
 				// Unauthorized
-				toast.error(response?.data)
+				toast.error("Please login again.")
 				break;
 			case 404:
 				toast.error('Page does not exist')

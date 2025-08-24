@@ -113,6 +113,21 @@ export const loginUser = (creds: LoginInfo) => {
 	};
 };
 
+export const checkUserAuth = () => {
+	console.log("checking user auth");
+	return async (dispatch: Dispatch) => {
+		try {
+			const user = await accountService.checkAuth();
+			updateLocalUser(user);
+			dispatch(setUser(user));
+		} catch (e) {
+			dispatch(clearUser());
+			showError(e)
+			return Promise.reject();
+		}
+	}
+}
+
 // Add or update user's primary information
 
 export const addUserInfo = (info: UserInfo) => {

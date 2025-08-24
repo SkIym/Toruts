@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from './app/store'
 import { useEffect, useState } from 'react'
-import { getLoggedInUser } from './app/redux/userReducer'
+import { checkUserAuth } from './app/redux/userReducer'
 import { Toaster } from "@/components/ui/sonner"
 import "./index.css"
 import NavBar from "./components/ui/navigationBar"
@@ -13,12 +13,12 @@ const App = () => {
 	const [isReady, setIsReady] = useState(false);
 
 	useEffect(() => {
-		const getUser = async () => {
-			await dispatch(getLoggedInUser());
+		const checkAuth = async () => {
+			await dispatch(checkUserAuth());
 			console.log("getting loggedinuser...")
 		}
 
-		getUser();
+		checkAuth();
 		setIsReady(true);
 	}, [dispatch])
 

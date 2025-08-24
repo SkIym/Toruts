@@ -6,6 +6,7 @@ export const API_ROUTES =
 		login: `${SERVER_URL}account/login`
 		, signup: `${SERVER_URL}account/signup`
 		, logout: `${SERVER_URL}account/logout`
+		, checkauth: `${SERVER_URL}account/check-auth`
 	}
 	, RECORD:
 	{

@@ -26,6 +26,15 @@ const logout = async () => {
 	return data
 }
 
+const checkAuth = async () => {
+	const { data } = await axios.get(
+		`${API_ROUTES.ACCOUNT.checkauth}`,
+		{
+			withCredentials: true,
+		})
+	return data
+}
+
 const setUserInfo = async (info: UserInfo) => {
 	console.log("info reached") 
 	const { data } = await axios.put<UserInfo>(
@@ -48,5 +57,5 @@ const deleteUser = async () => {
 }
 
 export default {
-	signup, login, setUserInfo, deleteUser, logout
+	signup, login, setUserInfo, deleteUser, logout, checkAuth
 }
